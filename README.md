@@ -1,10 +1,10 @@
-![PrintFleet](https://github.com/know-how-schmiede/PrintFleet/images/PrintFleetLogo.png "PrintFleetLogo")
+![PrintFleet Logo](images/PrintFleetLogo.png)
 
 # PrintFleet
 PrintFleet – Manage your 3D printer fleet
 
 
-Lizenz
+## Lizenz
 ------
 Der Quellcode dieses Projekts steht unter der Lizenz **CC BY-NC-SA 4.0**.
 
