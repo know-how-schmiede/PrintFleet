@@ -2,8 +2,10 @@
 # -*- coding: utf-8 -*-
 
 import time, sys, threading, requests
-from typing import Optional, Tuple, Dict, Any
-from flask import Flask, jsonify, Response
+from typing import Optional, Dict, Any
+from flask import Flask, jsonify, Response, render_template
+from flask import send_from_directory
+import os
 
 # ---- Konfiguration laden ----
 try:
@@ -16,7 +18,9 @@ except ImportError:
         print("Konfigurationsdatei 'dashboardPrinterList.py' fehlt/fehlerhaft.", file=sys.stderr)
         raise
 
-app = Flask(__name__)
+# Flask-App mit Template- und Static-Ordner
+app = Flask(__name__, static_folder="static", template_folder="templates")
+
 state_lock = threading.Lock()
 printer_state: Dict[str, Dict[str, Any]] = {}
 
@@ -204,133 +208,14 @@ def monitor_printer(prn: dict, global_defaults: dict, stop_evt: threading.Event)
 
 # ----------------- Flask Endpoints -----------------
 @app.route("/")
-def index() -> Response:
-    html = """
-<!DOCTYPE html>
-<html lang="de">
-<head>
-<meta charset="utf-8">
-<title>Drucker-Status</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="/static/DashboardStyle.css">
-</head>
-<body>
-  <h1>Drucker-Status</h1>
-  <p><small class="mono">Aktualisierung alle 5&nbsp;Sekunden</small></p>
-  <table id="tbl">
-    <thead>
-      <tr>
-        <th>Name</th>
-        <th>Backend</th>
-        <th>Status</th>
-        <th>Datei</th>
-        <th style="min-width:160px">Fortschritt</th>
-        <th>verstrichen</th>
-        <th>Rest</th>
-        <th>Hotend (Ist/Target)</th>
-        <th>Bed (Ist/Target)</th>
-        <th>Zuletzt</th>
-        <th>Aktionen</th>
-        <th>Fehler</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+def index() -> str:
+    # 'page' wird im Template benutzt, um den aktiven Menüpunkt zu markieren
+    return render_template("index.html", page="overview")
 
-<script>
-function pctColor(p){
-  if(p >= 80) return 'linear-gradient(90deg,#16a34a,#22c55e)'; // grün
-  if(p >= 40) return 'linear-gradient(90deg,#ca8a04,#eab308)'; // gelb
-  return 'linear-gradient(90deg,#dc2626,#ef4444)';             // rot
-}
-function toFixed1(x){
-  return (typeof x === 'number' && isFinite(x)) ? x.toFixed(1) : (x ?? '');
-}
-async function loadData(){
-  try{
-    const r = await fetch('/api/status', {cache:'no-store'});
-    const data = await r.json();
-    const tbody = document.querySelector('#tbl tbody');
-    tbody.innerHTML = '';
-    const now = Math.floor(Date.now()/1000);
-
-    (data || []).forEach(p => {
-      // Fallbacks
-      const name = p.name || '';
-      const backend = p.backend || '';
-      const state = p.state || 'standby';
-      const filename = p.filename || '';
-      const progress_pct = (typeof p.progress_pct === 'number' && isFinite(p.progress_pct)) ? p.progress_pct : 0;
-      const elapsed_hms = p.elapsed_hms || '';
-      const eta_hms = p.eta_hms || '';
-      const hotend = (typeof p.hotend === 'number') ? p.hotend : 0;
-      const hotend_t = (typeof p.hotend_t === 'number') ? p.hotend_t : 0;
-      const bed = (typeof p.bed === 'number') ? p.bed : 0;
-      const bed_t = (typeof p.bed_t === 'number') ? p.bed_t : 0;
-      const last_update = (typeof p.last_update === 'number') ? p.last_update : 0;
-      const error = p.error || '';
-      const link = p.link || '';
-
-      const tr = document.createElement('tr');
-      tr.className = state;
-
-      const td = (t)=>{ const x=document.createElement('td'); x.textContent=t; return x; };
-      const tdHTML = (h)=>{ const x=document.createElement('td'); x.innerHTML=h; return x; };
-
-      const badge = '<span class="badge ' + state + '">' + state + '</span>';
-
-      // Fortschrittsbalken
-      const progCell = document.createElement('td');
-      const progWrap = document.createElement('div');
-      progWrap.className = 'progress';
-      const inner = document.createElement('div');
-      inner.style.width = progress_pct + '%';
-      inner.style.background = pctColor(progress_pct);
-      progWrap.appendChild(inner);
-      const label = document.createElement('div');
-      label.style.fontSize='12px'; label.style.marginTop='4px';
-      label.textContent = (isFinite(progress_pct) ? progress_pct.toFixed(1) : '0.0') + '%';
-      progCell.appendChild(progWrap);
-      progCell.appendChild(label);
-
-      // Aktionen
-      const actions = document.createElement('td'); actions.className='actions';
-      if(link){
-        const a1 = document.createElement('a'); a1.href = link; a1.target = '_blank'; a1.className='btn';
-        a1.textContent = 'Web-UI öffnen';
-        actions.appendChild(a1);
-      }
-
-      const last = last_update ? (now - last_update) : 0;
-      const lastTxt = (last >= 0) ? (last + ' s') : '';
-
-      tr.appendChild(td(name));
-      tr.appendChild(td(backend));
-      tr.appendChild(tdHTML(badge));
-      tr.appendChild(td(filename));
-      tr.appendChild(progCell);
-      tr.appendChild(td(elapsed_hms));
-      tr.appendChild(td(eta_hms));
-      tr.appendChild(td(toFixed1(hotend) + ' / ' + toFixed1(hotend_t) + ' °C'));
-      tr.appendChild(td(toFixed1(bed)    + ' / ' + toFixed1(bed_t)    + ' °C'));
-      tr.appendChild(td(lastTxt));
-      tr.appendChild(actions);
-      tr.appendChild(td(error));
-
-      tbody.appendChild(tr);
-    });
-  } catch(e){
-    console.error('fetch error', e);
-  }
-}
-loadData();
-setInterval(loadData, 5000);
-</script>
-</body>
-</html>
-"""
-    return Response(html, mimetype="text/html")
-
+@app.route("/settings")
+def settings_page() -> str:
+    # Beispiel für eine weitere Seite, die du über das Menü erreichst
+    return render_template("settings.html", page="settings")
 
 @app.route("/api/status")
 def api_status():
@@ -338,14 +223,17 @@ def api_status():
         rows = [printer_state[k] for k in sorted(printer_state.keys())]
     return jsonify(rows)
 
+
 # ----------------- Start Threads + App -----------------
 def start_threads():
     stop_evt = threading.Event()
     threads = []
     for prn in PRINTERS:
-        t = threading.Thread(target=monitor_printer,
-                             args=(prn, GLOBAL if isinstance(GLOBAL, dict) else {}, stop_evt),
-                             daemon=True)
+        t = threading.Thread(
+            target=monitor_printer,
+            args=(prn, GLOBAL if isinstance(GLOBAL, dict) else {}, stop_evt),
+            daemon=True
+        )
         t.start()
         threads.append(t)
     return stop_evt, threads
