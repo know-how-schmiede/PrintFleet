@@ -1,7 +1,6 @@
 ![PrintFleet Logo](images/PrintFleetLogo.png)
 
-# PrintFleet
-PrintFleet – Manage your 3D printer fleet
+# PrintFleet - Manage your 3D printer fleet
 Zentrale Verwaltung und Monitoring einer 3D-Drucker-Farm
 
 PrintFleet ist eine Web-Anwendung zur Überwachung, Steuerung und Dokumentation mehrerer 3D-Drucker innerhalb einer Drucker-Farm.
