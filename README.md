@@ -79,7 +79,6 @@ Im Fokus stehen:
 - One-Click-Installer über GitHub Releases
 
 ## Lizenz
-------
 Der Quellcode dieses Projekts steht unter der Lizenz **CC BY-NC-SA 4.0**.
 
 Das bedeutet:
