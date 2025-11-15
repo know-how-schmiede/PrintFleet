@@ -12,7 +12,7 @@ PRINTERS = [
     {
         "name": "Neptune4",
         "backend": "moonraker",
-        "host": "192.168.1.238",
+        "host": "192.168.1.236",
         "port": 80,
         # "token": "",        # optional
         # "https": False,
@@ -46,7 +46,7 @@ PRINTERS = [
         "backend": "octoprint",
         "host": "192.168.1.167",
         "port": 80,              # „nacktes“ OctoPrint oft 5000
-        "api_key": "api-key-OctoPrint-Hier-Einsetzen",
+        "api_key": "N0X5aHS_NmaMJCOjpt1ZVOVrAGaZ6-aVY8O_zhNLbj4",
         # "https": False,
     },
 ]
