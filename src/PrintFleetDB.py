@@ -22,7 +22,7 @@ except Exception as e:
 
 
 # -------------------------------------------------
-# SQLite: nur Struktur anlegen, keine Seed-Daten
+# SQLite: Struktur anlegen (printers + settings)
 # -------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "PrintFleet.sqlite3")
@@ -35,15 +35,19 @@ def get_db_connection() -> sqlite3.Connection:
 
 
 def init_db_schema_only() -> None:
-    """Erzeugt (falls nötig) die Tabelle `printers`.
+    """Erzeugt (falls nötig) die Tabellen `printers` und `settings`.
 
-    Es werden **keine** Drucker aus einer Python-Liste übernommen.
-    Die Datenpflege erfolgt extern (z.B. mit einem DB-Tool) und wird später
-    um ein Web-Formular in PrintFleet ergänzt.
+    - `printers` enthält nur noch druckerspezifische Daten
+    - `settings` enthält globale Einstellungen wie Poll-Intervall,
+      DB-Reload-Intervall und eine globale Telegram-Chat-ID
+
+    Die eigentlichen Drucker-Datensätze werden extern (z.B. mit einem
+    DB-Tool) gepflegt und später über ein Web-Formular ergänzt.
     """
     conn = get_db_connection()
     cur = conn.cursor()
 
+    # Druckertabelle – jetzt mit NOT NULL + DEFAULT für error_report_interval
     cur.execute(
         """
         CREATE TABLE IF NOT EXISTS printers (
@@ -55,27 +59,75 @@ def init_db_schema_only() -> None:
             https INTEGER NOT NULL DEFAULT 0,
             token TEXT,
             api_key TEXT,
-            interval REAL,
-            error_report_interval REAL,
+            error_report_interval REAL NOT NULL DEFAULT 30.0,
             -- Platzhalter für spätere Erweiterungen
             tasmota_host TEXT,
             tasmota_topic TEXT,
-            telegram_chat_id TEXT,
             enabled INTEGER NOT NULL DEFAULT 1
         );
         """
     )
 
+    # Globale Settings-Tabelle
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS settings (
+            id INTEGER PRIMARY KEY CHECK (id = 1),
+            poll_interval REAL,
+            db_reload_interval REAL,
+            telegram_chat_id TEXT
+        );
+        """
+    )
+
+    # Falls noch kein Settings-Datensatz existiert, einen Default-Eintrag erzeugen
+    cur.execute("SELECT COUNT(*) AS cnt FROM settings")
+    row = cur.fetchone()
+    if not row or row[0] == 0:
+        default_poll = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
+        default_reload = 30.0  # alle 30 Sekunden nach DB-Änderungen schauen
+        cur.execute(
+            """
+            INSERT INTO settings (id, poll_interval, db_reload_interval, telegram_chat_id)
+            VALUES (1, ?, ?, NULL)
+            """,
+            (default_poll, default_reload),
+        )
+
     conn.commit()
     conn.close()
 
 
+
+def load_settings_from_db() -> Dict[str, Any]:
+    """Lädt die globale Konfiguration aus der Tabelle `settings`.
+
+    Gibt ein Dict mit Schlüsseln `poll_interval`, `db_reload_interval`,
+    `telegram_chat_id` zurück.
+    """
+    settings: Dict[str, Any] = {}
+
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT poll_interval, db_reload_interval, telegram_chat_id FROM settings WHERE id = 1")
+    row = cur.fetchone()
+    conn.close()
+
+    if row:
+        default_poll = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
+        settings["poll_interval"] = float(row["poll_interval"] or default_poll)
+        settings["db_reload_interval"] = float(row["db_reload_interval"] or 30.0)
+        settings["telegram_chat_id"] = row["telegram_chat_id"]
+    else:
+        settings["poll_interval"] = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
+        settings["db_reload_interval"] = 30.0
+        settings["telegram_chat_id"] = None
+
+    return settings
+
+
 def load_printers_from_db() -> list[dict]:
     """Lädt alle aktiven Drucker aus der SQLite-Datenbank.
-
-    Die Struktur der zurückgegebenen Dicts entspricht den geplanten
-    Konfigurationsfeldern, sodass der Rest des Codes unverändert
-    weiterarbeiten kann.
 
     Wenn noch keine Drucker eingetragen sind, wird eine leere Liste
     zurückgegeben und es werden keine Monitor-Threads gestartet.
@@ -87,8 +139,22 @@ def load_printers_from_db() -> list[dict]:
     conn.close()
 
     printers: list[dict] = []
+
+    # Default für error_report_interval aus GLOBAL
+    if isinstance(GLOBAL, dict):
+        default_err = float(GLOBAL.get("error_report_interval", 30.0))
+    else:
+        default_err = 30.0
+
     for r in rows:
         https_flag = bool(r["https"])
+
+        err_interval = (
+            float(r["error_report_interval"])
+            if r["error_report_interval"] is not None
+            else default_err
+        )
+
         printers.append(
             {
                 "id": r["id"],
@@ -99,24 +165,19 @@ def load_printers_from_db() -> list[dict]:
                 "https": https_flag,
                 "token": r["token"],
                 "api_key": r["api_key"],
-                # Falls nicht gesetzt, auf GLOBAL zurückfallen
-                "interval": r["interval"]
-                if r["interval"] is not None
-                else float(GLOBAL.get("interval", 5.0)),
-                "error_report_interval": r["error_report_interval"]
-                if r["error_report_interval"] is not None
-                else float(GLOBAL.get("error_report_interval", 30.0)),
+                "error_report_interval": err_interval,
                 # Platzhalter-Felder für spätere Nutzung
                 "tasmota_host": r["tasmota_host"],
                 "tasmota_topic": r["tasmota_topic"],
-                "telegram_chat_id": r["telegram_chat_id"],
             }
         )
     return printers
 
 
-# DB-Struktur anlegen und Druckerliste aus DB holen
+
+# DB-Struktur anlegen und initiale Daten laden
 init_db_schema_only()
+SETTINGS: Dict[str, Any] = load_settings_from_db()
 PRINTERS = load_printers_from_db()
 
 
@@ -127,6 +188,9 @@ app = Flask(__name__, static_folder="static", template_folder="templates")
 
 state_lock = threading.Lock()
 printer_state: Dict[str, Dict[str, Any]] = {}
+
+# aktive Monitor-Threads nach Drucker-ID
+monitor_threads: Dict[int, threading.Thread] = {}
 
 
 # ----------------- Helfer -----------------
@@ -226,7 +290,9 @@ def fetch_octoprint(base_url: str, api_key: str, timeout: float):
 
 # ----------------- Monitor-Thread -----------------
 
-def monitor_printer(prn: dict, global_defaults: dict, stop_evt: threading.Event):
+def monitor_printer(prn: dict, printer_id: int, global_defaults: dict, stop_evt: threading.Event):
+    global SETTINGS
+
     name = prn.get("name", prn.get("host", "UNNAMED"))
     host = prn["host"]
     port = prn.get("port", global_defaults.get("port", 80))
@@ -234,11 +300,17 @@ def monitor_printer(prn: dict, global_defaults: dict, stop_evt: threading.Event)
     be = (prn.get("backend") or "moonraker").lower()
     token = prn.get("token")
     api_key = prn.get("api_key")
-    interval = float(prn.get("interval", global_defaults.get("interval", 5.0)))
-    err_interval = float(
-        prn.get("error_report_interval", global_defaults.get("error_report_interval", 30.0))
-    )
+     # --- neu: robuster Default für error_report_interval ---
+    if isinstance(global_defaults, dict):
+        default_err = float(global_defaults.get("error_report_interval", 30.0))
+    else:
+        default_err = 30.0
 
+    err_raw = prn.get("error_report_interval")
+    if err_raw is None:
+        err_raw = default_err
+    err_interval = float(err_raw)
+    # -------------------------------------------------------
     scheme = "https" if https else "http"
     base_url = f"{scheme}://{host}:{port}"
 
@@ -247,18 +319,38 @@ def monitor_printer(prn: dict, global_defaults: dict, stop_evt: threading.Event)
     last_error_text = None
 
     while not stop_evt.is_set():
+        # Prüfen, ob der Drucker in der DB noch aktiviert ist
+        try:
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute("SELECT enabled FROM printers WHERE id = ?", (printer_id,))
+            row = cur.fetchone()
+            conn.close()
+            if (row is None) or (row["enabled"] != 1):
+                print(f"[{name}] Deaktiviert oder gelöscht – beende Monitor-Thread.", file=sys.stderr)
+                break
+        except Exception as e:
+            print(f"[{name}] Warnung: Konnte enabled-Status nicht prüfen: {e}", file=sys.stderr)
+
+        # Aktuelles Poll-Intervall aus SETTINGS lesen (dynamisch änderbar)
+        if isinstance(GLOBAL, dict):
+            poll_default = float(GLOBAL.get("interval", 5.0))
+        else:
+            poll_default = 5.0
+        poll_interval = float(SETTINGS.get("poll_interval", poll_default))
+
         try:
             if be == "octoprint":
                 res = fetch_octoprint(
                     base_url,
                     api_key=api_key,
-                    timeout=max(5.0, interval + 2.0),
+                    timeout=max(5.0, poll_interval + 2.0),
                 )
             else:
                 res = fetch_moonraker(
                     base_url,
                     token=token,
-                    timeout=max(5.0, interval + 2.0),
+                    timeout=max(5.0, poll_interval + 2.0),
                 )
 
             (
@@ -375,7 +467,48 @@ def monitor_printer(prn: dict, global_defaults: dict, stop_evt: threading.Event)
                 last_error_text = err
                 last_error_report_ts = now
 
-        time.sleep(max(0.2, interval))
+        time.sleep(max(0.2, poll_interval))
+
+
+# ----------------- DB-Watcher-Thread -----------------
+
+def db_watch_loop(global_stop_evt: threading.Event):
+    """Beobachtet periodisch die Datenbank:
+
+    - Lädt geänderte Settings (poll_interval, db_reload_interval, telegram_chat_id)
+    - Startet Monitor-Threads für neu hinzugefügte Drucker (enabled = 1)
+
+    Dadurch muss das Script bei neuen Druckern oder geänderten Settings
+    nicht neu gestartet werden.
+    """
+    global SETTINGS, PRINTERS, monitor_threads
+
+    while not global_stop_evt.is_set():
+        try:
+            # Settings aktualisieren
+            SETTINGS = load_settings_from_db()
+
+            # Drucker neu laden
+            PRINTERS = load_printers_from_db()
+
+            # Neue Drucker erkennen und ggf. Monitor-Thread starten
+            for prn in PRINTERS:
+                pid = prn["id"]
+                if pid not in monitor_threads or not monitor_threads[pid].is_alive():
+                    t = threading.Thread(
+                        target=monitor_printer,
+                        args=(prn, pid, GLOBAL if isinstance(GLOBAL, dict) else {}, global_stop_evt),
+                        daemon=True,
+                    )
+                    t.start()
+                    monitor_threads[pid] = t
+
+        except Exception as e:
+            print(f"[DB-WATCHER] Fehler beim Reload: {e}", file=sys.stderr)
+
+        # Reload-Intervall aus SETTINGS
+        reload_interval = float(SETTINGS.get("db_reload_interval", 30.0)) if SETTINGS else 30.0
+        time.sleep(max(5.0, reload_interval))
 
 
 # ----------------- Flask Endpoints -----------------
@@ -402,18 +535,18 @@ def api_status():
 
 # ----------------- Start Threads + App -----------------
 
-def start_threads():
+def start_monitor_threads(initial_printers: list[dict]):
     stop_evt = threading.Event()
-    threads = []
-    for prn in PRINTERS:
+    for prn in initial_printers:
+        pid = prn["id"]
         t = threading.Thread(
             target=monitor_printer,
-            args=(prn, GLOBAL if isinstance(GLOBAL, dict) else {}, stop_evt),
+            args=(prn, pid, GLOBAL if isinstance(GLOBAL, dict) else {}, stop_evt),
             daemon=True,
         )
         t.start()
-        threads.append(t)
-    return stop_evt, threads
+        monitor_threads[pid] = t
+    return stop_evt
 
 
 if __name__ == "__main__":
@@ -422,8 +555,8 @@ if __name__ == "__main__":
         for prn in PRINTERS:
             name = prn.get("name", prn.get("host", "UNNAMED"))
             host = prn["host"]
-            port = prn.get("port", GLOBAL.get("port", 80))
-            https = prn.get("https", GLOBAL.get("https", False))
+            port = prn.get("port", GLOBAL.get("port", 80)) if isinstance(GLOBAL, dict) else prn.get("port", 80)
+            https = prn.get("https", GLOBAL.get("https", False)) if isinstance(GLOBAL, dict) else prn.get("https", False)
             scheme = "https" if https else "http"
             printer_state[name] = {
                 "name": name,
@@ -445,10 +578,22 @@ if __name__ == "__main__":
                 "link": f"{scheme}://{host}:{port}/",
             }
 
-    stop_evt, threads = start_threads()
+    # Monitor-Threads für vorhandene Drucker starten
+    global_stop_evt = start_monitor_threads(PRINTERS)
+
+    # DB-Watcher-Thread starten
+    watcher_thread = threading.Thread(
+        target=db_watch_loop,
+        args=(global_stop_evt,),
+        daemon=True,
+    )
+    watcher_thread.start()
+
     try:
         app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
     finally:
-        stop_evt.set()
-        for t in threads:
+        global_stop_evt.set()
+        # Threads beim Beenden sauber einsammeln
+        for t in list(monitor_threads.values()):
             t.join(timeout=2.0)
+        watcher_thread.join(timeout=2.0)
