@@ -1,14 +1,66 @@
+/* ===========================
+   Basis: Farb-Variablen
+   =========================== */
+
 :root {
+  /* Statusfarben */
   --ok: #22c55e;
   --mid: #eab308;
   --low: #ef4444;
   --muted: #f0f0f0;
+
+  /* Allgemeine Farben */
+  --color-bg: #ffffff;
+  --color-text: #111111;
+  --color-muted-text: #666666;
+
+  --color-border: #dddddd;
+  --color-header-bg: #f5f5f5;
+  --color-header-text: #111111;
+
+  --color-progress-bg: #eeeeee;
+  --color-progress-fill: #22c55e;
+
+  --btn-bg: #fafafa;
+  --btn-border: #dddddd;
+  --btn-text: #111111;
+  --btn-hover-bg: #f0f0f0;
+
+  /* Zeilenfarben nach Druckerstatus */
+  --row-offline-bg: #ffe5e5;
+  --row-error-bg:   #ffe5e5;
+  --row-printing-bg:#eaf4ff;
+  --row-standby-bg: #e9f9ee;
+  --row-complete-bg:#f5fff5;
+  --row-paused-bg:  #fff9e6;
+
+  /* Badge-Hintergründe */
+  --badge-printing-bg:  #e7f5ff;
+  --badge-complete-bg:  #e6ffe6;
+  --badge-paused-bg:    #fff3cd;
+  --badge-standby-bg:   #f0fff4;
+  --badge-cancelled-bg: #ffe6e6;
+  --badge-error-bg:     #ffd0c7;
+  --badge-offline-bg:   #ffc9c9;
+
+  /* Navigation */
+  --nav-bg: #111827;
+  --nav-text: #e5e7eb;
+  --nav-link: #9ca3af;
+  --nav-link-hover: #f9fafb;
+  --nav-link-active-border: #f59e0b;
+  --nav-border-color: #1f2937;
 }
+
+/* ===========================
+   Grundlayout & Tabellen
+   =========================== */
 
 body {
   font-family: system-ui, Arial, sans-serif;
   padding: 16px;
-  color: #111;
+  color: var(--color-text);
+  background: var(--color-bg);
 }
 
 h1 {
@@ -21,37 +73,43 @@ table {
   width: 100%;
 }
 
-th, td {
-  border: 1px solid #ddd;
+th,
+td {
+  border: 1px solid var(--color-border);
   padding: 8px;
   text-align: left;
 }
 
 th {
-  background: #f5f5f5;
+  background: var(--color-header-bg);
+  color: var(--color-header-text);
   position: sticky;
   top: 0;
 }
 
 /* Zeilenfarben nach Druckerstatus */
-tr.offline, tr.error {
-  background: #ffe5e5;  /* rot für offline / fehler */
+tr.offline {
+  background: var(--row-offline-bg);
+}
+
+tr.error {
+  background: var(--row-error-bg);
 }
 
 tr.printing {
-  background: #eaf4ff;  /* leichtes Blau für aktive Drucke */
+  background: var(--row-printing-bg);
 }
 
 tr.standby {
-  background: #e9f9ee;  /* leichtes Grün für Standby */
+  background: var(--row-standby-bg);
 }
 
 tr.complete {
-  background: #f5fff5;  /* sehr helles Grün */
+  background: var(--row-complete-bg);
 }
 
 tr.paused {
-  background: #fff9e6;  /* leicht gelblich */
+  background: var(--row-paused-bg);
 }
 
 /* Badges */
@@ -62,23 +120,24 @@ tr.paused {
   font-size: 12px;
 }
 
-.badge.printing { background: #e7f5ff; }
-.badge.complete { background: #e6ffe6; }
-.badge.paused   { background: #fff3cd; }
-.badge.standby  { background: #f0fff4; }
-.badge.cancelled{ background: #ffe6e6; }
-.badge.error    { background: #ffd0c7; }
-.badge.offline  { background: #ffc9c9; }
+.badge.printing  { background: var(--badge-printing-bg); }
+.badge.complete  { background: var(--badge-complete-bg); }
+.badge.paused    { background: var(--badge-paused-bg); }
+.badge.standby   { background: var(--badge-standby-bg); }
+.badge.cancelled { background: var(--badge-cancelled-bg); }
+.badge.error     { background: var(--badge-error-bg); }
+.badge.offline   { background: var(--badge-offline-bg); }
 
 small.mono {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  color: #666;
+  color: var(--color-muted-text);
 }
 
+/* Fortschrittsbalken */
 .progress {
   width: 100%;
   height: 10px;
-  background: #eee;
+  background: var(--color-progress-bg);
   border-radius: 6px;
   overflow: hidden;
 }
@@ -86,25 +145,227 @@ small.mono {
 .progress > div {
   height: 100%;
   width: 0%;
-  transition: width .4s ease;
+  transition: width 0.4s ease;
+  background: var(--color-progress-fill);
 }
 
+/* Buttons */
 .btn {
   display: inline-block;
   padding: 6px 10px;
   border-radius: 8px;
-  border: 1px solid #ddd;
-  background: #fafafa;
+  border: 1px solid var(--btn-border);
+  background: var(--btn-bg);
   text-decoration: none;
-  color: #111;
+  color: var(--btn-text);
   font-size: 13px;
   margin-right: 6px;
 }
 
 .btn:hover {
-  background: #f0f0f0;
+  background: var(--btn-hover-bg);
 }
 
 .actions {
   white-space: nowrap;
+}
+
+/* ===========================
+   Navigation
+   =========================== */
+
+nav {
+  background: var(--nav-bg);
+  color: var(--nav-text);
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--nav-border-color);
+}
+
+nav ul {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0 1.5rem;
+  gap: 1rem;
+}
+
+nav a {
+  color: var(--nav-link);
+  text-decoration: none;
+  padding: 0.25rem 0.5rem;
+  transition: color 0.15s ease, border-bottom-color 0.15s ease;
+}
+
+nav a.active,
+nav a:hover {
+  color: var(--nav-link-hover);
+  border-bottom: 2px solid var(--nav-link-active-border);
+}
+
+/* Theme-Selector im Menü */
+.theme-selector {
+  margin-left: auto; /* nach rechts schieben */
+}
+
+.theme-selector label {
+  font-size: 0.85rem;
+  margin-right: 0.35rem;
+  color: var(--nav-link);
+}
+
+.theme-selector select {
+  font-size: 0.85rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 6px;
+  border: 1px solid var(--nav-border-color);
+  background: var(--nav-bg);
+  color: var(--nav-text);
+}
+
+.theme-selector select:focus {
+  outline: none;
+  border-color: var(--nav-link-active-border);
+}
+
+/* ===========================
+   Themes (Farbschemata)
+   =========================== */
+
+/* 1) Light Blue Theme */
+body.theme-light-blue {
+  --color-bg: #f4f7fb;
+  --color-text: #111827;
+  --color-muted-text: #6b7280;
+
+  --color-border: #d1d5db;
+  --color-header-bg: #e5e7eb;
+  --color-header-text: #111827;
+
+  --color-progress-bg: #e5e7eb;
+  --color-progress-fill: #3b82f6;
+
+  --btn-bg: #ffffff;
+  --btn-border: #cbd5f5;
+  --btn-text: #111827;
+  --btn-hover-bg: #e5e7ff;
+
+  --row-offline-bg: #fee2e2;
+  --row-error-bg:   #fee2e2;
+  --row-printing-bg:#dbeafe;
+  --row-standby-bg: #dcfce7;
+  --row-complete-bg:#ecfdf3;
+  --row-paused-bg:  #fef9c3;
+
+  --badge-printing-bg:  #e0edff;
+  --badge-complete-bg:  #d9f99d;
+  --badge-paused-bg:    #feeab6;
+  --badge-standby-bg:   #dcfce7;
+  --badge-cancelled-bg: #fecaca;
+  --badge-error-bg:     #fecaca;
+  --badge-offline-bg:   #fecaca;
+
+  --ok: #16a34a;
+  --mid: #eab308;
+  --low: #dc2626;
+  --muted: #e5e7eb;
+
+  --nav-bg: #ffffff;
+  --nav-text: #111827;
+  --nav-link: #4b5563;
+  --nav-link-hover: #111827;
+  --nav-link-active-border: #2563eb;
+  --nav-border-color: #d1d5db;
+}
+
+/* 2) Dark Blue Theme */
+body.theme-dark-blue {
+  --color-bg: #020617;
+  --color-text: #e5e7eb;
+  --color-muted-text: #9ca3af;
+
+  --color-border: #1f2937;
+  --color-header-bg: #0f172a;
+  --color-header-text: #e5e7eb;
+
+  --color-progress-bg: #020617;
+  --color-progress-fill: #3b82f6;
+
+  --btn-bg: #0f172a;
+  --btn-border: #1f2937;
+  --btn-text: #e5e7eb;
+  --btn-hover-bg: #111827;
+
+  --row-offline-bg: #451a1a;
+  --row-error-bg:   #451a1a;
+  --row-printing-bg:#1e293b;
+  --row-standby-bg: #052e1b;
+  --row-complete-bg:#064e3b;
+  --row-paused-bg:  #42330a;
+
+  --badge-printing-bg:  #1d3559;
+  --badge-complete-bg:  #14532d;
+  --badge-paused-bg:    #854d0e;
+  --badge-standby-bg:   #166534;
+  --badge-cancelled-bg: #7f1d1d;
+  --badge-error-bg:     #7f1d1d;
+  --badge-offline-bg:   #7f1d1d;
+
+  --ok: #22c55e;
+  --mid: #eab308;
+  --low: #f97373;
+  --muted: #4b5563;
+
+  --nav-bg: #0f172a;
+  --nav-text: #e5e7eb;
+  --nav-link: #9ca3af;
+  --nav-link-hover: #ffffff;
+  --nav-link-active-border: #f59e0b;
+  --nav-border-color: #1e293b;
+}
+
+/* 3) Dark Teal Theme */
+body.theme-dark-teal {
+  --color-bg: #020617;
+  --color-text: #e0f2f1;
+  --color-muted-text: #80cbc4;
+
+  --color-border: #0f2930;
+  --color-header-bg: #022c33;
+  --color-header-text: #e0f2f1;
+
+  --color-progress-bg: #011619;
+  --color-progress-fill: #14b8a6;
+
+  --btn-bg: #022c33;
+  --btn-border: #064e53;
+  --btn-text: #e0f2f1;
+  --btn-hover-bg: #04353d;
+
+  --row-offline-bg: #421b23;
+  --row-error-bg:   #421b23;
+  --row-printing-bg:#023047;
+  --row-standby-bg: #043d33;
+  --row-complete-bg:#065f46;
+  --row-paused-bg:  #654321;
+
+  --badge-printing-bg:  #023e53;
+  --badge-complete-bg:  #065f46;
+  --badge-paused-bg:    #8b5a2b;
+  --badge-standby-bg:   #0f766e;
+  --badge-cancelled-bg: #7f1d1d;
+  --badge-error-bg:     #7f1d1d;
+  --badge-offline-bg:   #7f1d1d;
+
+  --ok: #22c55e;
+  --mid: #eab308;
+  --low: #fb7185;
+  --muted: #4b5563;
+
+  --nav-bg: #022c33;
+  --nav-text: #e0f2f1;
+  --nav-link: #80cbc4;
+  --nav-link-hover: #ffffff;
+  --nav-link-active-border: #14b8a6;
+  --nav-border-color: #064e53;
 }

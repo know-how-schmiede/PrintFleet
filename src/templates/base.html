@@ -4,70 +4,83 @@
     <meta charset="utf-8">
     <title>{% block title %}Drucker-Status{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- vorhandenes CSS weiterverwenden -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='DashboardStyle.css') }}">
-    <style>
-        /* kleines zusätzliches Styling für das Menü */
-        nav {
-            background: #111827;
-            color: #e5e7eb;
-            padding: 0.5rem 1rem;
-        }
-        nav ul {
-            display: flex;
-            align-items: center;     /* wichtig, damit das Logo vertikal zentriert ist */
-            list-style: none;
-            margin: 0;
-            padding: 0 1.5rem;
-            gap: 1rem;
-        }
-        nav a {
-            color: #9ca3af;
-            text-decoration: none;
-            padding: 0.25rem 0.5rem;
-        }
-        nav a.active, nav a:hover {
-            color: #f9fafb;
-            border-bottom: 2px solid #f59e0b;
-        }
-        main {
-            padding: 1rem;
-        }
-    </style>
 </head>
+
 <body>
     <h1>PrintFleet V0.1</h1>
     <p><small class="mono">Aktualisierung alle 5&nbsp;Sekunden</small></p>
 
     <nav>
-    <ul>
-        <!-- LOGO: kein Link, nur ein Bild -->
-        <li style="margin-right: 1rem;">
-            <img src="{{ url_for('static', filename='PrintFleetLogo200.png') }}"
-            alt="Logo"
-            style="height: 32px; width: auto; vertical-align: middle;">
-        </li>
+        <ul>
+            <li style="margin-right: 1rem;">
+                <img src="{{ url_for('static', filename='PrintFleetLogo200.png') }}"
+                    alt="Logo"
+                    style="height: 32px; width: auto; vertical-align: middle;">
+            </li>
 
+            <li>
+                <a href="{{ url_for('index') }}"
+                    class="{% if page == 'overview' %}active{% endif %}">
+                    Übersicht
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('settings_page') }}"
+                    class="{% if page == 'settings' %}active{% endif %}">
+                    Einstellungen
+                </a>
+            </li>
 
-        <li>
-            <a href="{{ url_for('index') }}"
-               class="{% if page == 'overview' %}active{% endif %}">
-                Übersicht
-            </a>
-        </li>
-        <li>
-            <a href="{{ url_for('settings_page') }}"
-               class="{% if page == 'settings' %}active{% endif %}">
-                Einstellungen
-            </a>
-        </li>
-
-        <!-- Weitere Links später einfach ergänzen -->
-    </ul>
-</nav>
+            <li class="theme-selector">
+                <label for="themeSelect">Theme:</label>
+                <select id="themeSelect">
+                    <option value="default">Standard</option>
+                    <option value="theme-light-blue">Light Blue</option>
+                    <option value="theme-dark-blue">Dark Blue</option>
+                    <option value="theme-dark-teal">Dark Teal</option>
+                </select>
+            </li>
+        </ul>
+    </nav>
 
     <main>
         {% block content %}{% endblock %}
     </main>
+
+    <!-- Theme-Script bleibt unverändert -->
+    <script>
+        (function() {
+            const THEME_KEY = 'printfleet-theme';
+            const body = document.body;
+            const select = document.getElementById('themeSelect');
+
+            const knownThemes = [
+                'theme-light-blue',
+                'theme-dark-blue',
+                'theme-dark-teal'
+            ];
+
+            function applyTheme(theme) {
+                knownThemes.forEach(t => body.classList.remove(t));
+                if (theme && theme !== 'default') body.classList.add(theme);
+            }
+
+            const savedTheme = localStorage.getItem(THEME_KEY);
+
+            if (savedTheme) {
+                applyTheme(savedTheme);
+                select.value = savedTheme;
+            }
+
+            select.addEventListener('change', function() {
+                const value = this.value;
+                applyTheme(value);
+                localStorage.setItem(THEME_KEY, value);
+            });
+        })();
+    </script>
+
 </body>
 </html>
