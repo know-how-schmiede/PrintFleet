@@ -9,3 +9,5 @@ Migration von Konfig-File auf SQLite-Datenbank Lösung. Verwaltung der Datenbank
 
 ### 17. November 2025:
 Installation auf Proxmox-CLuster im FutureSpace Lab. Drucker-Daten per CSV-Export aus DBBrowser gebackupt.
+CSS-Theme`s eingebaut. Anleitung um Git-Pull für Update aus Server ergänzt
+![Drucker-Status V1](images/Screen_DashBoard_V1.png)
