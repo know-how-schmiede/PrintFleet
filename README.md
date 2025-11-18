@@ -80,16 +80,16 @@ Im Fokus stehen:
 
 ## Unterstützte Drucker
 ### Klipper/Moonraker (Bereits integriert)
-- Elegoo Neptune 4 Pro (funktioniert, getestet)
-- Elegoo Neptune 4 Plus (funktioniert, getestet)
+- Elegoo Neptune 4 Pro ✔
+- Elegoo Neptune 4 Plus ✔
 - Creality Sonic Pad (müsste funktionieren)
 - Ender 3 mit Klipper (müsste funktionieren)
 - Voron (müsste funktionieren)
 - Anycubic Kobra 3 (müsste funktionieren)
 
 ### OctoPrint
-- FLSUN SuperRacer (funktioniert, getestet)
-- FLSUN Q5 (funktioniert, getestet)
+- FLSUN SuperRacer ✔
+- FLSUN Q5 ✔
 - viele ältere Drucker, Eigenbau
 
 ### PrusaLink / PrusaConnect (Muss noch integriert werden)
