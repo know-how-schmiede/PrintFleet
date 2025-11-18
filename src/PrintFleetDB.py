@@ -63,6 +63,9 @@ def init_db_schema_only() -> None:
             -- Platzhalter für spätere Erweiterungen
             tasmota_host TEXT,
             tasmota_topic TEXT,
+            location TEXT,
+            printer_type TEXT,
+            notes TEXT,
             enabled INTEGER NOT NULL DEFAULT 1
         );
         """
