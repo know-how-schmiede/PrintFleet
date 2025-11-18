@@ -1,0 +1,66 @@
+{
+  "app_title": "PrintFleet – Обзор принтеров",
+
+  "menu_dashboard": "Панель",
+  "menu_printers": "Принтеры",
+  "menu_settings": "Настройки",
+
+  "page_overview_title": "Обзор принтеров",
+  "page_settings_title": "Настройки",
+
+  "btn_refresh": "Обновить",
+  "btn_save": "Сохранить",
+  "btn_cancel": "Отмена",
+  "btn_open_web_ui": "Открыть веб-интерфейс",
+
+  "col_printer_name": "Имя",
+  "col_backend": "Бэкенд",
+  "col_host": "Хост",
+  "col_state": "Статус",
+  "col_filename": "Файл",
+  "col_progress": "Прогресс",
+  "col_elapsed": "Прошло",
+  "col_eta": "Осталось",
+  "col_hotend": "Хотэнд",
+  "col_hotend_target": "Цель (Хотэнд)",
+  "col_bed": "Платформа",
+  "col_bed_target": "Цель (Платформа)",
+  "col_last_update": "Последнее обновление",
+  "col_error": "Ошибка",
+  "col_link": "Веб-интерфейс",
+  "col_actions": "Действия",
+
+  "state_printing": "Печать",
+  "state_paused": "Пауза",
+  "state_cancelled": "Отменено",
+  "state_complete": "Завершено",
+  "state_error": "Ошибка",
+  "state_offline": "Офлайн",
+  "state_standby": "Ожидание",
+  "state_unknown": "Неизвестно",
+
+  "status_no_printers": "Нет настроенных принтеров.",
+  "status_loading": "Загрузка статуса принтера…",
+  "status_last_update": "Последнее обновление",
+
+  "settings_section_general": "Основные настройки",
+  "settings_poll_interval": "Интервал опроса (секунды)",
+  "settings_db_reload_interval": "Интервал обновления базы данных (секунды)",
+  "settings_telegram_chat_id": "ID чата Telegram",
+  "settings_language": "Язык",
+
+  "settings_language_en": "Английский",
+  "settings_language_de": "Немецкий",
+
+  "settings_saved": "Настройки сохранены.",
+  "settings_save_error": "Не удалось сохранить настройки.",
+  "settings_info_restart_hint": "Некоторые изменения могут потребовать перезагрузки сервиса.",
+
+  "refresh_interval_info": "Обновление каждые 5 секунд",
+
+  "theme_label": "Тема:",
+  "theme_default": "По умолчанию",
+  "theme_light_blue": "Светло-синяя",
+  "theme_dark_blue": "Тёмно-синяя",
+  "theme_dark_teal": "Тёмный бирюзовый"
+}

@@ -1,0 +1,66 @@
+{
+  "app_title": "PrintFleet – Vue d’ensemble des imprimantes",
+
+  "menu_dashboard": "Tableau de bord",
+  "menu_printers": "Imprimantes",
+  "menu_settings": "Paramètres",
+
+  "page_overview_title": "Vue d’ensemble des imprimantes",
+  "page_settings_title": "Paramètres",
+
+  "btn_refresh": "Actualiser",
+  "btn_save": "Enregistrer",
+  "btn_cancel": "Annuler",
+  "btn_open_web_ui": "Ouvrir l’interface Web",
+
+  "col_printer_name": "Nom",
+  "col_backend": "Backend",
+  "col_host": "Hôte",
+  "col_state": "Statut",
+  "col_filename": "Fichier",
+  "col_progress": "Progression",
+  "col_elapsed": "Écoulé",
+  "col_eta": "Restant",
+  "col_hotend": "Hotend",
+  "col_hotend_target": "Cible (Hotend)",
+  "col_bed": "Plateau",
+  "col_bed_target": "Cible (Plateau)",
+  "col_last_update": "Dernière mise à jour",
+  "col_error": "Erreur",
+  "col_link": "Interface Web",
+  "col_actions": "Actions",
+
+  "state_printing": "Impression en cours",
+  "state_paused": "En pause",
+  "state_cancelled": "Annulé",
+  "state_complete": "Terminé",
+  "state_error": "Erreur",
+  "state_offline": "Hors ligne",
+  "state_standby": "En attente",
+  "state_unknown": "Inconnu",
+
+  "status_no_printers": "Aucune imprimante configurée.",
+  "status_loading": "Chargement du statut des imprimantes…",
+  "status_last_update": "Dernière mise à jour",
+
+  "settings_section_general": "Paramètres généraux",
+  "settings_poll_interval": "Intervalle d’interrogation (secondes)",
+  "settings_db_reload_interval": "Intervalle de rechargement de la base (secondes)",
+  "settings_telegram_chat_id": "ID de chat Telegram",
+  "settings_language": "Langue",
+
+  "settings_language_en": "Anglais",
+  "settings_language_de": "Allemand",
+
+  "settings_saved": "Les paramètres ont été enregistrés.",
+  "settings_save_error": "Impossible d’enregistrer les paramètres.",
+  "settings_info_restart_hint": "Certaines modifications peuvent nécessiter un redémarrage du service.",
+
+  "refresh_interval_info": "Actualisation toutes les 5 secondes",
+
+  "theme_label": "Thème :",
+  "theme_default": "Par défaut",
+  "theme_light_blue": "Bleu clair",
+  "theme_dark_blue": "Bleu foncé",
+  "theme_dark_teal": "Turquoise foncé"
+}
