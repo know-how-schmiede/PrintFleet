@@ -1,29 +1,44 @@
 {% extends "base.html" %}
 
-{% block title %}Drucker-Status{% endblock %}
+{% block title %}{{ _('page_overview_title') }}{% endblock %}
 
 {% block content %}
   <table id="tbl">
     <thead>
       <tr>
-        <th>Name</th>
-        <th>Backend</th>
-        <th>Status</th>
-        <th>Datei</th>
-        <th style="min-width:160px">Fortschritt</th>
-        <th>verstrichen</th>
-        <th>Rest</th>
-        <th>Hotend (Ist/Target)</th>
-        <th>Bed (Ist/Target)</th>
-        <th>Zuletzt</th>
-        <th>Aktionen</th>
-        <th>Fehler</th>
+        <th>{{ _('col_printer_name') }}</th>
+        <th>{{ _('col_backend') }}</th>
+        <th>{{ _('col_state') }}</th>
+        <th>{{ _('col_filename') }}</th>
+        <th style="min-width:160px">{{ _('col_progress') }}</th>
+        <th>{{ _('col_elapsed') }}</th>
+        <th>{{ _('col_eta') }}</th>
+        <th>{{ _('col_hotend') }} ({{ _('col_hotend_target') }})</th>
+        <th>{{ _('col_bed') }} ({{ _('col_bed_target') }})</th>
+        <th>{{ _('col_last_update') }}</th>
+        <th>{{ _('col_actions') }}</th>
+        <th>{{ _('col_error') }}</th>
       </tr>
     </thead>
     <tbody></tbody>
   </table>
 
 <script>
+// Übersetzte Status-Texte aus dem Backend
+const STATE_LABELS = {
+  "printing": "{{ _('state_printing') }}",
+  "paused": "{{ _('state_paused') }}",
+  "cancelled": "{{ _('state_cancelled') }}",
+  "complete": "{{ _('state_complete') }}",
+  "error": "{{ _('state_error') }}",
+  "offline": "{{ _('state_offline') }}",
+  "standby": "{{ _('state_standby') }}",
+  "unknown": "{{ _('state_unknown') }}"
+};
+
+// Button-Text für Aktionen
+const BTN_OPEN_WEB_UI = "{{ _('btn_open_web_ui') }}";
+
 function pctColor(p){
   if(p >= 80) return 'linear-gradient(90deg,#16a34a,#22c55e)'; // grün
   if(p >= 40) return 'linear-gradient(90deg,#ca8a04,#eab308)'; // gelb
@@ -63,7 +78,8 @@ async function loadData(){
       const td = (t)=>{ const x=document.createElement('td'); x.textContent=t; return x; };
       const tdHTML = (h)=>{ const x=document.createElement('td'); x.innerHTML=h; return x; };
 
-      const badge = '<span class="badge ' + state + '">' + state + '</span>';
+      const stateLabel = STATE_LABELS[state] || state;
+      const badge = '<span class="badge ' + state + '">' + stateLabel + '</span>';
 
       // Fortschrittsbalken
       const progCell = document.createElement('td');
@@ -83,7 +99,7 @@ async function loadData(){
       const actions = document.createElement('td'); actions.className='actions';
       if(link){
         const a1 = document.createElement('a'); a1.href = link; a1.target = '_blank'; a1.className='btn';
-        a1.textContent = 'Web-UI öffnen';
+        a1.textContent = BTN_OPEN_WEB_UI;
         actions.appendChild(a1);
       }
 

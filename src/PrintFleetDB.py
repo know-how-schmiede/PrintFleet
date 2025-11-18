@@ -7,9 +7,11 @@ import threading
 import requests
 import sqlite3
 import os
+import json
 from typing import Optional, Dict, Any
 
-from flask import Flask, jsonify, render_template
+# from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, g
 
 # -------------------------------------------------
 # Konfiguration laden (nur GLOBAL)
@@ -26,7 +28,15 @@ except Exception as e:
 # -------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "PrintFleet.sqlite3")
+I18N_DIR = os.path.join(BASE_DIR, "i18n")
 
+# -------------------------------------------------
+# Flask-App mit Template- und Static-Ordner
+# -------------------------------------------------
+app = Flask(__name__, static_folder="static", template_folder="templates")
+
+state_lock = threading.Lock()
+printer_state: Dict[str, Dict[str, Any]] = {}
 
 def get_db_connection() -> sqlite3.Connection:
     conn = sqlite3.connect(DB_PATH)
@@ -78,24 +88,33 @@ def init_db_schema_only() -> None:
             id INTEGER PRIMARY KEY CHECK (id = 1),
             poll_interval REAL,
             db_reload_interval REAL,
-            telegram_chat_id TEXT
+            telegram_chat_id TEXT,
+            language TEXT
         );
         """
     )
+
+    # Migration für bestehende Installationen:
+    cur.execute("PRAGMA table_info(settings)")
+    cols = [r[1] for r in cur.fetchall()]
+    if "language" not in cols:
+        cur.execute("ALTER TABLE settings ADD COLUMN language TEXT")
+
 
     # Falls noch kein Settings-Datensatz existiert, einen Default-Eintrag erzeugen
     cur.execute("SELECT COUNT(*) AS cnt FROM settings")
     row = cur.fetchone()
     if not row or row[0] == 0:
         default_poll = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
-        default_reload = 30.0  # alle 30 Sekunden nach DB-Änderungen schauen
+        default_reload = 30.0
         cur.execute(
             """
-            INSERT INTO settings (id, poll_interval, db_reload_interval, telegram_chat_id)
-            VALUES (1, ?, ?, NULL)
+            INSERT INTO settings (id, poll_interval, db_reload_interval, telegram_chat_id, language)
+            VALUES (1, ?, ?, NULL, 'en')
             """,
             (default_poll, default_reload),
         )
+
 
     conn.commit()
     conn.close()
@@ -112,7 +131,7 @@ def load_settings_from_db() -> Dict[str, Any]:
 
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT poll_interval, db_reload_interval, telegram_chat_id FROM settings WHERE id = 1")
+    cur.execute("SELECT poll_interval, db_reload_interval, telegram_chat_id, language FROM settings WHERE id = 1")
     row = cur.fetchone()
     conn.close()
 
@@ -121,10 +140,12 @@ def load_settings_from_db() -> Dict[str, Any]:
         settings["poll_interval"] = float(row["poll_interval"] or default_poll)
         settings["db_reload_interval"] = float(row["db_reload_interval"] or 30.0)
         settings["telegram_chat_id"] = row["telegram_chat_id"]
+        settings["language"] = row["language"] or "en"
     else:
         settings["poll_interval"] = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
         settings["db_reload_interval"] = 30.0
         settings["telegram_chat_id"] = None
+        settings["language"] = "en"
 
     return settings
 
@@ -176,6 +197,61 @@ def load_printers_from_db() -> list[dict]:
         )
     return printers
 
+def load_translations(lang_code: str) -> dict:
+    """Lädt Übersetzungen aus JSON-Dateien mit Fallback auf Englisch."""
+    translations: Dict[str, Any] = {}
+
+    # 1) Basis: Englisch immer laden
+    en_path = os.path.join(I18N_DIR, "en.json")
+    if os.path.exists(en_path):
+        try:
+            with open(en_path, "r", encoding="utf-8") as f:
+                translations = json.load(f)
+        except Exception as e:
+            print(f"[i18n] Fehler beim Laden von en.json: {e}", file=sys.stderr)
+
+    # 2) Gewünschte Sprache darüberlegen (falls nicht englisch)
+    if lang_code != "en":
+        lang_path = os.path.join(I18N_DIR, f"{lang_code}.json")
+        if os.path.exists(lang_path):
+            try:
+                with open(lang_path, "r", encoding="utf-8") as f:
+                    specific = json.load(f)
+                translations.update(specific)
+            except Exception as e:
+                print(f"[i18n] Fehler beim Laden von {lang_code}.json: {e}", file=sys.stderr)
+
+    return translations
+
+
+def get_current_language() -> str:
+    """Aktuelle Sprache aus den geladenen SETTINGS ermitteln."""
+    lang = SETTINGS.get("language") or "en"
+    return lang
+
+
+def _(key: str) -> str:
+    """Übersetzungsfunktion für Jinja-Templates."""
+    if not hasattr(g, "translations"):
+        return key
+    return g.translations.get(key, key)
+
+
+@app.before_request
+def set_language():
+    """Vor jedem Request Sprache setzen und Übersetzungen laden."""
+    lang = get_current_language()
+    g.lang = lang
+    g.translations = load_translations(lang)
+
+
+@app.context_processor
+def inject_translation_helpers():
+    """Stellt _() und current_language() in allen Templates zur Verfügung."""
+    return {
+        "_": _,
+        "current_language": lambda: getattr(g, "lang", "en"),
+    }
 
 
 # DB-Struktur anlegen und initiale Daten laden
@@ -184,13 +260,7 @@ SETTINGS: Dict[str, Any] = load_settings_from_db()
 PRINTERS = load_printers_from_db()
 
 
-# -------------------------------------------------
-# Flask-App mit Template- und Static-Ordner
-# -------------------------------------------------
-app = Flask(__name__, static_folder="static", template_folder="templates")
 
-state_lock = threading.Lock()
-printer_state: Dict[str, Dict[str, Any]] = {}
 
 # aktive Monitor-Threads nach Drucker-ID
 monitor_threads: Dict[int, threading.Thread] = {}

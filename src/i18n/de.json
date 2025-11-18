@@ -1,0 +1,67 @@
+{
+  "app_title": "PrintFleet – Drucker-Übersicht",
+
+  "menu_dashboard": "Dashboard",
+  "menu_printers": "Drucker",
+  "menu_settings": "Einstellungen",
+
+  "page_overview_title": "Drucker-Übersicht",
+  "page_settings_title": "Einstellungen",
+
+  "btn_refresh": "Aktualisieren",
+  "btn_save": "Speichern",
+  "btn_cancel": "Abbrechen",
+  "btn_open_web_ui": "Web-UI öffnen",
+
+  "col_printer_name": "Name",
+  "col_backend": "Backend",
+  "col_host": "Host",
+  "col_state": "Status",
+  "col_filename": "Datei",
+  "col_progress": "Fortschritt",
+  "col_elapsed": "Vergangen",
+  "col_eta": "Verbleibend",
+  "col_hotend": "Hotend",
+  "col_hotend_target": "Soll (Hotend)",
+  "col_bed": "Druckbett",
+  "col_bed_target": "Soll (Bett)",
+  "col_last_update": "Letzte Aktualisierung",
+  "col_error": "Fehler",
+  "col_link": "Web-Oberfläche",
+  "col_actions": "Aktionen",
+ 
+  "state_printing": "Druck läuft",
+  "state_paused": "Pausiert",
+  "state_cancelled": "Abgebrochen",
+  "state_complete": "Abgeschlossen",
+  "state_error": "Fehler",
+  "state_offline": "Offline",
+  "state_standby": "Bereit",
+  "state_unknown": "Unbekannt",
+
+  "status_no_printers": "Keine Drucker konfiguriert.",
+  "status_loading": "Druckerstatus wird geladen…",
+  "status_last_update": "Letzte Aktualisierung",
+
+  "settings_section_general": "Allgemeine Einstellungen",
+  "settings_poll_interval": "Abfrageintervall (Sekunden)",
+  "settings_db_reload_interval": "DB-Reload-Intervall (Sekunden)",
+  "settings_telegram_chat_id": "Telegram-Chat-ID",
+  "settings_language": "Sprache",
+
+  "settings_language_en": "Englisch",
+  "settings_language_de": "Deutsch",
+
+  "settings_saved": "Einstellungen wurden gespeichert.",
+  "settings_save_error": "Einstellungen konnten nicht gespeichert werden.",
+  "settings_info_restart_hint": "Einige Änderungen erfordern eventuell einen Neustart des Dienstes.",
+
+  "refresh_interval_info": "Aktualisierung alle 5 Sekunden",
+
+  "theme_label": "Theme:",
+  "theme_default": "Standard",
+  "theme_light_blue": "Hellblau",
+  "theme_dark_blue": "Dunkelblau",
+  "theme_dark_teal": "Dunkles Türkis"
+
+}

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="{{ current_language() }}">
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}Drucker-Status{% endblock %}</title>
+    <title>{% block title %}{{ _('app_title') }}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='DashboardStyle.css') }}">
@@ -10,7 +10,7 @@
 
 <body>
     <h1>PrintFleet V0.1</h1>
-    <p><small class="mono">Aktualisierung alle 5&nbsp;Sekunden</small></p>
+    <p><small class="mono">{{ _('refresh_interval_info') }}</small></p>
 
     <nav>
         <ul>
@@ -23,25 +23,27 @@
             <li>
                 <a href="{{ url_for('index') }}"
                     class="{% if page == 'overview' %}active{% endif %}">
-                    Übersicht
+                    {{ _('menu_dashboard') }}
                 </a>
             </li>
             <li>
                 <a href="{{ url_for('settings_page') }}"
                     class="{% if page == 'settings' %}active{% endif %}">
-                    Einstellungen
+                    {{ _('menu_settings') }}
                 </a>
             </li>
 
+            <!-- Theme selection -->
             <li class="theme-selector">
-                <label for="themeSelect">Theme:</label>
+                <label for="themeSelect">{{ _('theme_label') }}</label>
                 <select id="themeSelect">
-                    <option value="default">Standard</option>
-                    <option value="theme-light-blue">Light Blue</option>
-                    <option value="theme-dark-blue">Dark Blue</option>
-                    <option value="theme-dark-teal">Dark Teal</option>
+                    <option value="default">{{ _('theme_default') }}</option>
+                    <option value="theme-light-blue">{{ _('theme_light_blue') }}</option>
+                    <option value="theme-dark-blue">{{ _('theme_dark_blue') }}</option>
+                    <option value="theme-dark-teal">{{ _('theme_dark_teal') }}</option>
                 </select>
             </li>
+
         </ul>
     </nav>
 

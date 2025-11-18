@@ -1,0 +1,67 @@
+{
+  "app_title": "PrintFleet – Printer Overview",
+
+  "menu_dashboard": "Dashboard",
+  "menu_printers": "Printers",
+  "menu_settings": "Settings",
+
+  "page_overview_title": "Printer Overview",
+  "page_settings_title": "Settings",
+
+  "btn_refresh": "Refresh",
+  "btn_save": "Save",
+  "btn_cancel": "Cancel",
+  "btn_open_web_ui": "Open Web UI",
+
+  "col_printer_name": "Name",
+  "col_backend": "Backend",
+  "col_host": "Host",
+  "col_state": "Status",
+  "col_filename": "File",
+  "col_progress": "Progress",
+  "col_elapsed": "Elapsed",
+  "col_eta": "ETA",
+  "col_hotend": "Hotend",
+  "col_hotend_target": "Target (Hotend)",
+  "col_bed": "Bed",
+  "col_bed_target": "Target (Bed)",
+  "col_last_update": "Last update",
+  "col_error": "Error",
+  "col_link": "Web UI",
+  "col_actions": "Actions",
+
+  "state_printing": "Printing",
+  "state_paused": "Paused",
+  "state_cancelled": "Cancelled",
+  "state_complete": "Completed",
+  "state_error": "Error",
+  "state_offline": "Offline",
+  "state_standby": "Standby",
+  "state_unknown": "Unknown",
+
+  "status_no_printers": "No printers configured.",
+  "status_loading": "Loading printer status…",
+  "status_last_update": "Last update",
+
+  "settings_section_general": "General settings",
+  "settings_poll_interval": "Poll interval (seconds)",
+  "settings_db_reload_interval": "DB reload interval (seconds)",
+  "settings_telegram_chat_id": "Telegram chat ID",
+  "settings_language": "Language",
+
+  "settings_language_en": "English",
+  "settings_language_de": "German",
+
+  "settings_saved": "Settings have been saved.",
+  "settings_save_error": "Could not save settings.",
+  "settings_info_restart_hint": "Some changes may require a restart of the service.",
+
+  "refresh_interval_info": "Refreshing every 5 seconds",
+
+  "theme_label": "Theme:",
+  "theme_default": "Default",
+  "theme_light_blue": "Light Blue",
+  "theme_dark_blue": "Dark Blue",
+  "theme_dark_teal": "Dark Teal"
+
+}
