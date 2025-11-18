@@ -78,6 +78,33 @@ Im Fokus stehen:
 - Docker-Container
 - One-Click-Installer über GitHub Releases
 
+## Unterstützte Drucker
+### Klipper/Moonraker (Bereits integriert)
+- Elegoo Neptune 4 Pro (funktioniert, getestet)
+- Elegoo Neptune 4 Plus (funktioniert, getestet)
+- Creality Sonic Pad (müsste funktionieren)
+- Ender 3 mit Klipper (müsste funktionieren)
+- Voron (müsste funktionieren)
+- Anycubic Kobra 3 (müsste funktionieren)
+
+### OctoPrint
+- FLSUN SuperRacer (funktioniert, getestet)
+- FLSUN Q5 (funktioniert, getestet)
+- viele ältere Drucker, Eigenbau
+
+### PrusaLink / PrusaConnect (Muss noch integriert werden)
+- Prusa MK4
+- Prusa XL
+- Prusa MK3
+- Prusa MK3.9
+
+### BambuLab (Muss noch integriert werden)
+Lokale „LAN-Only API“ (MQTT + HTTP)
+- BambuLab X1 Carbon
+- BambuLab P1
+- BambuLab A1
+- BambuLab A1 mini
+
 ## Lizenz
 Der Quellcode dieses Projekts steht unter der Lizenz **CC BY-NC-SA 4.0**.
 
