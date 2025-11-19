@@ -22,14 +22,23 @@
 
             <li>
                 <a href="{{ url_for('index') }}"
-                    class="{% if page == 'overview' %}active{% endif %}">
+                class="{% if page == 'overview' %}active{% endif %}">
                     {{ _('menu_dashboard') }}
                 </a>
             </li>
+
             <li>
                 <a href="{{ url_for('settings_page') }}"
-                    class="{% if page == 'settings' %}active{% endif %}">
+                class="{% if page == 'settings' %}active{% endif %}">
                     {{ _('menu_settings') }}
+                </a>
+            </li>
+
+            <!-- NEU: Printer Setup -->
+            <li>
+                <a href="{{ url_for('printer_list') }}"
+                class="{% if page == 'printers' %}active{% endif %}">
+                    Printer Setup
                 </a>
             </li>
 
@@ -43,7 +52,6 @@
                     <option value="theme-dark-teal">{{ _('theme_dark_teal') }}</option>
                 </select>
             </li>
-
         </ul>
     </nav>
 

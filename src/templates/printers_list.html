@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Printer Setup – PrintFleet{% endblock %}
+
+{% block content %}
+<h2>Printer Setup</h2>
+
+<p>
+    <a href="{{ url_for('printer_new') }}" class="btn">
+        New Printer
+    </a>
+</p>
+
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Backend</th>
+            <th>Host</th>
+            <th>Port</th>
+            <th>HTTPS</th>
+            <th>Enabled</th>
+            <th>Aktionen</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for p in printers %}
+        <tr>
+            <td>{{ p["id"] }}</td>
+            <td>{{ p["name"] }}</td>
+            <td>{{ p["backend"] }}</td>
+            <td>{{ p["host"] }}</td>
+            <td>{{ p["port"] }}</td>
+            <td>{{ 'yes' if p["https"] else 'no' }}</td>
+            <td>{{ 'yes' if p["enabled"] else 'no' }}</td>
+            <td>
+                <a href="{{ url_for('printer_edit', printer_id=p['id']) }}" class="btn">
+                    Settings
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

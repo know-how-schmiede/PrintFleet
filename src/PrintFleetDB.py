@@ -11,7 +11,7 @@ import json
 from typing import Optional, Dict, Any
 
 # from flask import Flask, jsonify, render_template
-from flask import Flask, jsonify, render_template, g
+from flask import Flask, jsonify, render_template, g, request, redirect, url_for, abort
 
 # -------------------------------------------------
 # Konfiguration laden (nur GLOBAL)
@@ -196,6 +196,15 @@ def load_printers_from_db() -> list[dict]:
             }
         )
     return printers
+
+def get_printer_by_id(printer_id: int) -> Optional[sqlite3.Row]:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM printers WHERE id = ?", (printer_id,))
+    row = cur.fetchone()
+    conn.close()
+    return row
+
 
 def load_translations(lang_code: str) -> dict:
     """Lädt Übersetzungen aus JSON-Dateien mit Fallback auf Englisch."""
@@ -599,11 +608,149 @@ def settings_page() -> str:
     return render_template("settings.html", page="settings")
 
 
+@app.route("/printers")
+def printer_list() -> str:
+    """Liste aller Drucker anzeigen."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM printers ORDER BY id")
+    printers = cur.fetchall()
+    conn.close()
+    return render_template("printers_list.html", page="printers", printers=printers)
+
+
+@app.route("/printers/new", methods=["GET", "POST"])
+def printer_new() -> str:
+    """Neuen Drucker anlegen."""
+    error = None
+
+    if request.method == "POST":
+        name = (request.form.get("name") or "").strip()
+        backend = (request.form.get("backend") or "").strip()
+        host = (request.form.get("host") or "").strip()
+        port_raw = (request.form.get("port") or "").strip()
+        https_flag = 1 if request.form.get("https") == "on" else 0
+        token = (request.form.get("token") or "").strip() or None
+        api_key = (request.form.get("api_key") or "").strip() or None
+        err_int_raw = (request.form.get("error_report_interval") or "").strip()
+
+        # Simple Pflichtfelder-Prüfung
+        if not name or not backend or not host or not port_raw:
+            error = "Name, Backend, Host und Port sind Pflichtfelder."
+        else:
+            try:
+                port = int(port_raw)
+            except ValueError:
+                error = "Port muss eine Zahl sein."
+
+        if not error:
+            try:
+                error_report_interval = float(err_int_raw) if err_int_raw else 30.0
+            except ValueError:
+                error_report_interval = 30.0
+
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute(
+                """
+                INSERT INTO printers
+                    (name, backend, host, port, https, token, api_key,
+                     error_report_interval, enabled)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+                """,
+                (name, backend, host, port, https_flag, token, api_key, error_report_interval),
+            )
+            conn.commit()
+            new_id = cur.lastrowid
+            conn.close()
+            # Nach dem Anlegen direkt zur Detailseite
+            return redirect(url_for("printer_edit", printer_id=new_id))
+
+    # GET oder Fehlerfall
+    return render_template("printer_form.html", page="printers", printer=None, error=error, mode="new")
+    
+
+@app.route("/printers/<int:printer_id>", methods=["GET", "POST"])
+def printer_edit(printer_id: int) -> str:
+    """Bestehenden Drucker bearbeiten."""
+    printer = get_printer_by_id(printer_id)
+    if printer is None:
+        abort(404)
+
+    error = None
+
+    if request.method == "POST":
+        # Update-Formular
+        name = (request.form.get("name") or "").strip()
+        backend = (request.form.get("backend") or "").strip()
+        host = (request.form.get("host") or "").strip()
+        port_raw = (request.form.get("port") or "").strip()
+        https_flag = 1 if request.form.get("https") == "on" else 0
+        token = (request.form.get("token") or "").strip() or None
+        api_key = (request.form.get("api_key") or "").strip() or None
+        err_int_raw = (request.form.get("error_report_interval") or "").strip()
+        enabled_flag = 1 if request.form.get("enabled") == "on" else 0
+
+        if not name or not backend or not host or not port_raw:
+            error = "Name, Backend, Host und Port sind Pflichtfelder."
+        else:
+            try:
+                port = int(port_raw)
+            except ValueError:
+                error = "Port muss eine Zahl sein."
+
+        if not error:
+            try:
+                error_report_interval = float(err_int_raw) if err_int_raw else 30.0
+            except ValueError:
+                error_report_interval = 30.0
+
+            conn = get_db_connection()
+            cur = conn.cursor()
+            cur.execute(
+                """
+                UPDATE printers
+                SET name = ?, backend = ?, host = ?, port = ?, https = ?,
+                    token = ?, api_key = ?, error_report_interval = ?, enabled = ?
+                WHERE id = ?
+                """,
+                (name, backend, host, port, https_flag, token, api_key,
+                 error_report_interval, enabled_flag, printer_id),
+            )
+            conn.commit()
+            conn.close()
+            # Neu laden, damit die Ansicht aktualisiert ist
+            printer = get_printer_by_id(printer_id)
+
+    return render_template("printer_form.html", page="printers", printer=printer, error=error, mode="edit")
+
+
+@app.route("/printers/<int:printer_id>/delete", methods=["POST"])
+def printer_delete(printer_id: int):
+    """Drucker endgültig löschen."""
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM printers WHERE id = ?", (printer_id,))
+    conn.commit()
+    conn.close()
+    # Liste neu anzeigen
+    return redirect(url_for("printer_list"))
+
+
 @app.route("/api/status")
 def api_status():
     with state_lock:
         rows = [printer_state[k] for k in sorted(printer_state.keys())]
     return jsonify(rows)
+
+
+@app.route("/debug_routes")
+def debug_routes():
+    lines = []
+    for rule in app.url_map.iter_rules():
+        lines.append(f"{rule.endpoint} -> {rule.rule}")
+    return "<br>".join(sorted(lines))
+
 
 
 # ----------------- Start Threads + App -----------------
