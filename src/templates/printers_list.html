@@ -1,27 +1,27 @@
 {% extends "base.html" %}
 
-{% block title %}Printer Setup – PrintFleet{% endblock %}
+{% block title %}{{ _('printer_setup_title') }} – PrintFleet{% endblock %}
 
 {% block content %}
-<h2>Printer Setup</h2>
+<h2>{{ _('printer_setup_title') }}</h2>
 
 <p>
     <a href="{{ url_for('printer_new') }}" class="btn">
-        New Printer
+        {{ _('printer_new_button') }}
     </a>
 </p>
 
 <table>
     <thead>
         <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Backend</th>
-            <th>Host</th>
-            <th>Port</th>
-            <th>HTTPS</th>
-            <th>Enabled</th>
-            <th>Aktionen</th>
+            <th>{{ _('printer_list_id') }}</th>
+            <th>{{ _('printer_list_name') }}</th>
+            <th>{{ _('printer_list_backend') }}</th>
+            <th>{{ _('printer_list_host') }}</th>
+            <th>{{ _('printer_list_port') }}</th>
+            <th>{{ _('printer_list_https') }}</th>
+            <th>{{ _('printer_list_enabled') }}</th>
+            <th>{{ _('printer_list_actions') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -36,7 +36,7 @@
             <td>{{ 'yes' if p["enabled"] else 'no' }}</td>
             <td>
                 <a href="{{ url_for('printer_edit', printer_id=p['id']) }}" class="btn">
-                    Settings
+                    {{ _('printer_list_settings') }}
                 </a>
             </td>
         </tr>

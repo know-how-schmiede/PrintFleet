@@ -1,15 +1,19 @@
 {% extends "base.html" %}
 
 {% block title %}
-  {% if mode == 'new' %}Neuer Drucker – PrintFleet{% else %}Drucker bearbeiten – PrintFleet{% endif %}
+  {% if mode == 'new' %}
+    {{ _('printer_form_new_title') }} – PrintFleet
+  {% else %}
+    {{ _('printer_form_edit_title') }} – PrintFleet
+  {% endif %}
 {% endblock %}
 
 {% block content %}
 <h2>
   {% if mode == 'new' %}
-    Neuer Drucker
+    {{ _('printer_form_new_title') }}
   {% else %}
-    Drucker bearbeiten: {{ printer["name"] }}
+    {{ _('printer_form_edit_title') }}: {{ printer["name"] }}
   {% endif %}
 </h2>
 
@@ -19,13 +23,13 @@
 
 <form method="post">
     <div>
-        <label for="name">Name*</label><br>
+        <label for="name">{{ _('printer_form_name_label') }}*</label><br>
         <input type="text" id="name" name="name"
                value="{% if printer %}{{ printer['name'] }}{% endif %}" required>
     </div>
 
     <div>
-        <label for="backend">Backend*</label><br>
+        <label for="backend">{{ _('printer_form_backend_label') }}*</label><br>
         <select id="backend" name="backend" required>
             {% set current_backend = printer['backend'] if printer else 'moonraker' %}
             <option value="moonraker" {% if current_backend == 'moonraker' %}selected{% endif %}>Moonraker</option>
@@ -34,13 +38,13 @@
     </div>
 
     <div>
-        <label for="host">Host*</label><br>
+        <label for="host">{{ _('printer_form_host_label') }}*</label><br>
         <input type="text" id="host" name="host"
                value="{% if printer %}{{ printer['host'] }}{% endif %}" required>
     </div>
 
     <div>
-        <label for="port">Port*</label><br>
+        <label for="port">{{ _('printer_form_port_label') }}*</label><br>
         <input type="number" id="port" name="port"
                value="{% if printer %}{{ printer['port'] }}{% else %}80{% endif %}" required>
     </div>
@@ -49,24 +53,24 @@
         <label>
             <input type="checkbox" name="https"
                    {% if printer and printer['https'] %}checked{% endif %}>
-            HTTPS verwenden
+            {{ _('printer_form_https_label') }}
         </label>
     </div>
 
     <div>
-        <label for="token">Token (Moonraker)</label><br>
+        <label for="token">{{ _('printer_form_token_label') }}</label><br>
         <input type="text" id="token" name="token"
                value="{% if printer %}{{ printer['token'] or '' }}{% endif %}">
     </div>
 
     <div>
-        <label for="api_key">API-Key (OctoPrint)</label><br>
+        <label for="api_key">{{ _('printer_form_api_key_label') }}</label><br>
         <input type="text" id="api_key" name="api_key"
                value="{% if printer %}{{ printer['api_key'] or '' }}{% endif %}">
     </div>
 
     <div>
-        <label for="error_report_interval">Fehlermeldungs-Intervall (Sek.)</label><br>
+        <label for="error_report_interval">{{ _('printer_form_error_interval_label') }}</label><br>
         <input type="number" step="1" min="1" id="error_report_interval" name="error_report_interval"
                value="{% if printer %}{{ printer['error_report_interval'] }}{% else %}30{% endif %}">
     </div>
@@ -76,26 +80,30 @@
         <label>
             <input type="checkbox" name="enabled"
                    {% if printer and printer['enabled'] %}checked{% endif %}>
-            Drucker aktiviert
+            {{ _('printer_form_enabled_label') }}
         </label>
     </div>
     {% endif %}
 
     <p>
         <button type="submit" class="btn">
-          {% if mode == 'new' %}Anlegen{% else %}Speichern{% endif %}
+          {% if mode == 'new' %}
+            {{ _('printer_form_create_button') }}
+          {% else %}
+            {{ _('printer_form_save_button') }}
+          {% endif %}
         </button>
-        <a href="{{ url_for('printer_list') }}" class="btn">Zurück zur Liste</a>
+        <a href="{{ url_for('printer_list') }}" class="btn">{{ _('printer_form_back_to_list') }}</a>
     </p>
 </form>
 
 {% if mode == 'edit' %}
 <hr>
-<h3>Drucker löschen</h3>
+<h3>{{ _('printer_form_delete_title') }}</h3>
 <form method="post" action="{{ url_for('printer_delete', printer_id=printer['id']) }}"
-      onsubmit="return confirm('Diesen Drucker wirklich löschen?');">
+      onsubmit="return confirm('{{ _('printer_form_delete_confirm') }}');">
     <button type="submit" class="btn" style="background:#b91c1c;">
-        Löschen
+        {{ _('printer_form_delete_button') }}
     </button>
 </form>
 {% endif %}
