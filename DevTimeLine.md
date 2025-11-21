@@ -11,3 +11,9 @@ Migration von Konfig-File auf SQLite-Datenbank Lösung. Verwaltung der Datenbank
 Installation auf Proxmox-CLuster im FutureSpace Lab. Drucker-Daten per CSV-Export aus DBBrowser gebackupt.
 CSS-Theme`s eingebaut. Anleitung um Git-Pull für Update aus Server ergänzt
 ![Drucker-Status V1](images/Screen_DashBoard_V1.png)
+
+### 18.-21. November 2025:
+Integration der Formulare für Drucker-Verwaltung, Neu, Ändern und Löschen.
+Formular für Einstellungen, Tasmota-Steckdosen integration, Ein- und Ausschalten mittels Button, Status Button, Abfrage Status Tasmota-Steckdose, Alert bei Steckdosen Abschaltung.
+Recherche PlugIn (PortLister 0.1.10) für OctoPrint, damit bei Neustart von Drucker automatisch Verbindung zum Drucker durchgeführt wird.
+![Drucker-Status V2](images/Screen_DashBoard_V2.png)
