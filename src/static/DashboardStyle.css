@@ -165,13 +165,13 @@ small.mono {
 
 /* OFF → Anzeige "On" → grün */
 .power-btn.state-off {
-  background: #16a34a !important;  /* green-600 */
+  background: #dc2626 !important;  /* green-600 */
   color: white !important;
 }
 
 /* ON → Anzeige "Off" → rot */
 .power-btn.state-on {
-  background: #dc2626 !important;  /* red-600 */
+  background: #16a34a !important;  /* red-600 */
   color: white !important;
 }
 
