@@ -58,11 +58,11 @@ function updatePowerButton(btn, state) {
   btn.classList.remove("state-on", "state-off", "state-unknown");
 
   if (state === 'ON') {
-    btn.textContent = 'Off';
+    btn.textContent = 'ON';
     btn.classList.add("state-on");
 
   } else if (state === 'OFF') {
-    btn.textContent = 'On';
+    btn.textContent = 'OFF';
     btn.classList.add("state-off");
 
   } else {
