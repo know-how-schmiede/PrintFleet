@@ -69,6 +69,14 @@
                value="{% if printer %}{{ printer['api_key'] or '' }}{% endif %}">
     </div>
 
+    <!-- NEU: Tasmota-IP-Adresse -->
+    <div>
+        <label for="tasmota_host">{{ _('printer_form_tasmota_host_label') }}</label><br>
+        <input type="text" id="tasmota_host" name="tasmota_host"
+               placeholder="192.168.1.20"
+               value="{% if printer %}{{ printer['tasmota_host'] or '' }}{% endif %}">
+    </div>
+
     <div>
         <label for="error_report_interval">{{ _('printer_form_error_interval_label') }}</label><br>
         <input type="number" step="1" min="1" id="error_report_interval" name="error_report_interval"

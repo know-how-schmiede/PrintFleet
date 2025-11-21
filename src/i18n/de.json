@@ -1,17 +1,18 @@
 {
-  "app_title": "PrintFleet – Drucker-Übersicht",
+  "app_title": "PrintFleet – Druckerübersicht",
 
   "menu_dashboard": "Dashboard",
   "menu_printers": "Drucker",
   "menu_settings": "Einstellungen",
 
-  "page_overview_title": "Drucker-Übersicht",
-  "page_settings_title": "Einstellungen",
-
   "btn_refresh": "Aktualisieren",
   "btn_save": "Speichern",
   "btn_cancel": "Abbrechen",
-  "btn_open_web_ui": "Web-UI öffnen",
+  "btn_open_web_ui": "Weboberfläche öffnen",
+  "btn_power_toggle": "Strom",
+
+  "page_overview_title": "Druckerübersicht",
+  "page_settings_title": "Einstellungen",
 
   "col_printer_name": "Name",
   "col_backend": "Backend",
@@ -20,17 +21,17 @@
   "col_filename": "Datei",
   "col_progress": "Fortschritt",
   "col_elapsed": "Vergangen",
-  "col_eta": "Verbleibend",
+  "col_eta": "Restzeit",
   "col_hotend": "Hotend",
-  "col_hotend_target": "Soll (Hotend)",
+  "col_hotend_target": "Zielsoll (Hotend)",
   "col_bed": "Druckbett",
-  "col_bed_target": "Soll (Bett)",
+  "col_bed_target": "Zielsoll (Druckbett)",
   "col_last_update": "Letzte Aktualisierung",
   "col_error": "Fehler",
-  "col_link": "Web-Oberfläche",
+  "col_link": "Weboberfläche",
   "col_actions": "Aktionen",
- 
-  "state_printing": "Druck läuft",
+
+  "state_printing": "Druckt",
   "state_paused": "Pausiert",
   "state_cancelled": "Abgebrochen",
   "state_complete": "Abgeschlossen",
@@ -42,44 +43,39 @@
   "status_no_printers": "Keine Drucker konfiguriert.",
   "status_loading": "Druckerstatus wird geladen…",
   "status_last_update": "Letzte Aktualisierung",
-
-  "settings_section_general": "Allgemeine Einstellungen",
-  "settings_poll_interval": "Abfrageintervall (Sekunden)",
-  "settings_db_reload_interval": "DB-Reload-Intervall (Sekunden)",
-  "settings_telegram_chat_id": "Telegram-Chat-ID",
-  "settings_language": "Sprache",
-
-  "settings_language_en": "Englisch",
-  "settings_language_de": "Deutsch",
-
-  "settings_saved": "Einstellungen wurden gespeichert.",
-  "settings_save_error": "Einstellungen konnten nicht gespeichert werden.",
-  "settings_info_restart_hint": "Einige Änderungen erfordern eventuell einen Neustart des Dienstes.",
-
   "refresh_interval_info": "Aktualisierung alle 5 Sekunden",
 
   "theme_label": "Theme:",
   "theme_default": "Standard",
   "theme_light_blue": "Hellblau",
   "theme_dark_blue": "Dunkelblau",
-  "theme_dark_teal": "Dunkles Türkis",
+  "theme_dark_teal": "Dunkles Petrol",
 
+  "settings_title": "Einstellungen",
+  "settings_section_general": "Allgemeine Einstellungen",
 
-"settings_title": "Einstellungen",
-  "settings_message_saved": "Einstellungen gespeichert.",
-  "settings_poll_interval_label": "Poll-Intervall (Sekunden)",
-  "settings_poll_interval_help": "Wie oft PrintFleet jeden Drucker abfragt. Kleinere Werte bedeuten häufigere Aktualisierung, aber höhere Last.",
-  "settings_db_reload_interval_label": "DB-Reload-Intervall (Sekunden)",
-  "settings_db_reload_interval_help": "In welchem Abstand die Druckerkonfiguration aus der Datenbank neu eingelesen wird.",
+  "settings_poll_interval_label": "Abfrageintervall (Sekunden)",
+  "settings_db_reload_interval_label": "DB-Neuladeintervall (Sekunden)",
   "settings_telegram_chat_id_label": "Telegram Chat-ID",
-  "settings_telegram_chat_id_help": "Chat-ID für Telegram-Benachrichtigungen (optional). Leer lassen, wenn Telegram nicht genutzt wird.",
-  "settings_language_label": "Sprache der Oberfläche",
-  "settings_language_help": "Bestimmt, welche Übersetzungsdatei aus dem i18n-Ordner verwendet wird (Fallback ist Englisch).",
-  "settings_save_button": "Einstellungen speichern",
-  "settings_error_poll_interval": "Poll-Intervall muss eine positive Zahl sein.",
-  "settings_error_db_reload": "DB-Reload-Intervall muss eine Zahl sein.",
+  "settings_language_label": "Sprache der Benutzeroberfläche",
 
-  "printer_setup_title": "Printer Setup",
+  "settings_poll_interval_help": "Wie oft PrintFleet jeden Drucker abfragt. Kleinere Werte bedeuten häufigere Updates, aber auch höhere Systemlast.",
+  "settings_db_reload_interval_help": "Wie oft die Druckerkonfiguration aus der Datenbank neu geladen wird.",
+  "settings_telegram_chat_id_help": "Chat-ID für Telegram-Benachrichtigungen (optional). Leer lassen, wenn Telegram nicht verwendet wird.",
+  "settings_language_help": "Legt fest, welche Übersetzungsdatei aus dem i18n-Ordner verwendet wird (Englisch ist die Fallback-Sprache).",
+
+  "settings_language_en": "Englisch",
+  "settings_language_de": "Deutsch",
+
+  "settings_save_button": "Einstellungen speichern",
+  "settings_saved": "Einstellungen wurden gespeichert.",
+  "settings_message_saved": "Einstellungen gespeichert.",
+  "settings_save_error": "Einstellungen konnten nicht gespeichert werden.",
+  "settings_info_restart_hint": "Einige Änderungen erfordern möglicherweise einen Neustart des Dienstes.",
+  "settings_error_poll_interval": "Das Abfrageintervall muss eine positive Zahl sein.",
+  "settings_error_db_reload": "Das DB-Neuladeintervall muss eine Zahl sein.",
+
+  "printer_setup_title": "Druckerverwaltung",
   "printer_new_button": "Neuer Drucker",
   "printer_list_id": "ID",
   "printer_list_name": "Name",
@@ -87,11 +83,11 @@
   "printer_list_host": "Host",
   "printer_list_port": "Port",
   "printer_list_https": "HTTPS",
-  "printer_list_enabled": "Aktiv",
+  "printer_list_enabled": "Aktiviert",
   "printer_list_actions": "Aktionen",
   "printer_list_settings": "Einstellungen",
 
-  "printer_form_new_title": "Neuer Drucker",
+  "printer_form_new_title": "Neuen Drucker anlegen",
   "printer_form_edit_title": "Drucker bearbeiten",
   "printer_form_name_label": "Name",
   "printer_form_backend_label": "Backend",
@@ -99,16 +95,19 @@
   "printer_form_port_label": "Port",
   "printer_form_https_label": "HTTPS verwenden",
   "printer_form_token_label": "Token (Moonraker)",
-  "printer_form_api_key_label": "API-Key (OctoPrint)",
-  "printer_form_error_interval_label": "Fehlermeldungs-Intervall (Sekunden)",
+  "printer_form_api_key_label": "API-Schlüssel (OctoPrint)",
+  "printer_form_error_interval_label": "Fehlermeldeintervall (Sekunden)",
   "printer_form_enabled_label": "Drucker aktiviert",
-  "printer_form_create_button": "Anlegen",
+  "printer_form_tasmota_host_label": "Tasmota IP-Adresse",
+
+  "printer_form_create_button": "Erstellen",
   "printer_form_save_button": "Speichern",
   "printer_form_back_to_list": "Zurück zur Liste",
+
   "printer_form_delete_title": "Drucker löschen",
   "printer_form_delete_button": "Löschen",
   "printer_form_delete_confirm": "Diesen Drucker wirklich löschen?",
 
-  "printer_error_required_fields": "Name, Backend, Host und Port sind Pflichtfelder.",
-  "printer_error_port_number": "Port muss eine Zahl sein."
+  "printer_error_required_fields": "Name, Backend, Host und Port sind erforderlich.",
+  "printer_error_port_number": "Der Port muss eine Zahl sein."
 }

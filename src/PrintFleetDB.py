@@ -13,6 +13,10 @@ from typing import Optional, Dict, Any
 # from flask import Flask, jsonify, render_template
 from flask import Flask, jsonify, render_template, g, request, redirect, url_for, abort
 
+# Tasmota Steckdosen Steuerung
+from tasmota_power import tasmota_get_state, tasmota_set_state
+
+
 # -------------------------------------------------
 # Konfiguration laden (nur GLOBAL)
 # -------------------------------------------------
@@ -382,7 +386,12 @@ def monitor_printer(prn: dict, printer_id: int, global_defaults: dict, stop_evt:
     be = (prn.get("backend") or "moonraker").lower()
     token = prn.get("token")
     api_key = prn.get("api_key")
-     # --- neu: robuster Default für error_report_interval ---
+
+    # aktueller Tasmota-Host, wird im Loop aus der DB aktualisiert
+    current_tasmota_host = prn.get("tasmota_host")
+
+
+    # robuster Default für error_report_interval
     if isinstance(global_defaults, dict):
         default_err = float(global_defaults.get("error_report_interval", 30.0))
     else:
@@ -392,7 +401,7 @@ def monitor_printer(prn: dict, printer_id: int, global_defaults: dict, stop_evt:
     if err_raw is None:
         err_raw = default_err
     err_interval = float(err_raw)
-    # -------------------------------------------------------
+
     scheme = "https" if https else "http"
     base_url = f"{scheme}://{host}:{port}"
 
@@ -401,27 +410,31 @@ def monitor_printer(prn: dict, printer_id: int, global_defaults: dict, stop_evt:
     last_error_text = None
 
     while not stop_evt.is_set():
-        # Prüfen, ob der Drucker in der DB noch aktiviert ist
+
+        # prüfen ob Drucker noch aktiv ist + Tasmota-Host aus DB holen
         try:
             conn = get_db_connection()
             cur = conn.cursor()
-            cur.execute("SELECT enabled FROM printers WHERE id = ?", (printer_id,))
+            cur.execute("SELECT enabled, tasmota_host FROM printers WHERE id = ?", (printer_id,))
             row = cur.fetchone()
             conn.close()
             if (row is None) or (row["enabled"] != 1):
                 print(f"[{name}] Deaktiviert oder gelöscht – beende Monitor-Thread.", file=sys.stderr)
                 break
-        except Exception as e:
-            print(f"[{name}] Warnung: Konnte enabled-Status nicht prüfen: {e}", file=sys.stderr)
 
-        # Aktuelles Poll-Intervall aus SETTINGS lesen (dynamisch änderbar)
-        if isinstance(GLOBAL, dict):
-            poll_default = float(GLOBAL.get("interval", 5.0))
-        else:
-            poll_default = 5.0
+            # NEU: aktuellen Tasmota-Host aus der DB übernehmen
+            current_tasmota_host = row["tasmota_host"]
+
+        except Exception as e:
+            print(f"[{name}] Warnung: Konnte enabled-Status/Tasmota-Host nicht prüfen: {e}", file=sys.stderr)
+
+
+        # Poll-Intervall
+        poll_default = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
         poll_interval = float(SETTINGS.get("poll_interval", poll_default))
 
         try:
+            # Backend-Abfrage
             if be == "octoprint":
                 res = fetch_octoprint(
                     base_url,
@@ -435,16 +448,7 @@ def monitor_printer(prn: dict, printer_id: int, global_defaults: dict, stop_evt:
                     timeout=max(5.0, poll_interval + 2.0),
                 )
 
-            (
-                state,
-                filename,
-                elapsed,
-                progress,
-                hotend,
-                hotend_t,
-                bed,
-                bed_t,
-            ) = res
+            state, filename, elapsed, progress, hotend, hotend_t, bed, bed_t = res
 
             eta_s = 0.0
             if progress and progress > 0 and elapsed and elapsed > 0:
@@ -452,6 +456,7 @@ def monitor_printer(prn: dict, printer_id: int, global_defaults: dict, stop_evt:
 
             with state_lock:
                 printer_state[name] = {
+                    "id": printer_id,
                     "name": name,
                     "backend": be,
                     "host": host,
@@ -469,6 +474,7 @@ def monitor_printer(prn: dict, printer_id: int, global_defaults: dict, stop_evt:
                     "last_update": int(time.time()),
                     "error": None,
                     "link": f"{scheme}://{host}:{port}/",
+                    "tasmota_host": current_tasmota_host,
                 }
 
             consecutive_errors = 0
@@ -476,12 +482,21 @@ def monitor_printer(prn: dict, printer_id: int, global_defaults: dict, stop_evt:
             last_error_report_ts = 0.0
 
         except requests.exceptions.RequestException as e:
+            # Offline
             consecutive_errors += 1
             err = f"NICHT ERREICHBAR (Versuch {consecutive_errors}): {e}"
             now = time.time()
+
             with state_lock:
                 st = printer_state.get(
-                    name, {"name": name, "backend": be, "host": host}
+                    name,
+                    {
+                        "id": printer_id,
+                        "name": name,
+                        "backend": be,
+                        "host": host,
+                        "tasmota_host": current_tasmota_host,
+                    },
                 )
                 st.update(
                     {
@@ -513,12 +528,21 @@ def monitor_printer(prn: dict, printer_id: int, global_defaults: dict, stop_evt:
                 last_error_report_ts = now
 
         except Exception as e:
+            # unerwarteter Fehler
             consecutive_errors += 1
             err = f"Unerwarteter Fehler: {e}"
             now = time.time()
+
             with state_lock:
                 st = printer_state.get(
-                    name, {"name": name, "backend": be, "host": host}
+                    name,
+                    {
+                        "id": printer_id,
+                        "name": name,
+                        "backend": be,
+                        "host": host,
+                        "tasmota_host": current_tasmota_host,
+                    },
                 )
                 st.update(
                     {
@@ -549,8 +573,8 @@ def monitor_printer(prn: dict, printer_id: int, global_defaults: dict, stop_evt:
                 last_error_text = err
                 last_error_report_ts = now
 
+        # Schleifenpause
         time.sleep(max(0.2, poll_interval))
-
 
 # ----------------- DB-Watcher-Thread -----------------
 
@@ -718,6 +742,8 @@ def printer_new() -> str:
         token = (request.form.get("token") or "").strip() or None
         api_key = (request.form.get("api_key") or "").strip() or None
         err_int_raw = (request.form.get("error_report_interval") or "").strip()
+        # NEU: Tasmota-IP-Adresse
+        tasmota_host = (request.form.get("tasmota_host") or "").strip() or None
 
         # Simple Pflichtfelder-Prüfung
         if not name or not backend or not host or not port_raw:
@@ -727,7 +753,6 @@ def printer_new() -> str:
                 port = int(port_raw)
             except ValueError:
                 error = _("printer_error_port_number")
-
 
         if not error:
             try:
@@ -741,10 +766,20 @@ def printer_new() -> str:
                 """
                 INSERT INTO printers
                     (name, backend, host, port, https, token, api_key,
-                     error_report_interval, enabled)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1)
+                     error_report_interval, tasmota_host, enabled)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
                 """,
-                (name, backend, host, port, https_flag, token, api_key, error_report_interval),
+                (
+                    name,
+                    backend,
+                    host,
+                    port,
+                    https_flag,
+                    token,
+                    api_key,
+                    error_report_interval,
+                    tasmota_host,
+                ),
             )
             conn.commit()
             new_id = cur.lastrowid
@@ -754,7 +789,8 @@ def printer_new() -> str:
 
     # GET oder Fehlerfall
     return render_template("printer_form.html", page="printers", printer=None, error=error, mode="new")
-    
+
+
 
 @app.route("/printers/<int:printer_id>", methods=["GET", "POST"])
 def printer_edit(printer_id: int) -> str:
@@ -776,6 +812,8 @@ def printer_edit(printer_id: int) -> str:
         api_key = (request.form.get("api_key") or "").strip() or None
         err_int_raw = (request.form.get("error_report_interval") or "").strip()
         enabled_flag = 1 if request.form.get("enabled") == "on" else 0
+        # NEU: Tasmota-IP-Adresse
+        tasmota_host = (request.form.get("tasmota_host") or "").strip() or None
 
         if not name or not backend or not host or not port_raw:
             error = _("printer_error_required_fields")
@@ -784,7 +822,6 @@ def printer_edit(printer_id: int) -> str:
                 port = int(port_raw)
             except ValueError:
                 error = _("printer_error_port_number")
-
 
         if not error:
             try:
@@ -798,11 +835,23 @@ def printer_edit(printer_id: int) -> str:
                 """
                 UPDATE printers
                 SET name = ?, backend = ?, host = ?, port = ?, https = ?,
-                    token = ?, api_key = ?, error_report_interval = ?, enabled = ?
+                    token = ?, api_key = ?, error_report_interval = ?,
+                    tasmota_host = ?, enabled = ?
                 WHERE id = ?
                 """,
-                (name, backend, host, port, https_flag, token, api_key,
-                 error_report_interval, enabled_flag, printer_id),
+                (
+                    name,
+                    backend,
+                    host,
+                    port,
+                    https_flag,
+                    token,
+                    api_key,
+                    error_report_interval,
+                    tasmota_host,
+                    enabled_flag,
+                    printer_id,
+                ),
             )
             conn.commit()
             conn.close()
@@ -810,6 +859,7 @@ def printer_edit(printer_id: int) -> str:
             printer = get_printer_by_id(printer_id)
 
     return render_template("printer_form.html", page="printers", printer=printer, error=error, mode="edit")
+
 
 
 @app.route("/printers/<int:printer_id>/delete", methods=["POST"])
@@ -822,6 +872,53 @@ def printer_delete(printer_id: int):
     conn.close()
     # Liste neu anzeigen
     return redirect(url_for("printer_list"))
+
+@app.route("/api/printer/<int:printer_id>/power/status")
+def api_printer_power_status(printer_id):
+    printer = get_printer_by_id(printer_id)
+    if printer is None:
+        return jsonify({"status": "error", "msg": "Printer not found"}), 404
+
+    ip = printer["tasmota_host"]
+    if not ip:
+        return jsonify({"status": "error", "msg": "No Tasmota IP configured"}), 400
+
+    state = tasmota_get_state(ip)  # 'ON', 'OFF', 'UNKNOWN'
+    return jsonify({"status": "ok", "state": state})
+
+
+@app.route("/api/printer/<int:printer_id>/power/toggle", methods=["POST"])
+def api_printer_power_toggle(printer_id):
+    printer = get_printer_by_id(printer_id)
+    if printer is None:
+        return jsonify({"status": "error", "msg": "Printer not found"}), 404
+
+    ip = printer["tasmota_host"]
+    if not ip:
+        return jsonify({"status": "error", "msg": "No Tasmota IP configured"}), 400
+
+    current = tasmota_get_state(ip)  # 'ON' / 'OFF' / 'UNKNOWN'
+
+    if current == "ON":
+        target_on = False
+        target_state = "OFF"
+    elif current == "OFF":
+        target_on = True
+        target_state = "ON"
+    else:
+        # UNKNOWN → wir versuchen einzuschalten
+        target_on = True
+        target_state = "ON"
+
+    ok = tasmota_set_state(ip, target_on)
+    new_state = tasmota_get_state(ip) if ok else current
+
+    return jsonify({
+        "status": "ok" if ok else "error",
+        "requested": target_state,
+        "state": new_state
+    }), (200 if ok else 500)
+
 
 
 @app.route("/api/status")
@@ -857,7 +954,8 @@ def start_monitor_threads(initial_printers: list[dict]):
 
 
 if __name__ == "__main__":
-    # Initiale Platzhalter (auf Basis der in der DB hinterlegten Drucker)
+
+    # Initiale Platzhalter für vorhandene Drucker
     with state_lock:
         for prn in PRINTERS:
             name = prn.get("name", prn.get("host", "UNNAMED"))
@@ -865,7 +963,9 @@ if __name__ == "__main__":
             port = prn.get("port", GLOBAL.get("port", 80)) if isinstance(GLOBAL, dict) else prn.get("port", 80)
             https = prn.get("https", GLOBAL.get("https", False)) if isinstance(GLOBAL, dict) else prn.get("https", False)
             scheme = "https" if https else "http"
+
             printer_state[name] = {
+                "id": prn["id"],                     # korrekt
                 "name": name,
                 "backend": prn.get("backend", "moonraker"),
                 "host": host,
@@ -883,12 +983,13 @@ if __name__ == "__main__":
                 "last_update": int(time.time()),
                 "error": None,
                 "link": f"{scheme}://{host}:{port}/",
+                "tasmota_host": prn.get("tasmota_host"),   # korrekt
             }
 
-    # Monitor-Threads für vorhandene Drucker starten
+    # Monitor-Threads starten
     global_stop_evt = start_monitor_threads(PRINTERS)
 
-    # DB-Watcher-Thread starten
+    # DB-Watcher starten
     watcher_thread = threading.Thread(
         target=db_watch_loop,
         args=(global_stop_evt,),
@@ -900,7 +1001,6 @@ if __name__ == "__main__":
         app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
     finally:
         global_stop_evt.set()
-        # Threads beim Beenden sauber einsammeln
         for t in list(monitor_threads.values()):
             t.join(timeout=2.0)
         watcher_thread.join(timeout=2.0)

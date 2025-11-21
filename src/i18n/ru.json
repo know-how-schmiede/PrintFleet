@@ -5,13 +5,14 @@
   "menu_printers": "Принтеры",
   "menu_settings": "Настройки",
 
-  "page_overview_title": "Обзор принтеров",
-  "page_settings_title": "Настройки",
-
   "btn_refresh": "Обновить",
   "btn_save": "Сохранить",
   "btn_cancel": "Отмена",
   "btn_open_web_ui": "Открыть веб-интерфейс",
+  "btn_power_toggle": "Питание",
+
+  "page_overview_title": "Обзор принтеров",
+  "page_settings_title": "Настройки",
 
   "col_printer_name": "Имя",
   "col_backend": "Бэкенд",
@@ -23,63 +24,58 @@
   "col_eta": "Осталось",
   "col_hotend": "Хотэнд",
   "col_hotend_target": "Цель (Хотэнд)",
-  "col_bed": "Платформа",
-  "col_bed_target": "Цель (Платформа)",
+  "col_bed": "Стол",
+  "col_bed_target": "Цель (Стол)",
   "col_last_update": "Последнее обновление",
   "col_error": "Ошибка",
   "col_link": "Веб-интерфейс",
   "col_actions": "Действия",
 
-  "state_printing": "Печать",
+  "state_printing": "Печатает",
   "state_paused": "Пауза",
   "state_cancelled": "Отменено",
   "state_complete": "Завершено",
   "state_error": "Ошибка",
-  "state_offline": "Офлайн",
+  "state_offline": "Отключён",
   "state_standby": "Ожидание",
   "state_unknown": "Неизвестно",
 
-  "status_no_printers": "Нет настроенных принтеров.",
-  "status_loading": "Загрузка статуса принтера…",
+  "status_no_printers": "Принтеры не настроены.",
+  "status_loading": "Загрузка статуса принтеров…",
   "status_last_update": "Последнее обновление",
-
-  "settings_section_general": "Основные настройки",
-  "settings_poll_interval": "Интервал опроса (секунды)",
-  "settings_db_reload_interval": "Интервал обновления базы данных (секунды)",
-  "settings_telegram_chat_id": "ID чата Telegram",
-  "settings_language": "Язык",
-
-  "settings_language_en": "Английский",
-  "settings_language_de": "Немецкий",
-
-  "settings_saved": "Настройки сохранены.",
-  "settings_save_error": "Не удалось сохранить настройки.",
-  "settings_info_restart_hint": "Некоторые изменения могут потребовать перезагрузки сервиса.",
-
   "refresh_interval_info": "Обновление каждые 5 секунд",
 
   "theme_label": "Тема:",
-  "theme_default": "По умолчанию",
+  "theme_default": "Стандартная",
   "theme_light_blue": "Светло-синяя",
   "theme_dark_blue": "Тёмно-синяя",
   "theme_dark_teal": "Тёмный бирюзовый",
 
+  "settings_title": "Настройки",
+  "settings_section_general": "Общие настройки",
 
- "settings_title": "Настройки",
-  "settings_message_saved": "Настройки сохранены.",
-  "settings_poll_interval_label": "Интервал опроса (сек.)",
-  "settings_poll_interval_help": "Как часто PrintFleet опрашивает каждый принтер. Меньшие значения — чаще обновление, но выше нагрузка.",
-  "settings_db_reload_interval_label": "Интервал перезагрузки БД (сек.)",
-  "settings_db_reload_interval_help": "Как часто конфигурация принтеров перечитывается из базы данных.",
-  "settings_telegram_chat_id_label": "Telegram Chat-ID",
-  "settings_telegram_chat_id_help": "Chat-ID для уведомлений в Telegram (необязательно). Оставьте пустым, если Telegram не используется.",
+  "settings_poll_interval_label": "Интервал опроса (секунды)",
+  "settings_db_reload_interval_label": "Интервал перезагрузки БД (секунды)",
+  "settings_telegram_chat_id_label": "ID чата Telegram",
   "settings_language_label": "Язык интерфейса",
-  "settings_language_help": "Определяет, какой файл перевода из каталога i18n используется (по умолчанию английский).",
+
+  "settings_poll_interval_help": "Как часто PrintFleet запрашивает данные с принтеров. Меньшие значения — более частые обновления, но выше нагрузка.",
+  "settings_db_reload_interval_help": "Как часто конфигурация принтеров перезагружается из базы данных.",
+  "settings_telegram_chat_id_help": "ID чата для уведомлений Telegram (опционально). Оставьте пустым, если Telegram не используется.",
+  "settings_language_help": "Определяет, какой файл перевода из папки i18n используется (английский — резервный).",
+
+  "settings_language_en": "Английский",
+  "settings_language_de": "Немецкий",
+
   "settings_save_button": "Сохранить настройки",
+  "settings_saved": "Настройки сохранены.",
+  "settings_message_saved": "Настройки сохранены.",
+  "settings_save_error": "Не удалось сохранить настройки.",
+  "settings_info_restart_hint": "Некоторые изменения могут потребовать перезапуска службы.",
   "settings_error_poll_interval": "Интервал опроса должен быть положительным числом.",
   "settings_error_db_reload": "Интервал перезагрузки БД должен быть числом.",
 
-  "printer_setup_title": "Принтеры",
+  "printer_setup_title": "Управление принтерами",
   "printer_new_button": "Новый принтер",
   "printer_list_id": "ID",
   "printer_list_name": "Имя",
@@ -87,11 +83,11 @@
   "printer_list_host": "Хост",
   "printer_list_port": "Порт",
   "printer_list_https": "HTTPS",
-  "printer_list_enabled": "Активен",
+  "printer_list_enabled": "Активирован",
   "printer_list_actions": "Действия",
   "printer_list_settings": "Настройки",
 
-  "printer_form_new_title": "Новый принтер",
+  "printer_form_new_title": "Добавить принтер",
   "printer_form_edit_title": "Редактировать принтер",
   "printer_form_name_label": "Имя",
   "printer_form_backend_label": "Бэкенд",
@@ -100,15 +96,18 @@
   "printer_form_https_label": "Использовать HTTPS",
   "printer_form_token_label": "Токен (Moonraker)",
   "printer_form_api_key_label": "API-ключ (OctoPrint)",
-  "printer_form_error_interval_label": "Интервал сообщений об ошибках (сек.)",
-  "printer_form_enabled_label": "Принтер активен",
+  "printer_form_error_interval_label": "Интервал отчёта об ошибках (секунды)",
+  "printer_form_enabled_label": "Принтер активирован",
+  "printer_form_tasmota_host_label": "IP-адрес Tasmota",
+
   "printer_form_create_button": "Создать",
   "printer_form_save_button": "Сохранить",
   "printer_form_back_to_list": "Назад к списку",
+
   "printer_form_delete_title": "Удалить принтер",
   "printer_form_delete_button": "Удалить",
   "printer_form_delete_confirm": "Действительно удалить этот принтер?",
 
   "printer_error_required_fields": "Имя, бэкенд, хост и порт обязательны.",
-  "printer_error_port_number": "Порт должен быть числом."  
+  "printer_error_port_number": "Порт должен быть числом."
 }

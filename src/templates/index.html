@@ -37,16 +37,58 @@ const STATE_LABELS = {
 };
 
 // Button-Text für Aktionen
-const BTN_OPEN_WEB_UI = "{{ _('btn_open_web_ui') }}";
+const BTN_OPEN_WEB_UI   = "{{ _('btn_open_web_ui') }}";
+const BTN_POWER_TOGGLE  = "{{ _('btn_power_toggle') }}"; // Fallback-/Unknown-Text
 
 function pctColor(p){
   if(p >= 80) return 'linear-gradient(90deg,#16a34a,#22c55e)'; // grün
   if(p >= 40) return 'linear-gradient(90deg,#ca8a04,#eab308)'; // gelb
   return 'linear-gradient(90deg,#dc2626,#ef4444)';             // rot
 }
+
 function toFixed1(x){
   return (typeof x === 'number' && isFinite(x)) ? x.toFixed(1) : (x ?? '');
 }
+
+// Button-Text anhand Zustand setzen
+function updatePowerButton(btn, state) {
+  btn.dataset.state = state;  // 'ON', 'OFF', 'UNKNOWN'
+
+  // zuerst alle Zustands-Klassen entfernen
+  btn.classList.remove("state-on", "state-off", "state-unknown");
+
+  if (state === 'ON') {
+    btn.textContent = 'Off';
+    btn.classList.add("state-on");
+
+  } else if (state === 'OFF') {
+    btn.textContent = 'On';
+    btn.classList.add("state-off");
+
+  } else {
+    btn.textContent = '…';
+    btn.classList.add("state-unknown");
+  }
+}
+
+
+// Status für einen einzelnen Power-Button vom Server holen
+async function initPowerButton(btn) {
+  const id = btn.dataset.printerId;
+  try {
+    const res = await fetch(`/api/printer/${id}/power/status`);
+    const data = await res.json();
+    if (data.status === 'ok') {
+      updatePowerButton(btn, data.state); // 'ON' oder 'OFF'
+    } else {
+      updatePowerButton(btn, 'UNKNOWN');
+    }
+  } catch (e) {
+    console.error(e);
+    updatePowerButton(btn, 'UNKNOWN');
+  }
+}
+
 async function loadData(){
   try{
     const r = await fetch('/api/status', {cache:'no-store'});
@@ -57,20 +99,22 @@ async function loadData(){
 
     (data || []).forEach(p => {
       // Fallbacks
-      const name = p.name || '';
-      const backend = p.backend || '';
-      const state = p.state || 'standby';
-      const filename = p.filename || '';
+      const printer_id   = p.id;
+      const tasmota_host = p.tasmota_host || null;
+      const name         = p.name || '';
+      const backend      = p.backend || '';
+      const state        = p.state || 'standby';
+      const filename     = p.filename || '';
       const progress_pct = (typeof p.progress_pct === 'number' && isFinite(p.progress_pct)) ? p.progress_pct : 0;
-      const elapsed_hms = p.elapsed_hms || '';
-      const eta_hms = p.eta_hms || '';
-      const hotend = (typeof p.hotend === 'number') ? p.hotend : 0;
-      const hotend_t = (typeof p.hotend_t === 'number') ? p.hotend_t : 0;
-      const bed = (typeof p.bed === 'number') ? p.bed : 0;
-      const bed_t = (typeof p.bed_t === 'number') ? p.bed_t : 0;
-      const last_update = (typeof p.last_update === 'number') ? p.last_update : 0;
-      const error = p.error || '';
-      const link = p.link || '';
+      const elapsed_hms  = p.elapsed_hms || '';
+      const eta_hms      = p.eta_hms || '';
+      const hotend       = (typeof p.hotend === 'number') ? p.hotend : 0;
+      const hotend_t     = (typeof p.hotend_t === 'number') ? p.hotend_t : 0;
+      const bed          = (typeof p.bed === 'number') ? p.bed : 0;
+      const bed_t        = (typeof p.bed_t === 'number') ? p.bed_t : 0;
+      const last_update  = (typeof p.last_update === 'number') ? p.last_update : 0;
+      const error        = p.error || '';
+      const link         = p.link || '';
 
       const tr = document.createElement('tr');
       tr.className = state;
@@ -90,17 +134,67 @@ async function loadData(){
       inner.style.background = pctColor(progress_pct);
       progWrap.appendChild(inner);
       const label = document.createElement('div');
-      label.style.fontSize='12px'; label.style.marginTop='4px';
+      label.style.fontSize='12px';
+      label.style.marginTop='4px';
       label.textContent = (isFinite(progress_pct) ? progress_pct.toFixed(1) : '0.0') + '%';
       progCell.appendChild(progWrap);
       progCell.appendChild(label);
 
       // Aktionen
-      const actions = document.createElement('td'); actions.className='actions';
-      if(link){
-        const a1 = document.createElement('a'); a1.href = link; a1.target = '_blank'; a1.className='btn';
+      const actions = document.createElement('td');
+      actions.className = 'actions';
+
+      // Web-UI öffnen
+      if (link) {
+        const a1 = document.createElement('a');
+        a1.href = link;
+        a1.target = '_blank';
+        a1.className = 'btn';
         a1.textContent = BTN_OPEN_WEB_UI;
         actions.appendChild(a1);
+      }
+
+      // Power-Button, nur wenn eine Tasmota-IP hinterlegt ist
+      if (tasmota_host) {
+        const btnPower = document.createElement('button');
+        btnPower.className = 'btn power-btn';
+        btnPower.dataset.printerId = printer_id;
+        btnPower.dataset.state = 'UNKNOWN';
+        btnPower.textContent = '…';   // Platzhalter, bis Status geladen ist
+
+        btnPower.addEventListener('click', async () => {
+          const current = btnPower.dataset.state || 'UNKNOWN';
+
+          // Sicherheitsabfrage nur beim Ausschalten
+          if (current === 'ON') {
+            const ok = confirm(
+              "Drucker wirklich ausschalten?\n" +
+              "Wenn gerade gedruckt wird, wird der Druck SOFORT abgebrochen!"
+            );
+            if (!ok) return;
+          }
+
+          try {
+            const resp = await fetch(`/api/printer/${printer_id}/power/toggle`, {
+              method: 'POST'
+            });
+            const data = await resp.json();
+            if (data.status === 'ok') {
+              // Neuen Zustand vom Server übernehmen
+              updatePowerButton(btnPower, data.state);
+            } else {
+              alert("Fehler beim Schalten: " + (data.msg || "Unbekannt"));
+            }
+          } catch (e) {
+            console.error(e);
+            alert("Netzwerkfehler beim Schalten der Steckdose.");
+          }
+        });
+
+        // initialen Zustand vom Server laden
+        initPowerButton(btnPower);
+
+        actions.appendChild(btnPower);
       }
 
       const last = last_update ? (now - last_update) : 0;
@@ -125,6 +219,7 @@ async function loadData(){
     console.error('fetch error', e);
   }
 }
+
 loadData();
 setInterval(loadData, 5000);
 </script>

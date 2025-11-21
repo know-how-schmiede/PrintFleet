@@ -88,29 +88,12 @@ th {
 }
 
 /* Zeilenfarben nach Druckerstatus */
-tr.offline {
-  background: var(--row-offline-bg);
-}
-
-tr.error {
-  background: var(--row-error-bg);
-}
-
-tr.printing {
-  background: var(--row-printing-bg);
-}
-
-tr.standby {
-  background: var(--row-standby-bg);
-}
-
-tr.complete {
-  background: var(--row-complete-bg);
-}
-
-tr.paused {
-  background: var(--row-paused-bg);
-}
+tr.offline   { background: var(--row-offline-bg); }
+tr.error     { background: var(--row-error-bg); }
+tr.printing  { background: var(--row-printing-bg); }
+tr.standby   { background: var(--row-standby-bg); }
+tr.complete  { background: var(--row-complete-bg); }
+tr.paused    { background: var(--row-paused-bg); }
 
 /* Badges */
 .badge {
@@ -171,6 +154,34 @@ small.mono {
 }
 
 /* ===========================
+   Power-Button (GLOBAL)
+   =========================== */
+
+.power-btn {
+  min-width: 60px;
+  font-weight: bold;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+/* OFF → Anzeige "On" → grün */
+.power-btn.state-off {
+  background: #16a34a !important;  /* green-600 */
+  color: white !important;
+}
+
+/* ON → Anzeige "Off" → rot */
+.power-btn.state-on {
+  background: #dc2626 !important;  /* red-600 */
+  color: white !important;
+}
+
+/* unbekannt → grau */
+.power-btn.state-unknown {
+  background: #6b7280 !important;  /* gray-500 */
+  color: white !important;
+}
+
+/* ===========================
    Navigation
    =========================== */
 
@@ -203,9 +214,9 @@ nav a:hover {
   border-bottom: 2px solid var(--nav-link-active-border);
 }
 
-/* Theme-Selector im Menü */
+/* Theme-Selector */
 .theme-selector {
-  margin-left: auto; /* nach rechts schieben */
+  margin-left: auto;
 }
 
 .theme-selector label {
