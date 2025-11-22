@@ -23,6 +23,17 @@
     <tbody></tbody>
   </table>
 
+  <!-- Dialog für detaillierte Fehlermeldungen -->
+  <dialog id="errorDialog">
+    <h3>{{ _('dialog_error_title') }}</h3>
+    <pre id="errorDialogText" style="white-space: pre-wrap; max-width: 80vw; max-height: 60vh; overflow:auto;"></pre>
+    <div style="text-align: right; margin-top: 1rem;">
+      <button id="errorDialogCloseBtn" class="btn">
+        {{ _('btn_close') }}
+      </button>
+    </div>
+  </dialog>
+
 <script>
 // Übersetzte Status-Texte aus dem Backend
 const STATE_LABELS = {
@@ -40,6 +51,10 @@ const STATE_LABELS = {
 const BTN_OPEN_WEB_UI   = "{{ _('btn_open_web_ui') }}";
 const BTN_POWER_TOGGLE  = "{{ _('btn_power_toggle') }}"; // Fallback-/Unknown-Text
 
+// Texte für Error-Spalte
+const ERROR_SHORT_LABEL = "{{ _('printer_error_unreachable') }}";
+const BTN_SHOW_ERROR_DETAILS = "{{ _('btn_show_error_details') }}";
+
 function pctColor(p){
   if(p >= 80) return 'linear-gradient(90deg,#16a34a,#22c55e)'; // grün
   if(p >= 40) return 'linear-gradient(90deg,#ca8a04,#eab308)'; // gelb
@@ -48,6 +63,44 @@ function pctColor(p){
 
 function toFixed1(x){
   return (typeof x === 'number' && isFinite(x)) ? x.toFixed(1) : (x ?? '');
+}
+
+// Error-Dialog Referenzen
+const errorDialog        = document.getElementById('errorDialog');
+const errorDialogText    = document.getElementById('errorDialogText');
+const errorDialogCloseBtn = document.getElementById('errorDialogCloseBtn');
+
+// Dialog-Eventhandling
+if (errorDialog && errorDialogCloseBtn) {
+  errorDialogCloseBtn.addEventListener('click', function () {
+    errorDialog.close();
+  });
+
+  // Dialog schließen, wenn man außerhalb klickt
+  errorDialog.addEventListener('click', function (event) {
+    const rect = errorDialog.getBoundingClientRect();
+    const isInDialog =
+      rect.top <= event.clientY &&
+      event.clientY <= rect.bottom &&
+      rect.left <= event.clientX &&
+      event.clientX <= rect.right;
+    if (!isInDialog) {
+      errorDialog.close();
+    }
+  });
+
+  // Delegation für alle Error-Buttons in der Tabelle
+  document.querySelector('#tbl tbody').addEventListener('click', function (event) {
+    const btn = event.target.closest('.show-error-btn');
+    if (!btn) return;
+    const msg = btn.dataset.error || '';
+    errorDialogText.textContent = msg;
+    if (typeof errorDialog.showModal === 'function') {
+      errorDialog.showModal();
+    } else {
+      alert(msg);
+    }
+  });
 }
 
 // Button-Text anhand Zustand setzen
@@ -70,7 +123,6 @@ function updatePowerButton(btn, state) {
     btn.classList.add("state-unknown");
   }
 }
-
 
 // Status für einen einzelnen Power-Button vom Server holen
 async function initPowerButton(btn) {
@@ -200,6 +252,27 @@ async function loadData(){
       const last = last_update ? (now - last_update) : 0;
       const lastTxt = (last >= 0) ? (last + ' s') : '';
 
+      // Error-Spalte: nur Kurztext + Button
+      const errorCell = document.createElement('td');
+      if (error) {
+        const shortSpan = document.createElement('span');
+        shortSpan.textContent = ERROR_SHORT_LABEL; // z.B. "Keine Verbindung"
+        errorCell.appendChild(shortSpan);
+
+        const space = document.createTextNode(' ');
+        errorCell.appendChild(space);
+
+        const btnDetails = document.createElement('button');
+        btnDetails.type = 'button';
+        btnDetails.className = 'btn btn-sm show-error-btn';
+        btnDetails.textContent = BTN_SHOW_ERROR_DETAILS;
+        // komplette Fehlermeldung im Dataset speichern
+        btnDetails.dataset.error = error;
+        errorCell.appendChild(btnDetails);
+      } else {
+        errorCell.textContent = ''; // oder '-' wenn du willst
+      }
+
       tr.appendChild(td(name));
       tr.appendChild(td(backend));
       tr.appendChild(tdHTML(badge));
@@ -211,7 +284,7 @@ async function loadData(){
       tr.appendChild(td(toFixed1(bed)    + ' / ' + toFixed1(bed_t)    + ' °C'));
       tr.appendChild(td(lastTxt));
       tr.appendChild(actions);
-      tr.appendChild(td(error));
+      tr.appendChild(errorCell);
 
       tbody.appendChild(tr);
     });

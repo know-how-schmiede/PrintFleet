@@ -13,16 +13,32 @@
 </p>
 
 <p>
-  Dies ist eine Übersichtseite für grundlegende Informationen über deine
-  PrintFleet-Installation.
+  PrintFleet ist ein leichtgewichtiges, modular aufgebautes Web-Interface<br>
+  zur Verwaltung mehrerer 3D-Drucker in einem lokalen Netzwerk.<br>
+  Ziel des Projekts ist es, einen zentralen Überblick über den Status aller<br>
+  verbundenen Drucker zu bieten – unabhängig vom verwendeten Backend<br>
+  (Moonraker, OctoPrint oder weitere Systeme).<br><br>
+  PrintFleet ermöglicht u.a.:
 </p>
-
+<ul>
+  <li>Überwachung des Druckstatus in Echtzeit</li>
+  <li>Abfrage von Temperaturen, Fortschritt, ETA und aktiven Jobs</li>
+  <li>Verwaltung und Konfiguration aller Drucker über eine einheitliche Oberfläche</li>
+  <li>Integration von Tasmota-Steckdosen zum automatischen Ein-/Ausschalten von Druckern</li>
+  <li>Zentrales Verwalten globaler Settings wie Polling-Intervallen und Sprache</li>
+  <li>Unterstützung mehrerer Sprachen dank integrierter i18n-Struktur</li>
+  <li>Erweiterbare Architektur durch saubere modulare Blueprint-Struktur</li>
+</ul>
+<p>Das Projekt befindet sich in aktiver Weiterentwicklung und wächst Schritt<br>
+   für Schritt zu einer vollständigen Multi-Printer-Managementlösung für Maker,<br>
+   Labore und Werkstätten.</p>
 <ul>
   <li>Python-Version: {{ config.get('PYTHON_VERSION', '') }}</li>
   <li>Flask-Debug-Mode: {{ config.get('DEBUG', False) }}</li>
 </ul>
 
-<p>
-  Weitere Infos (GitHub-Link, Changelog usw.) kannst du hier später noch ergänzen.
-</p>
+<ul>
+  <li>GitHub: https://github.com/know-how-schmiede/PrintFleet</li>
+  <li>YouTube: https://www.youtube.com/@knowhowschmiede</li>
+</ul>>
 {% endblock %}

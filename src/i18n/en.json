@@ -109,5 +109,10 @@
   "printer_form_delete_confirm": "Really delete this printer?",
 
   "printer_error_required_fields": "Name, backend, host and port are required.",
-  "printer_error_port_number": "Port must be a number."
+  "printer_error_port_number": "Port must be a number.",
+
+  "printer_error_unreachable": "Not reachable",
+  "btn_show_error_details": "Show details",
+  "dialog_error_title": "Error details",
+  "btn_close": "Close"
 }

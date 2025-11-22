@@ -109,5 +109,10 @@
   "printer_form_delete_confirm": "Diesen Drucker wirklich löschen?",
 
   "printer_error_required_fields": "Name, Backend, Host und Port sind erforderlich.",
-  "printer_error_port_number": "Der Port muss eine Zahl sein."
+  "printer_error_port_number": "Der Port muss eine Zahl sein.",
+
+  "printer_error_unreachable": "Keine Verbindung",
+  "btn_show_error_details": "Details",
+  "dialog_error_title": "Fehlermeldung",
+  "btn_close": "Schließen"
 }
