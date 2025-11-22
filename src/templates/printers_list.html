@@ -6,7 +6,7 @@
 <h2>{{ _('printer_setup_title') }}</h2>
 
 <p>
-    <a href="{{ url_for('printer_new') }}" class="btn">
+    <a href="{{ url_for('printers.printer_new') }}" class="btn">
         {{ _('printer_new_button') }}
     </a>
 </p>
@@ -14,14 +14,14 @@
 <table>
     <thead>
         <tr>
-            <th>{{ _('printer_list_id') }}</th>
-            <th>{{ _('printer_list_name') }}</th>
-            <th>{{ _('printer_list_backend') }}</th>
-            <th>{{ _('printer_list_host') }}</th>
-            <th>{{ _('printer_list_port') }}</th>
-            <th>{{ _('printer_list_https') }}</th>
-            <th>{{ _('printer_list_enabled') }}</th>
-            <th>{{ _('printer_list_actions') }}</th>
+            <th>{{ _('printers_list_id') }}</th>
+            <th>{{ _('printers_list_name') }}</th>
+            <th>{{ _('printers_list_backend') }}</th>
+            <th>{{ _('printers_list_host') }}</th>
+            <th>{{ _('printers_list_port') }}</th>
+            <th>{{ _('printers_list_https') }}</th>
+            <th>{{ _('printers_list_enabled') }}</th>
+            <th>{{ _('printers_list_actions') }}</th>
         </tr>
     </thead>
     <tbody>
@@ -35,8 +35,8 @@
             <td>{{ 'yes' if p["https"] else 'no' }}</td>
             <td>{{ 'yes' if p["enabled"] else 'no' }}</td>
             <td>
-                <a href="{{ url_for('printer_edit', printer_id=p['id']) }}" class="btn">
-                    {{ _('printer_list_settings') }}
+                <a href="{{ url_for('printers.printer_edit', printer_id=p['id']) }}" class="btn">
+                    {{ _('printers_list_settings') }}
                 </a>
             </td>
         </tr>

@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}
+  Info – PrintFleet v{{ app_version }}
+{% endblock %}
+
+{% block content %}
+<h2>Info</h2>
+
+<p>
+  <strong>PrintFleet Version:</strong>
+  v{{ app_version }}
+</p>
+
+<p>
+  Dies ist eine Übersichtseite für grundlegende Informationen über deine
+  PrintFleet-Installation.
+</p>
+
+<ul>
+  <li>Python-Version: {{ config.get('PYTHON_VERSION', '') }}</li>
+  <li>Flask-Debug-Mode: {{ config.get('DEBUG', False) }}</li>
+</ul>
+
+<p>
+  Weitere Infos (GitHub-Link, Changelog usw.) kannst du hier später noch ergänzen.
+</p>
+{% endblock %}

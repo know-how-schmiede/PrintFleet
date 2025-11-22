@@ -2,43 +2,54 @@
 <html lang="{{ current_language() }}">
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}{{ _('app_title') }}{% endblock %}</title>
+    <title>{% block title %}{{ _('app_title') }} – v{{ app_version }}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <link rel="stylesheet" href="{{ url_for('static', filename='DashboardStyle.css') }}">
 </head>
 
 <body>
-    <h1>PrintFleet V0.1</h1>
+    <h1>PrintFleet v{{ app_version }}</h1>
     <p><small class="mono">{{ _('refresh_interval_info') }}</small></p>
 
     <nav>
         <ul>
+            <!-- Logo -->
             <li style="margin-right: 1rem;">
                 <img src="{{ url_for('static', filename='PrintFleetLogo200.png') }}"
                     alt="Logo"
                     style="height: 32px; width: auto; vertical-align: middle;">
             </li>
-
+            
+            <!-- Dashboard-->
             <li>
-                <a href="{{ url_for('index') }}"
-                class="{% if page == 'overview' %}active{% endif %}">
+                <a href="{{ url_for('dashboard.index') }}"
+                    class="{% if page == 'overview' %}active{% endif %}">
                     {{ _('menu_dashboard') }}
                 </a>
             </li>
-
+            
+            <!-- Settings -->
             <li>
-                <a href="{{ url_for('settings_page') }}"
+                <a href="{{ url_for('settings.settings_page') }}"
                 class="{% if page == 'settings' %}active{% endif %}">
                     {{ _('menu_settings') }}
                 </a>
             </li>
 
-            <!-- NEU: Printer Setup -->
+            <!-- Printer Setup -->
             <li>
-                <a href="{{ url_for('printer_list') }}"
+                <a href="{{ url_for('printers.printer_list') }}"
                 class="{% if page == 'printers' %}active{% endif %}">
                     Printer Setup
+                </a>
+            </li>
+
+            <!-- Info-Seite -->
+            <li>
+                <a href="{{ url_for('info.info_page') }}"
+                class="{% if page == 'info' %}active{% endif %}">
+                    Info
                 </a>
             </li>
 

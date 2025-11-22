@@ -101,14 +101,14 @@
             {{ _('printer_form_save_button') }}
           {% endif %}
         </button>
-        <a href="{{ url_for('printer_list') }}" class="btn">{{ _('printer_form_back_to_list') }}</a>
+        <a href="{{ url_for('printers.printer_list') }}" class="btn">{{ _('printer_form_back_to_list') }}</a>
     </p>
 </form>
 
 {% if mode == 'edit' %}
 <hr>
 <h3>{{ _('printer_form_delete_title') }}</h3>
-<form method="post" action="{{ url_for('printer_delete', printer_id=printer['id']) }}"
+<form method="post" action="{{ url_for('printers.printer_delete', printer_id=printer['id']) }}"
       onsubmit="return confirm('{{ _('printer_form_delete_confirm') }}');">
     <button type="submit" class="btn" style="background:#b91c1c;">
         {{ _('printer_form_delete_button') }}
