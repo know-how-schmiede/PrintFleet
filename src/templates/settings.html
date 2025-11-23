@@ -96,4 +96,22 @@
 </p>
 
   </form>
+<h2>{{ _('settings_title_import') }}</h2>
+  <!-- Import-Formular für Settings (eigenes Form, anderer Endpoint) -->
+  <form
+    method="post"
+    action="{{ url_for('export.import_settings') }}"
+    enctype="multipart/form-data"
+    style="margin-top: 1rem;"
+  >
+    <input
+      type="file"
+      name="file"
+      accept=".json"
+      required
+    >
+    <button type="submit" class="btn">
+      {{ _('btn_import_settings') }}
+    </button>
+  </form>
 {% endblock %}

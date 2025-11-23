@@ -52,6 +52,7 @@
   "theme_dark_teal": "Dark Teal",
 
   "settings_title": "Settings",
+  "settings_title_import": "Settings Import",
   "settings_section_general": "General settings",
 
   "settings_poll_interval_label": "Poll interval (seconds)",
@@ -128,6 +129,21 @@
   "btn_close": "Close",
 
   "btn_export_printers": "Export Printers",
-  "btn_export_settings": "Export Settings"
+  "btn_export_settings": "Export Settings",
+  "btn_import_printers": "Import Printers",
+  "btn_import_settings": "Import Settings",
+
+  "msg_export_printers_success": "Printer list exported successfully.",
+  "msg_export_settings_success": "Settings exported successfully.",
+
+  "msg_import_printers_success": "Printers imported successfully.",
+  "msg_import_settings_success": "Settings imported successfully.",
+
+  "msg_import_no_file": "No file selected.",
+  "msg_import_invalid_json": "Invalid JSON file.",
+  "msg_import_wrong_type_printers": "This file is not a printer export.",
+  "msg_import_wrong_type_settings": "This file is not a settings export.",
+  "msg_import_invalid_structure": "Invalid JSON structure."
+
 
 }

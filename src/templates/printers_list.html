@@ -15,7 +15,28 @@
     <a href="{{ url_for('export.export_printers') }}" class="btn" style="margin-left: 1rem;">
         {{ _('btn_export_printers') }}
     </a>
+
+    <div>
+        <form
+            method="post"
+            action="{{ url_for('export.import_printers') }}"
+            enctype="multipart/form-data"
+            style="display: inline-block; margin-top: 0.5rem;"
+        >
+            <input
+                type="file"
+                name="file"
+                accept=".json"
+                required
+            >
+            <button type="submit" class="btn">
+                {{ _('btn_import_printers') }}
+            </button>
+        </form>
+    </div>
 </p>
+
+
 
 <table>
     <thead>

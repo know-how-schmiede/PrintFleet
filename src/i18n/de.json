@@ -52,6 +52,7 @@
   "theme_dark_teal": "Dunkles Petrol",
 
   "settings_title": "Einstellungen",
+  "settings_title_import": "Einstellungen importieren",
   "settings_section_general": "Allgemeine Einstellungen",
 
   "settings_poll_interval_label": "Abfrageintervall (Sekunden)",
@@ -128,6 +129,22 @@
   "btn_close": "Schließen",
 
   "btn_export_printers": "Drucker exportieren",
-  "btn_export_settings": "Einstellungen exportieren"
+  "btn_export_settings": "Einstellungen exportieren",
+  "btn_import_printers": "Drucker importieren",
+  "btn_import_settings": "Einstellungen importieren",
+
+  "msg_export_printers_success": "Druckerliste wurde erfolgreich exportiert.",
+  "msg_export_settings_success": "Einstellungen wurden erfolgreich exportiert.",
+
+  "msg_import_printers_success": "Drucker wurden erfolgreich importiert.",
+  "msg_import_settings_success": "Einstellungen wurden erfolgreich importiert.",
+
+  "msg_import_no_file": "Keine Datei ausgewählt.",
+  "msg_import_invalid_json": "Ungültige JSON-Datei.",
+  "msg_import_wrong_type_printers": "Diese Datei ist kein Drucker-Export.",
+  "msg_import_wrong_type_settings": "Diese Datei ist kein Settings-Export.",
+  "msg_import_invalid_structure": "Ungültige JSON-Struktur."
+
+
 
 }

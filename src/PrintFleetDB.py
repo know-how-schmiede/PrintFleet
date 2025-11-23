@@ -71,6 +71,14 @@ I18N_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "i18n")
 # -------------------------------------------------
 app = Flask(__name__, static_folder="static", template_folder="templates")
 
+# Secret Key für Sessions/flash-Messages
+try:
+    # falls du später mal was in GLOBAL hinterlegen willst:
+    app.config["SECRET_KEY"] = GLOBAL.get("flask_secret_key", "change-this-secret")
+except Exception:
+    # Fallback, falls GLOBAL kein dict ist o.ä.
+    app.config["SECRET_KEY"] = "change-this-secret"
+
 # Blueprint(s) registrieren
 app.register_blueprint(dashboard_bp)
 app.register_blueprint(printers_bp)
@@ -128,6 +136,12 @@ if __name__ == "__main__":
         daemon=True,
     )
     watcher_thread.start()
+
+    # PrintFleet Start Log-Print in Console
+    print("=========================")
+    print("===    PrintFleet     ===")
+    print("=========================")
+    print("Version: ", PRINTFLEET_VERSION)
 
     print("=== Registered routes ===")
     for rule in app.url_map.iter_rules():
