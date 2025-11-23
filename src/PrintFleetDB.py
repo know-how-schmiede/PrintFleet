@@ -28,6 +28,10 @@ from printfleet.db import (
 # PrintFleet Sprachen und Übersetzungen
 from printfleet.i18n import init_i18n, _
 
+# Export und Backup Printers und Settings
+from printfleet.export import bp as export_bp
+
+
 # Blueprints
 from printfleet.dashboard import bp as dashboard_bp
 from printfleet.printers import bp as printers_bp
@@ -73,6 +77,7 @@ app.register_blueprint(printers_bp)
 app.register_blueprint(settings_bp)
 app.register_blueprint(debug_bp)
 app.register_blueprint(info_bp)
+app.register_blueprint(export_bp)
 
 
 def get_current_language() -> str:
@@ -123,6 +128,12 @@ if __name__ == "__main__":
         daemon=True,
     )
     watcher_thread.start()
+
+    print("=== Registered routes ===")
+    for rule in app.url_map.iter_rules():
+        print(rule.endpoint, "->", rule.rule)
+    print("=========================")
+
 
     try:
         app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)

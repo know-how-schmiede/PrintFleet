@@ -87,6 +87,17 @@
   "printer_list_actions": "Actions",
   "printer_list_settings": "Settings",
 
+  "printers_list_id": "ID",
+  "printers_list_name": "Name",
+  "printers_list_backend": "Backend",
+  "printers_list_host": "Host",
+  "printers_list_port": "Port",
+  "printers_list_https": "HTTPS",
+  "printers_list_enabled": "Enabled",
+  "printers_list_actions": "Actions",
+  "printers_list_settings": "Settings",
+
+
   "printer_form_new_title": "New printer",
   "printer_form_edit_title": "Edit printer",
   "printer_form_name_label": "Name",
@@ -114,5 +125,9 @@
   "printer_error_unreachable": "Not reachable",
   "btn_show_error_details": "Show details",
   "dialog_error_title": "Error details",
-  "btn_close": "Close"
+  "btn_close": "Close",
+
+  "btn_export_printers": "Export Printers",
+  "btn_export_settings": "Export Settings"
+
 }

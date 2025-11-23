@@ -6,8 +6,14 @@
 <h2>{{ _('printer_setup_title') }}</h2>
 
 <p>
+    <!-- Neuer Drucker -->
     <a href="{{ url_for('printers.printer_new') }}" class="btn">
         {{ _('printer_new_button') }}
+    </a>
+
+    <!-- Export Button -->
+    <a href="{{ url_for('export.export_printers') }}" class="btn" style="margin-left: 1rem;">
+        {{ _('btn_export_printers') }}
     </a>
 </p>
 

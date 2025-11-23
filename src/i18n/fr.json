@@ -87,6 +87,17 @@
   "printer_list_actions": "Actions",
   "printer_list_settings": "Paramètres",
 
+  "printers_list_id": "ID",
+  "printers_list_name": "Nom",
+  "printers_list_backend": "Backend",
+  "printers_list_host": "Hôte",
+  "printers_list_port": "Port",
+  "printers_list_https": "HTTPS",
+  "printers_list_enabled": "Activé",
+  "printers_list_actions": "Actions",
+  "printers_list_settings": "Paramètres",
+
+
   "printer_form_new_title": "Ajouter une imprimante",
   "printer_form_edit_title": "Modifier l’imprimante",
   "printer_form_name_label": "Nom",

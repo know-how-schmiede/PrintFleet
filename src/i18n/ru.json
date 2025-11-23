@@ -87,6 +87,17 @@
   "printer_list_actions": "Действия",
   "printer_list_settings": "Настройки",
 
+  "printers_list_id": "ID",
+  "printers_list_name": "Имя",
+  "printers_list_backend": "Бэкенд",
+  "printers_list_host": "Хост",
+  "printers_list_port": "Порт",
+  "printers_list_https": "HTTPS",
+  "printers_list_enabled": "Вкл.",
+  "printers_list_actions": "Действия",
+  "printers_list_settings": "Настройки",
+
+
   "printer_form_new_title": "Добавить принтер",
   "printer_form_edit_title": "Редактировать принтер",
   "printer_form_name_label": "Имя",

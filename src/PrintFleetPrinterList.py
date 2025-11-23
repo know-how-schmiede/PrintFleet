@@ -20,7 +20,7 @@ PRINTERS = [
     {
         "name": "Neptune4 Plus",
         "backend": "moonraker",
-        "host": "192.168.1.242",
+        "host": "192.168.1.236",
         "port": 80,
         # "token": "",        # optional
         # "https": False,

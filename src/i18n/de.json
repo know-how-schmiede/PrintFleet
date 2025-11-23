@@ -87,6 +87,17 @@
   "printer_list_actions": "Aktionen",
   "printer_list_settings": "Einstellungen",
 
+  "printers_list_id": "ID",
+  "printers_list_name": "Name",
+  "printers_list_backend": "Backend",
+  "printers_list_host": "Host",
+  "printers_list_port": "Port",
+  "printers_list_https": "HTTPS",
+  "printers_list_enabled": "Aktiv",
+  "printers_list_actions": "Aktionen",
+  "printers_list_settings": "Einstellungen",
+
+
   "printer_form_new_title": "Neuen Drucker anlegen",
   "printer_form_edit_title": "Drucker bearbeiten",
   "printer_form_name_label": "Name",
@@ -114,5 +125,9 @@
   "printer_error_unreachable": "Keine Verbindung",
   "btn_show_error_details": "Details",
   "dialog_error_title": "Fehlermeldung",
-  "btn_close": "Schließen"
+  "btn_close": "Schließen",
+
+  "btn_export_printers": "Drucker exportieren",
+  "btn_export_settings": "Einstellungen exportieren"
+
 }

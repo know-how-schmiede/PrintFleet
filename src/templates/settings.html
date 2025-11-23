@@ -86,8 +86,14 @@
     </div>
 
     <p>
-      <button type="submit" class="btn">{{ _('settings_save_button') }}</button>
-    </p>
+    <!-- Speichern -->
+    <button type="submit" class="btn">{{ _('settings_save_button') }}</button>
+
+    <!-- Einstellungen exportieren -->
+    <a href="{{ url_for('export.export_settings') }}" class="btn" style="margin-left: 1rem;">
+        {{ _('btn_export_settings') }}
+    </a>
+</p>
 
   </form>
 {% endblock %}
