@@ -83,6 +83,11 @@ def monitor_printer(
             conn.close()
             if (row is None) or (row["enabled"] != 1):
                 print(f"[{name}] Deaktiviert oder gelöscht – beende Monitor-Thread.", file=sys.stderr)
+                
+                # Zustand aus printer_state entfernen
+                with state_lock:
+                    printer_state.pop(name, None)
+                
                 break
 
             current_tasmota_host = row["tasmota_host"]
