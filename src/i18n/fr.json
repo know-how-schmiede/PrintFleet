@@ -5,11 +5,20 @@
   "menu_printers": "Imprimantes",
   "menu_settings": "Paramètres",
 
-  "btn_refresh": "Rafraîchir",
+  "btn_refresh": "Actualiser",
   "btn_save": "Enregistrer",
   "btn_cancel": "Annuler",
   "btn_open_web_ui": "Ouvrir l’interface Web",
   "btn_power_toggle": "Alimentation",
+  "btn_show_error_details": "Afficher les détails",
+  "btn_close": "Fermer",
+  "btn_edit": "Modifier",
+  "btn_delete": "Supprimer",
+  "btn_export_printers": "Exporter les imprimantes",
+  "btn_export_settings": "Exporter les paramètres",
+  "btn_import_printers": "Importer des imprimantes",
+  "btn_import_settings": "Importer des paramètres",
+  "btn_show_all_columns": "Afficher toutes les colonnes",
 
   "page_overview_title": "Vue d’ensemble des imprimantes",
   "page_settings_title": "Paramètres",
@@ -17,11 +26,11 @@
   "col_printer_name": "Nom",
   "col_backend": "Backend",
   "col_host": "Hôte",
-  "col_state": "État",
+  "col_state": "Statut",
   "col_filename": "Fichier",
   "col_progress": "Progression",
   "col_elapsed": "Écoulé",
-  "col_eta": "Temps restant",
+  "col_eta": "Restant",
   "col_hotend": "Hotend",
   "col_hotend_target": "Cible (Hotend)",
   "col_bed": "Plateau",
@@ -30,18 +39,22 @@
   "col_error": "Erreur",
   "col_link": "Interface Web",
   "col_actions": "Actions",
+  "col_location": "Emplacement",
+  "col_printer_type": "Type",
+  "col_tasmota_host": "Hôte Tasmota",
+  "col_enabled": "Activé",
 
-  "state_printing": "En impression",
+  "state_printing": "Impression",
   "state_paused": "En pause",
   "state_cancelled": "Annulé",
   "state_complete": "Terminé",
   "state_error": "Erreur",
   "state_offline": "Hors ligne",
-  "state_standby": "En veille",
+  "state_standby": "En attente",
   "state_unknown": "Inconnu",
 
   "status_no_printers": "Aucune imprimante configurée.",
-  "status_loading": "Chargement de l’état des imprimantes…",
+  "status_loading": "Chargement du statut des imprimantes…",
   "status_last_update": "Dernière mise à jour",
   "refresh_interval_info": "Actualisation toutes les 5 secondes",
 
@@ -52,40 +65,35 @@
   "theme_dark_teal": "Sarcelle foncé",
 
   "settings_title": "Paramètres",
+  "settings_title_import": "Importer les paramètres",
   "settings_section_general": "Paramètres généraux",
 
   "settings_poll_interval_label": "Intervalle d’interrogation (secondes)",
-  "settings_db_reload_interval_label": "Intervalle de rechargement DB (secondes)",
+  "settings_db_reload_interval_label": "Rechargement de la base (secondes)",
   "settings_telegram_chat_id_label": "ID de chat Telegram",
   "settings_language_label": "Langue de l’interface",
 
-  "settings_poll_interval_help": "Fréquence de mise à jour de chaque imprimante. Des valeurs plus faibles augmentent la précision mais aussi la charge système.",
-  "settings_db_reload_interval_help": "Fréquence de rechargement de la configuration des imprimantes depuis la base de données.",
-  "settings_telegram_chat_id_help": "ID de chat pour les notifications Telegram (optionnel). Laisser vide si vous n’utilisez pas Telegram.",
-  "settings_language_help": "Sélectionne le fichier de traduction utilisé dans le dossier i18n (anglais par défaut).",
+  "settings_poll_interval_help": "Fréquence de requête de chaque imprimante. Des valeurs plus faibles augmentent la charge.",
+  "settings_db_reload_interval_help": "Fréquence de rechargement de la configuration depuis la base de données.",
+  "settings_telegram_chat_id_help": "ID du chat pour les notifications Telegram (optionnel).",
+  "settings_language_help": "Sélectionne le fichier de traduction à utiliser (anglais par défaut).",
 
   "settings_language_en": "Anglais",
   "settings_language_de": "Allemand",
 
   "settings_save_button": "Enregistrer les paramètres",
-  "settings_saved": "Les paramètres ont été enregistrés.",
+  "settings_saved": "Paramètres enregistrés.",
   "settings_message_saved": "Paramètres enregistrés.",
   "settings_save_error": "Impossible d’enregistrer les paramètres.",
-  "settings_info_restart_hint": "Certains changements peuvent nécessiter un redémarrage du service.",
-  "settings_error_poll_interval": "L’intervalle d’interrogation doit être un nombre positif.",
-  "settings_error_db_reload": "L’intervalle de rechargement DB doit être un nombre.",
+  "settings_info_restart_hint": "Certaines modifications peuvent nécessiter un redémarrage du service.",
+  "settings_error_poll_interval": "L’intervalle doit être un nombre positif.",
+  "settings_error_db_reload": "Le rechargement doit être un nombre.",
+
+  "settings_tab_general": "Général",
+  "settings_tab_notifications": "Notifications & langue",
 
   "printer_setup_title": "Gestion des imprimantes",
-  "printer_new_button": "Nouvelle imprimante",
-  "printer_list_id": "ID",
-  "printer_list_name": "Nom",
-  "printer_list_backend": "Backend",
-  "printer_list_host": "Hôte",
-  "printer_list_port": "Port",
-  "printer_list_https": "HTTPS",
-  "printer_list_enabled": "Activée",
-  "printer_list_actions": "Actions",
-  "printer_list_settings": "Paramètres",
+  "printer_new_button": "Ajouter une imprimante",
 
   "printers_list_id": "ID",
   "printers_list_name": "Nom",
@@ -97,8 +105,7 @@
   "printers_list_actions": "Actions",
   "printers_list_settings": "Paramètres",
 
-
-  "printer_form_new_title": "Ajouter une imprimante",
+  "printer_form_new_title": "Nouvelle imprimante",
   "printer_form_edit_title": "Modifier l’imprimante",
   "printer_form_name_label": "Nom",
   "printer_form_backend_label": "Backend",
@@ -107,9 +114,14 @@
   "printer_form_https_label": "Utiliser HTTPS",
   "printer_form_token_label": "Token (Moonraker)",
   "printer_form_api_key_label": "Clé API (OctoPrint)",
-  "printer_form_error_interval_label": "Intervalle de signalement des erreurs (secondes)",
+  "printer_form_error_interval_label": "Intervalle d’erreur (secondes)",
   "printer_form_enabled_label": "Imprimante activée",
-  "printer_form_tasmota_host_label": "Adresse IP Tasmota",
+  "printer_form_tasmota_host_label": "Hôte Tasmota",
+  "printer_form_tasmota_topic_label": "Topic Tasmota",
+  "printer_form_location_label": "Emplacement",
+  "printer_form_type_label": "Type d’imprimante",
+  "printer_form_notes_label": "Notes",
+  "printer_form_notes_placeholder": "Informations particulières, état de maintenance, matériaux utilisés, etc.",
 
   "printer_form_create_button": "Créer",
   "printer_form_save_button": "Enregistrer",
@@ -117,8 +129,32 @@
 
   "printer_form_delete_title": "Supprimer l’imprimante",
   "printer_form_delete_button": "Supprimer",
-  "printer_form_delete_confirm": "Supprimer cette imprimante ?",
+  "printer_form_delete_confirm": "Voulez-vous vraiment supprimer cette imprimante ?",
 
   "printer_error_required_fields": "Nom, backend, hôte et port sont obligatoires.",
-  "printer_error_port_number": "Le port doit être un nombre."
+  "printer_error_port_number": "Le port doit être un nombre.",
+  "printer_error_unreachable": "Inaccessible",
+
+  "dialog_error_title": "Détails de l’erreur",
+
+  "msg_export_printers_success": "Liste des imprimantes exportée avec succès.",
+  "msg_export_settings_success": "Paramètres exportés avec succès.",
+  "msg_import_printers_success": "Imprimantes importées avec succès.",
+  "msg_import_settings_success": "Paramètres importés avec succès.",
+  "msg_import_no_file": "Aucun fichier sélectionné.",
+  "msg_import_invalid_json": "Fichier JSON invalide.",
+  "msg_import_wrong_type_printers": "Ce fichier n’est pas un export d’imprimantes.",
+  "msg_import_wrong_type_settings": "Ce fichier n’est pas un export de paramètres.",
+  "msg_import_invalid_structure": "Structure JSON invalide.",
+
+  "dashboard_column_visibility": "Colonnes visibles",
+
+  "status_enabled": "Activé",
+  "status_disabled": "Désactivé",
+
+  "confirm_delete_printer": "Voulez-vous vraiment supprimer cette imprimante ?",
+
+  "printer_tab_general": "Général",
+  "printer_tab_connection": "Connexion & API"
+
 }

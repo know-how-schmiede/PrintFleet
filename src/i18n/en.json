@@ -10,6 +10,15 @@
   "btn_cancel": "Cancel",
   "btn_open_web_ui": "Open Web UI",
   "btn_power_toggle": "Power",
+  "btn_show_error_details": "Show details",
+  "btn_close": "Close",
+  "btn_edit": "Edit",
+  "btn_delete": "Delete",
+  "btn_export_printers": "Export Printers",
+  "btn_export_settings": "Export Settings",
+  "btn_import_printers": "Import Printers",
+  "btn_import_settings": "Import Settings",
+  "btn_show_all_columns": "Show all columns",
 
   "page_overview_title": "Printer Overview",
   "page_settings_title": "Settings",
@@ -30,6 +39,10 @@
   "col_error": "Error",
   "col_link": "Web UI",
   "col_actions": "Actions",
+  "col_location": "Location",
+  "col_printer_type": "Type",
+  "col_tasmota_host": "Tasmota Host",
+  "col_enabled": "Enabled",
 
   "state_printing": "Printing",
   "state_paused": "Paused",
@@ -76,17 +89,11 @@
   "settings_error_poll_interval": "Poll interval must be a positive number.",
   "settings_error_db_reload": "DB reload interval must be a number.",
 
-  "printer_setup_title": "Printer setup",
-  "printer_new_button": "New printer",
-  "printer_list_id": "ID",
-  "printer_list_name": "Name",
-  "printer_list_backend": "Backend",
-  "printer_list_host": "Host",
-  "printer_list_port": "Port",
-  "printer_list_https": "HTTPS",
-  "printer_list_enabled": "Enabled",
-  "printer_list_actions": "Actions",
-  "printer_list_settings": "Settings",
+  "settings_tab_general": "General",
+  "settings_tab_notifications": "Notifications & language",
+
+  "printer_setup_title": "Printer Setup",
+  "printer_new_button": "Add Printer",
 
   "printers_list_id": "ID",
   "printers_list_name": "Name",
@@ -97,7 +104,6 @@
   "printers_list_enabled": "Enabled",
   "printers_list_actions": "Actions",
   "printers_list_settings": "Settings",
-
 
   "printer_form_new_title": "New printer",
   "printer_form_edit_title": "Edit printer",
@@ -110,7 +116,12 @@
   "printer_form_api_key_label": "API key (OctoPrint)",
   "printer_form_error_interval_label": "Error reporting interval (seconds)",
   "printer_form_enabled_label": "Printer enabled",
-  "printer_form_tasmota_host_label": "Tasmota IP address",
+  "printer_form_tasmota_host_label": "Tasmota Host",
+  "printer_form_tasmota_topic_label": "Tasmota Topic",
+  "printer_form_location_label": "Location",
+  "printer_form_type_label": "Printer Type",
+  "printer_form_notes_label": "Notes",
+  "printer_form_notes_placeholder": "Special information, maintenance status, material in use, etc.",
 
   "printer_form_create_button": "Create",
   "printer_form_save_button": "Save",
@@ -122,23 +133,14 @@
 
   "printer_error_required_fields": "Name, backend, host and port are required.",
   "printer_error_port_number": "Port must be a number.",
-
   "printer_error_unreachable": "Not reachable",
-  "btn_show_error_details": "Show details",
-  "dialog_error_title": "Error details",
-  "btn_close": "Close",
 
-  "btn_export_printers": "Export Printers",
-  "btn_export_settings": "Export Settings",
-  "btn_import_printers": "Import Printers",
-  "btn_import_settings": "Import Settings",
+  "dialog_error_title": "Error details",
 
   "msg_export_printers_success": "Printer list exported successfully.",
   "msg_export_settings_success": "Settings exported successfully.",
-
   "msg_import_printers_success": "Printers imported successfully.",
   "msg_import_settings_success": "Settings imported successfully.",
-
   "msg_import_no_file": "No file selected.",
   "msg_import_invalid_json": "Invalid JSON file.",
   "msg_import_wrong_type_printers": "This file is not a printer export.",
@@ -146,19 +148,15 @@
   "msg_import_invalid_structure": "Invalid JSON structure.",
 
   "dashboard_column_visibility": "Visible columns",
-  "btn_show_all_columns": "Show all columns",
 
-  "printer_new_button": "Add printer",
-  "col_tasmota_host": "Tasmota host",
-  "btn_edit": "Edit",
-  "btn_delete": "Delete",
-  "confirm_delete_printer": "Really delete this printer?",
+  "status_enabled": "Enabled",
+  "status_disabled": "Disabled",
+  "confirm_delete_printer": "Do you really want to delete this printer?",
 
   "settings_tab_general": "General",
-  "settings_tab_notifications": "Notifications & language"
+  "settings_tab_notifications": "Notifications & language",
 
-
-
-
+  "printer_tab_general": "General",
+  "printer_tab_connection": "Connection & API"
 
 }

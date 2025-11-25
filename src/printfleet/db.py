@@ -35,12 +35,15 @@ def get_db_connection() -> sqlite3.Connection:
 
 
 def init_db_schema_only() -> None:
-    """Erzeugt (falls nötig) die Tabellen `printers` und `settings`."""
-
+    """Erzeugt (falls nötig) die Tabellen `printers` und `settings`
+    und führt einfache Migrationen für neue Spalten durch.
+    """
     conn = get_db_connection()
     cur = conn.cursor()
 
-    # Druckertabelle – jetzt mit NOT NULL + DEFAULT für error_report_interval
+    # ---------------------------
+    # printers: Ziel-Schema
+    # ---------------------------
     cur.execute(
         """
         CREATE TABLE IF NOT EXISTS printers (
@@ -64,7 +67,34 @@ def init_db_schema_only() -> None:
         """
     )
 
-    # Globale Settings-Tabelle
+    # Migration für bestehende Installationen (printers)
+    cur.execute("PRAGMA table_info(printers)")
+    printer_cols = [r[1] for r in cur.fetchall()]
+
+    if "error_report_interval" not in printer_cols:
+        cur.execute("ALTER TABLE printers ADD COLUMN error_report_interval REAL NOT NULL DEFAULT 30.0")
+
+    if "tasmota_host" not in printer_cols:
+        cur.execute("ALTER TABLE printers ADD COLUMN tasmota_host TEXT")
+
+    if "tasmota_topic" not in printer_cols:
+        cur.execute("ALTER TABLE printers ADD COLUMN tasmota_topic TEXT")
+
+    if "location" not in printer_cols:
+        cur.execute("ALTER TABLE printers ADD COLUMN location TEXT")
+
+    if "printer_type" not in printer_cols:
+        cur.execute("ALTER TABLE printers ADD COLUMN printer_type TEXT")
+
+    if "notes" not in printer_cols:
+        cur.execute("ALTER TABLE printers ADD COLUMN notes TEXT")
+
+    if "enabled" not in printer_cols:
+        cur.execute("ALTER TABLE printers ADD COLUMN enabled INTEGER NOT NULL DEFAULT 1")
+
+    # ---------------------------
+    # settings: Ziel-Schema
+    # ---------------------------
     cur.execute(
         """
         CREATE TABLE IF NOT EXISTS settings (
@@ -77,10 +107,11 @@ def init_db_schema_only() -> None:
         """
     )
 
-    # Migration für bestehende Installationen:
+    # Migration für bestehende Installationen (settings)
     cur.execute("PRAGMA table_info(settings)")
-    cols = [r[1] for r in cur.fetchall()]
-    if "language" not in cols:
+    settings_cols = [r[1] for r in cur.fetchall()]
+
+    if "language" not in settings_cols:
         cur.execute("ALTER TABLE settings ADD COLUMN language TEXT")
 
     # Falls noch kein Settings-Datensatz existiert, einen Default-Eintrag erzeugen
@@ -162,12 +193,17 @@ def load_printers_from_db() -> list[dict]:
                 "token": r["token"],
                 "api_key": r["api_key"],
                 "error_report_interval": err_interval,
-                # Platzhalter-Felder für spätere Nutzung
+                # Power / Tasmota
                 "tasmota_host": r["tasmota_host"],
                 "tasmota_topic": r["tasmota_topic"],
+                # Metadaten
+                "location": r["location"],
+                "printer_type": r["printer_type"],
+                "notes": r["notes"],
             }
         )
     return printers
+
 
 
 def get_printer_by_id(printer_id: int) -> Optional[sqlite3.Row]:

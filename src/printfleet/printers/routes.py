@@ -44,8 +44,16 @@ def printer_new() -> str:
         token = (request.form.get("token") or "").strip() or None
         api_key = (request.form.get("api_key") or "").strip() or None
         err_int_raw = (request.form.get("error_report_interval") or "").strip()
+
         # Tasmota-IP-Adresse
         tasmota_host = (request.form.get("tasmota_host") or "").strip() or None
+        # NEU: Tasmota-Topic
+        tasmota_topic = (request.form.get("tasmota_topic") or "").strip() or None
+
+        # NEU: Standort, Druckertyp, Notizen
+        location = (request.form.get("location") or "").strip() or None
+        printer_type = (request.form.get("printer_type") or "").strip() or None
+        notes = (request.form.get("notes") or "").strip() or None
 
         # Simple Pflichtfelder-Prüfung
         if not name or not backend or not host or not port_raw:
@@ -67,9 +75,21 @@ def printer_new() -> str:
             cur.execute(
                 """
                 INSERT INTO printers
-                    (name, backend, host, port, https, token, api_key,
-                     error_report_interval, tasmota_host, enabled)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+                    (name,
+                     backend,
+                     host,
+                     port,
+                     https,
+                     token,
+                     api_key,
+                     error_report_interval,
+                     tasmota_host,
+                     tasmota_topic,
+                     location,
+                     printer_type,
+                     notes,
+                     enabled)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
                 """,
                 (
                     name,
@@ -81,6 +101,10 @@ def printer_new() -> str:
                     api_key,
                     error_report_interval,
                     tasmota_host,
+                    tasmota_topic,
+                    location,
+                    printer_type,
+                    notes,
                 ),
             )
             conn.commit()
@@ -119,8 +143,16 @@ def printer_edit(printer_id: int) -> str:
         api_key = (request.form.get("api_key") or "").strip() or None
         err_int_raw = (request.form.get("error_report_interval") or "").strip()
         enabled_flag = 1 if request.form.get("enabled") == "on" else 0
+
         # Tasmota-IP-Adresse
         tasmota_host = (request.form.get("tasmota_host") or "").strip() or None
+        # NEU: Tasmota-Topic
+        tasmota_topic = (request.form.get("tasmota_topic") or "").strip() or None
+
+        # NEU: Standort, Druckertyp, Notizen
+        location = (request.form.get("location") or "").strip() or None
+        printer_type = (request.form.get("printer_type") or "").strip() or None
+        notes = (request.form.get("notes") or "").strip() or None
 
         if not name or not backend or not host or not port_raw:
             error = _("printer_error_required_fields")
@@ -141,9 +173,20 @@ def printer_edit(printer_id: int) -> str:
             cur.execute(
                 """
                 UPDATE printers
-                SET name = ?, backend = ?, host = ?, port = ?, https = ?,
-                    token = ?, api_key = ?, error_report_interval = ?,
-                    tasmota_host = ?, enabled = ?
+                SET name = ?,
+                    backend = ?,
+                    host = ?,
+                    port = ?,
+                    https = ?,
+                    token = ?,
+                    api_key = ?,
+                    error_report_interval = ?,
+                    tasmota_host = ?,
+                    tasmota_topic = ?,
+                    location = ?,
+                    printer_type = ?,
+                    notes = ?,
+                    enabled = ?
                 WHERE id = ?
                 """,
                 (
@@ -156,6 +199,10 @@ def printer_edit(printer_id: int) -> str:
                     api_key,
                     error_report_interval,
                     tasmota_host,
+                    tasmota_topic,
+                    location,
+                    printer_type,
+                    notes,
                     enabled_flag,
                     printer_id,
                 ),
