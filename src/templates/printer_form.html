@@ -9,111 +9,195 @@
 {% endblock %}
 
 {% block content %}
-<h2>
-  {% if mode == 'new' %}
-    {{ _('printer_form_new_title') }}
-  {% else %}
-    {{ _('printer_form_edit_title') }}: {{ printer["name"] }}
-  {% endif %}
-</h2>
 
-{% if error %}
-  <p style="color:red;">{{ error }}</p>
-{% endif %}
+<div class="card mb-3">
+  <div class="card-header">
+    <h2 class="h5 mb-0">
+      {% if mode == 'new' %}
+        {{ _('printer_form_new_title') }}
+      {% else %}
+        {{ _('printer_form_edit_title') }}: {{ printer["name"] }}
+      {% endif %}
+    </h2>
+  </div>
 
-<form method="post">
-    <div>
-        <label for="name">{{ _('printer_form_name_label') }}*</label><br>
-        <input type="text" id="name" name="name"
-               value="{% if printer %}{{ printer['name'] }}{% endif %}" required>
-    </div>
+  <div class="card-body">
 
-    <div>
-        <label for="backend">{{ _('printer_form_backend_label') }}*</label><br>
-        <select id="backend" name="backend" required>
-            {% set current_backend = printer['backend'] if printer else 'moonraker' %}
-            <option value="moonraker" {% if current_backend == 'moonraker' %}selected{% endif %}>Moonraker</option>
-            <option value="octoprint" {% if current_backend == 'octoprint' %}selected{% endif %}>OctoPrint</option>
-        </select>
-    </div>
-
-    <div>
-        <label for="host">{{ _('printer_form_host_label') }}*</label><br>
-        <input type="text" id="host" name="host"
-               value="{% if printer %}{{ printer['host'] }}{% endif %}" required>
-    </div>
-
-    <div>
-        <label for="port">{{ _('printer_form_port_label') }}*</label><br>
-        <input type="number" id="port" name="port"
-               value="{% if printer %}{{ printer['port'] }}{% else %}80{% endif %}" required>
-    </div>
-
-    <div>
-        <label>
-            <input type="checkbox" name="https"
-                   {% if printer and printer['https'] %}checked{% endif %}>
-            {{ _('printer_form_https_label') }}
-        </label>
-    </div>
-
-    <div>
-        <label for="token">{{ _('printer_form_token_label') }}</label><br>
-        <input type="text" id="token" name="token"
-               value="{% if printer %}{{ printer['token'] or '' }}{% endif %}">
-    </div>
-
-    <div>
-        <label for="api_key">{{ _('printer_form_api_key_label') }}</label><br>
-        <input type="text" id="api_key" name="api_key"
-               value="{% if printer %}{{ printer['api_key'] or '' }}{% endif %}">
-    </div>
-
-    <!-- NEU: Tasmota-IP-Adresse -->
-    <div>
-        <label for="tasmota_host">{{ _('printer_form_tasmota_host_label') }}</label><br>
-        <input type="text" id="tasmota_host" name="tasmota_host"
-               placeholder="192.168.1.20"
-               value="{% if printer %}{{ printer['tasmota_host'] or '' }}{% endif %}">
-    </div>
-
-    <div>
-        <label for="error_report_interval">{{ _('printer_form_error_interval_label') }}</label><br>
-        <input type="number" step="1" min="1" id="error_report_interval" name="error_report_interval"
-               value="{% if printer %}{{ printer['error_report_interval'] }}{% else %}30{% endif %}">
-    </div>
-
-    {% if mode == 'edit' %}
-    <div>
-        <label>
-            <input type="checkbox" name="enabled"
-                   {% if printer and printer['enabled'] %}checked{% endif %}>
-            {{ _('printer_form_enabled_label') }}
-        </label>
-    </div>
+    {% if error %}
+      <div class="alert alert-danger">
+        {{ error }}
+      </div>
     {% endif %}
 
-    <p>
-        <button type="submit" class="btn">
+    <form method="post">
+
+      <!-- Name -->
+      <div class="mb-3">
+        <label for="name" class="form-label">
+          {{ _('printer_form_name_label') }}*
+        </label>
+        <input type="text"
+               class="form-control"
+               id="name"
+               name="name"
+               value="{% if printer %}{{ printer['name'] }}{% endif %}"
+               required>
+      </div>
+
+      <!-- Backend -->
+      <div class="mb-3">
+        <label for="backend" class="form-label">
+          {{ _('printer_form_backend_label') }}*
+        </label>
+        <select id="backend"
+                name="backend"
+                class="form-select"
+                required>
+          {% set current_backend = printer['backend'] if printer else 'moonraker' %}
+          <option value="moonraker" {% if current_backend == 'moonraker' %}selected{% endif %}>Moonraker</option>
+          <option value="octoprint" {% if current_backend == 'octoprint' %}selected{% endif %}>OctoPrint</option>
+        </select>
+      </div>
+
+      <!-- Host -->
+      <div class="mb-3">
+        <label for="host" class="form-label">
+          {{ _('printer_form_host_label') }}*
+        </label>
+        <input type="text"
+               class="form-control"
+               id="host"
+               name="host"
+               value="{% if printer %}{{ printer['host'] }}{% endif %}"
+               required>
+      </div>
+
+      <!-- Port -->
+      <div class="mb-3">
+        <label for="port" class="form-label">
+          {{ _('printer_form_port_label') }}*
+        </label>
+        <input type="number"
+               class="form-control"
+               id="port"
+               name="port"
+               value="{% if printer %}{{ printer['port'] }}{% else %}80{% endif %}"
+               required>
+      </div>
+
+      <!-- HTTPS -->
+      <div class="form-check mb-3">
+        <input type="checkbox"
+               class="form-check-input"
+               id="https"
+               name="https"
+               {% if printer and printer['https'] %}checked{% endif %}>
+        <label class="form-check-label" for="https">
+          {{ _('printer_form_https_label') }}
+        </label>
+      </div>
+
+      <!-- Token -->
+      <div class="mb-3">
+        <label for="token" class="form-label">
+          {{ _('printer_form_token_label') }}
+        </label>
+        <input type="text"
+               class="form-control"
+               id="token"
+               name="token"
+               value="{% if printer %}{{ printer['token'] or '' }}{% endif %}">
+      </div>
+
+      <!-- API Key -->
+      <div class="mb-3">
+        <label for="api_key" class="form-label">
+          {{ _('printer_form_api_key_label') }}
+        </label>
+        <input type="text"
+               class="form-control"
+               id="api_key"
+               name="api_key"
+               value="{% if printer %}{{ printer['api_key'] or '' }}{% endif %}">
+      </div>
+
+      <!-- Tasmota-IP-Adresse -->
+      <div class="mb-3">
+        <label for="tasmota_host" class="form-label">
+          {{ _('printer_form_tasmota_host_label') }}
+        </label>
+        <input type="text"
+               class="form-control"
+               id="tasmota_host"
+               name="tasmota_host"
+               placeholder="192.168.1.20"
+               value="{% if printer %}{{ printer['tasmota_host'] or '' }}{% endif %}">
+      </div>
+
+      <!-- Error-Report-Intervall -->
+      <div class="mb-3">
+        <label for="error_report_interval" class="form-label">
+          {{ _('printer_form_error_interval_label') }}
+        </label>
+        <input type="number"
+               class="form-control"
+               step="1"
+               min="1"
+               id="error_report_interval"
+               name="error_report_interval"
+               value="{% if printer %}{{ printer['error_report_interval'] }}{% else %}30{% endif %}">
+      </div>
+
+      {% if mode == 'edit' %}
+      <!-- Enabled -->
+      <div class="form-check mb-3">
+        <input type="checkbox"
+               class="form-check-input"
+               id="enabled"
+               name="enabled"
+               {% if printer and printer['enabled'] %}checked{% endif %}>
+        <label class="form-check-label" for="enabled">
+          {{ _('printer_form_enabled_label') }}
+        </label>
+      </div>
+      {% endif %}
+
+      <!-- Buttons -->
+      <div class="d-flex gap-2 mt-3">
+        <button type="submit" class="btn btn-primary">
           {% if mode == 'new' %}
             {{ _('printer_form_create_button') }}
           {% else %}
             {{ _('printer_form_save_button') }}
           {% endif %}
         </button>
-        <a href="{{ url_for('printers.printer_list') }}" class="btn">{{ _('printer_form_back_to_list') }}</a>
-    </p>
-</form>
+        <a href="{{ url_for('printers.printer_list') }}" class="btn btn-secondary">
+          {{ _('printer_form_back_to_list') }}
+        </a>
+      </div>
+
+    </form>
+  </div>
+</div>
 
 {% if mode == 'edit' %}
-<hr>
-<h3>{{ _('printer_form_delete_title') }}</h3>
-<form method="post" action="{{ url_for('printers.printer_delete', printer_id=printer['id']) }}"
-      onsubmit="return confirm('{{ _('printer_form_delete_confirm') }}');">
-    <button type="submit" class="btn" style="background:#b91c1c;">
+<div class="card border-danger">
+  <div class="card-header bg-danger text-white">
+    <h3 class="h6 mb-0">{{ _('printer_form_delete_title') }}</h3>
+  </div>
+  <div class="card-body">
+    <p class="mb-2">
+      {{ _('printer_form_delete_confirm') }}
+    </p>
+    <form method="post"
+          action="{{ url_for('printers.printer_delete', printer_id=printer['id']) }}"
+          onsubmit="return confirm('{{ _('printer_form_delete_confirm') }}');">
+      <button type="submit" class="btn btn-danger">
         {{ _('printer_form_delete_button') }}
-    </button>
-</form>
+      </button>
+    </form>
+  </div>
+</div>
 {% endif %}
 
 {% endblock %}

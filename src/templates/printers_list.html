@@ -3,71 +3,97 @@
 {% block title %}{{ _('printer_setup_title') }} – PrintFleet{% endblock %}
 
 {% block content %}
-<h2>{{ _('printer_setup_title') }}</h2>
 
-<p>
+<!-- Kopfzeile mit Titel und Aktionen -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="h4 mb-0">{{ _('printer_setup_title') }}</h2>
+  <div class="btn-group">
     <!-- Neuer Drucker -->
-    <a href="{{ url_for('printers.printer_new') }}" class="btn">
-        {{ _('printer_new_button') }}
+    <a href="{{ url_for('printers.printer_new') }}" class="btn btn-primary btn-sm">
+      {{ _('printer_new_button') }}
     </a>
 
     <!-- Export Button -->
-    <a href="{{ url_for('export.export_printers') }}" class="btn" style="margin-left: 1rem;">
-        {{ _('btn_export_printers') }}
+    <a href="{{ url_for('export.export_printers') }}" class="btn btn-outline-secondary btn-sm">
+      {{ _('btn_export_printers') }}
     </a>
+  </div>
+</div>
 
-    <div>
-        <form
-            method="post"
-            action="{{ url_for('export.import_printers') }}"
-            enctype="multipart/form-data"
-            style="display: inline-block; margin-top: 0.5rem;"
+<!-- Import-Formular als kompakte Zeile -->
+<div class="card mb-3">
+  <div class="card-body py-2">
+    <form
+      method="post"
+      action="{{ url_for('export.import_printers') }}"
+      enctype="multipart/form-data"
+      class="row g-2 align-items-center"
+    >
+      <div class="col-sm-6 col-md-8">
+        <input
+          type="file"
+          name="file"
+          accept=".json"
+          required
+          class="form-control form-control-sm"
         >
-            <input
-                type="file"
-                name="file"
-                accept=".json"
-                required
-            >
-            <button type="submit" class="btn">
-                {{ _('btn_import_printers') }}
-            </button>
-        </form>
-    </div>
-</p>
+      </div>
+      <div class="col-sm-6 col-md-4 text-sm-start text-md-start">
+        <button type="submit" class="btn btn-success btn-sm">
+          {{ _('btn_import_printers') }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
 
-
-
-<table>
-    <thead>
-        <tr>
-            <th>{{ _('printers_list_id') }}</th>
-            <th>{{ _('printers_list_name') }}</th>
-            <th>{{ _('printers_list_backend') }}</th>
-            <th>{{ _('printers_list_host') }}</th>
-            <th>{{ _('printers_list_port') }}</th>
-            <th>{{ _('printers_list_https') }}</th>
-            <th>{{ _('printers_list_enabled') }}</th>
-            <th>{{ _('printers_list_actions') }}</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for p in printers %}
-        <tr>
-            <td>{{ p["id"] }}</td>
-            <td>{{ p["name"] }}</td>
-            <td>{{ p["backend"] }}</td>
-            <td>{{ p["host"] }}</td>
-            <td>{{ p["port"] }}</td>
-            <td>{{ 'yes' if p["https"] else 'no' }}</td>
-            <td>{{ 'yes' if p["enabled"] else 'no' }}</td>
-            <td>
-                <a href="{{ url_for('printers.printer_edit', printer_id=p['id']) }}" class="btn">
-                    {{ _('printers_list_settings') }}
-                </a>
+<!-- Tabelle mit Druckern -->
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center py-2">
+    <h3 class="h6 mb-0">Printer Setup</h3>
+    <a href="{{ url_for('printers.printer_new') }}" class="btn btn-primary btn-sm">
+      {{ _('printer_new_button') if _ else 'Neuen Drucker hinzufügen' }}
+    </a>
+  </div>
+  <div class="card-body p-2">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover table-sm align-middle mb-0" id="printerSetupTable">
+        <thead>
+          <tr>
+            <th>{{ _('col_printer_name') }}</th>
+            <th>{{ _('col_backend') }}</th>
+            <th>{{ _('col_host') }}</th>
+            <th>{{ _('col_tasmota_host') if _ else 'Tasmota Host' }}</th>
+            <th class="text-end">{{ _('col_actions') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in printers %}
+          <tr>
+            <td>{{ p.name }}</td>
+            <td>{{ p.backend }}</td>
+            <td>{{ p.host }}</td>
+            <td>{{ p.tasmota_host or '' }}</td>
+            <td class="text-end">
+              <a href="{{ url_for('printers.printer_edit', printer_id=p.id) }}"
+                 class="btn btn-outline-secondary btn-sm me-1">
+                {{ _('btn_edit') if _ else 'Bearbeiten' }}
+              </a>
+              <form action="{{ url_for('printers.printer_delete', printer_id=p.id) }}"
+                    method="post"
+                    class="d-inline"
+                    onsubmit="return confirm('{{ _('confirm_delete_printer') if _ else 'Drucker wirklich löschen?' }}');">
+                <button type="submit" class="btn btn-danger btn-sm">
+                  {{ _('btn_delete') if _ else 'Löschen' }}
+                </button>
+              </form>
             </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 {% endblock %}

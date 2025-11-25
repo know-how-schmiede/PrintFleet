@@ -146,7 +146,11 @@
   "msg_import_invalid_structure": "Ungültige JSON-Struktur.",
 
   "dashboard_column_visibility": "Sichtbare Spalten",
-  "btn_show_all_columns": "Alle anzeigen"
+  "btn_show_all_columns": "Alle anzeigen",
+
+  "settings_tab_general": "Allgemein",
+  "settings_tab_notifications": "Benachrichtigungen & Sprache"
+
 
 
 

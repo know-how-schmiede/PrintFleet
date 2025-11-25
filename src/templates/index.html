@@ -1,122 +1,127 @@
 {% extends "base.html" %}
+{% block container_class %}container-fluid{% endblock %}
 
 {% block title %}{{ _('page_overview_title') }}{% endblock %}
 
 {% block content %}
 
-  <table id="tbl">
-    <thead>
-      <tr>
-        <!-- Name: immer sichtbar, mit "Alle anzeigen"-Button -->
-        <th data-col-key="name">
-          <div class="col-toggle">
-            <span>{{ _('col_printer_name') }}</span>
-            <button
-              type="button"
-              id="showAllColumnsBtn"
-              class="btn btn-sm btn-icon"
-              style="margin-left: 0.5rem;"
-              title="{{ _('btn_show_all_columns') if _ else 'Alle Spalten anzeigen' }}"
-              aria-label="{{ _('btn_show_all_columns') if _ else 'Alle Spalten anzeigen' }}"
-            >
-              &#128065;
-            </button>
-          </div>
-        </th>
+<div class="card">
+  <div class="card-body p-2">
+    <div class="table-responsive">
+      <table id="tbl" class="table table-striped table-hover table-sm align-middle mb-0">
+        <thead>
+          <tr>
+            <!-- Name: immer sichtbar, mit "Alle anzeigen"-Auge -->
+            <th data-col-key="name">
+              <div class="col-toggle">
+                <span>{{ _('col_printer_name') }}</span>
+                <button
+                  type="button"
+                  id="showAllColumnsBtn"
+                  class="btn btn-outline-secondary btn-sm btn-icon"
+                  style="margin-left: 0.5rem;"
+                  title="{{ _('btn_show_all_columns') if _ else 'Alle Spalten anzeigen' }}"
+                  aria-label="{{ _('btn_show_all_columns') if _ else 'Alle Spalten anzeigen' }}"
+                >
+                  &#128065;
+                </button>
+              </div>
+            </th>
 
+            <th data-col-key="backend">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="backend" checked>
+                {{ _('col_backend') }}
+              </label>
+            </th>
 
-        <th data-col-key="backend">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="backend" checked>
-            {{ _('col_backend') }}
-          </label>
-        </th>
+            <th data-col-key="state">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="state" checked>
+                {{ _('col_state') }}
+              </label>
+            </th>
 
-        <th data-col-key="state">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="state" checked>
-            {{ _('col_state') }}
-          </label>
-        </th>
+            <th data-col-key="filename">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="filename" checked>
+                {{ _('col_filename') }}
+              </label>
+            </th>
 
-        <th data-col-key="filename">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="filename" checked>
-            {{ _('col_filename') }}
-          </label>
-        </th>
+            <th data-col-key="progress" style="min-width:160px;">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="progress" checked>
+                {{ _('col_progress') }}
+              </label>
+            </th>
 
-        <th data-col-key="progress" style="min-width:160px;">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="progress" checked>
-            {{ _('col_progress') }}
-          </label>
-        </th>
+            <th data-col-key="elapsed">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="elapsed" checked>
+                {{ _('col_elapsed') }}
+              </label>
+            </th>
 
-        <th data-col-key="elapsed">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="elapsed" checked>
-            {{ _('col_elapsed') }}
-          </label>
-        </th>
+            <th data-col-key="eta">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="eta" checked>
+                {{ _('col_eta') }}
+              </label>
+            </th>
 
-        <th data-col-key="eta">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="eta" checked>
-            {{ _('col_eta') }}
-          </label>
-        </th>
+            <th data-col-key="hotend">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="hotend" checked>
+                {{ _('col_hotend') }} ({{ _('col_hotend_target') }})
+              </label>
+            </th>
 
-        <th data-col-key="hotend">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="hotend" checked>
-            {{ _('col_hotend') }} ({{ _('col_hotend_target') }})
-          </label>
-        </th>
+            <th data-col-key="bed">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="bed" checked>
+                {{ _('col_bed') }} ({{ _('col_bed_target') }})
+              </label>
+            </th>
 
-        <th data-col-key="bed">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="bed" checked>
-            {{ _('col_bed') }} ({{ _('col_bed_target') }})
-          </label>
-        </th>
+            <th data-col-key="last_update">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="last_update" checked>
+                {{ _('col_last_update') }}
+              </label>
+            </th>
 
-        <th data-col-key="last_update">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="last_update" checked>
-            {{ _('col_last_update') }}
-          </label>
-        </th>
+            <th data-col-key="actions">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="actions" checked>
+                {{ _('col_actions') }}
+              </label>
+            </th>
 
-        <th data-col-key="actions">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="actions" checked>
-            {{ _('col_actions') }}
-          </label>
-        </th>
-
-        <th data-col-key="error">
-          <label class="col-toggle">
-            <input type="checkbox" data-col-toggle="error" checked>
-            {{ _('col_error') }}
-          </label>
-        </th>
-      </tr>
-    </thead>
-
-    <tbody></tbody>
-  </table>
-
-  <!-- Dialog für detaillierte Fehlermeldungen -->
-  <dialog id="errorDialog">
-    <h3>{{ _('dialog_error_title') }}</h3>
-    <pre id="errorDialogText" style="white-space: pre-wrap; max-width: 80vw; max-height: 60vh; overflow:auto;"></pre>
-    <div style="text-align: right; margin-top: 1rem;">
-      <button id="errorDialogCloseBtn" class="btn">
-        {{ _('btn_close') }}
-      </button>
+            <th data-col-key="error">
+              <label class="col-toggle">
+                <input type="checkbox" data-col-toggle="error" checked>
+                {{ _('col_error') }}
+              </label>
+            </th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
     </div>
-  </dialog>
+  </div>
+</div>
+
+<!-- Dialog für detaillierte Fehlermeldungen -->
+<dialog id="errorDialog">
+  <h3 class="h5">{{ _('dialog_error_title') }}</h3>
+  <pre id="errorDialogText" style="white-space: pre-wrap; max-width: 80vw; max-height: 60vh; overflow:auto;"></pre>
+  <div class="text-end mt-3">
+    <button id="errorDialogCloseBtn" class="btn btn-secondary btn-sm">
+      {{ _('btn_close') }}
+    </button>
+  </div>
+</dialog>
 
 <script>
 // Übersetzte Status-Texte aus dem Backend
@@ -143,7 +148,7 @@ const BTN_SHOW_ERROR_DETAILS = "{{ _('btn_show_error_details') }}";
 
 const COLUMN_STORAGE_KEY = 'printfleet_dashboard_columns';
 
-// WICHTIG: 'name' ist NICHT in der Liste -> Name ist immer sichtbar
+// 'name' ist NICHT in der Liste -> Name ist immer sichtbar
 const COLUMN_KEYS = [
   'backend',
   'state',
@@ -194,16 +199,13 @@ function applyColumnVisibility() {
     if (hasPrefs && Object.prototype.hasOwnProperty.call(prefs, key)) {
       visible = !!prefs[key];
     } else {
-      // Standard: so wie Checkbox aktuell gesetzt ist (oder true, falls keine Checkbox gefunden)
       const cb = document.querySelector('input[data-col-toggle="' + key + '"]');
       visible = cb ? cb.checked : true;
     }
 
-    // Checkbox-Zustand mitziehen
     const cb = document.querySelector('input[data-col-toggle="' + key + '"]');
     if (cb) cb.checked = visible;
 
-    // Zellen + Header umschalten
     const cells = table.querySelectorAll('[data-col-key="' + key + '"]');
     cells.forEach(cell => {
       cell.style.display = visible ? '' : 'none';
@@ -223,7 +225,6 @@ document.querySelectorAll('input[data-col-toggle]').forEach(cb => {
 const showAllBtn = document.getElementById('showAllColumnsBtn');
 if (showAllBtn) {
   showAllBtn.addEventListener('click', () => {
-    // alle Checkboxen aktivieren
     document.querySelectorAll('input[data-col-toggle]').forEach(cb => {
       cb.checked = true;
     });
@@ -235,12 +236,25 @@ if (showAllBtn) {
 // Beim ersten Laden: gespeicherte Einstellungen anwenden
 applyColumnVisibility();
 
-// ---------------- Restliches Dashboard-Skript ----------------
+// ---------------- Bootstrap-Style-Helfer ----------------
 
-function pctColor(p){
-  if(p >= 80) return 'linear-gradient(90deg,#16a34a,#22c55e)'; // grün
-  if(p >= 40) return 'linear-gradient(90deg,#ca8a04,#eab308)'; // gelb
-  return 'linear-gradient(90deg,#dc2626,#ef4444)';             // rot
+function progressBarClass(p) {
+  if (p >= 80) return 'bg-success';
+  if (p >= 40) return 'bg-warning text-dark';
+  return 'bg-danger';
+}
+
+function stateBadgeClass(state) {
+  switch (state) {
+    case 'printing':  return 'bg-success';
+    case 'paused':    return 'bg-warning text-dark';
+    case 'cancelled': return 'bg-secondary';
+    case 'complete':  return 'bg-success';
+    case 'error':     return 'bg-danger';
+    case 'offline':   return 'bg-secondary';
+    case 'standby':   return 'bg-info text-dark';
+    default:          return 'bg-light text-dark';
+  }
 }
 
 function toFixed1(x){
@@ -258,7 +272,6 @@ if (errorDialog && errorDialogCloseBtn) {
     errorDialog.close();
   });
 
-  // Dialog schließen, wenn man außerhalb klickt
   errorDialog.addEventListener('click', function (event) {
     const rect = errorDialog.getBoundingClientRect();
     const isInDialog =
@@ -271,7 +284,6 @@ if (errorDialog && errorDialogCloseBtn) {
     }
   });
 
-  // Delegation für alle Error-Buttons in der Tabelle
   document.querySelector('#tbl tbody').addEventListener('click', function (event) {
     const btn = event.target.closest('.show-error-btn');
     if (!btn) return;
@@ -285,24 +297,21 @@ if (errorDialog && errorDialogCloseBtn) {
   });
 }
 
-// Button-Text anhand Zustand setzen
+// Button-Text anhand Zustand setzen (mit Bootstrap-Farben)
 function updatePowerButton(btn, state) {
-  btn.dataset.state = state;  // 'ON', 'OFF', 'UNKNOWN'
+  btn.dataset.state = state;
 
-  // zuerst alle Zustands-Klassen entfernen
-  btn.classList.remove("state-on", "state-off", "state-unknown");
+  btn.classList.remove("btn-success", "btn-outline-secondary", "btn-danger");
 
   if (state === 'ON') {
     btn.textContent = 'ON';
-    btn.classList.add("state-on");
-
+    btn.classList.add("btn-success");
   } else if (state === 'OFF') {
     btn.textContent = 'OFF';
-    btn.classList.add("state-off");
-
+    btn.classList.add("btn-outline-secondary");
   } else {
     btn.textContent = '…';
-    btn.classList.add("state-unknown");
+    btn.classList.add("btn-outline-secondary");
   }
 }
 
@@ -313,7 +322,7 @@ async function initPowerButton(btn) {
     const res = await fetch(`/api/printer/${id}/power/status`);
     const data = await res.json();
     if (data.status === 'ok') {
-      updatePowerButton(btn, data.state); // 'ON' oder 'OFF'
+      updatePowerButton(btn, data.state);
     } else {
       updatePowerButton(btn, 'UNKNOWN');
     }
@@ -332,7 +341,6 @@ async function loadData(){
     const now = Math.floor(Date.now()/1000);
 
     (data || []).forEach(p => {
-      // Fallbacks
       const printer_id   = p.id;
       const tasmota_host = p.tasmota_host || null;
       const name         = p.name || '';
@@ -367,20 +375,23 @@ async function loadData(){
       };
 
       const stateLabel = STATE_LABELS[state] || state;
-      const badge = '<span class="badge ' + state + '">' + stateLabel + '</span>';
+      const badge = '<span class="badge ' + stateBadgeClass(state) + '">' + stateLabel + '</span>';
 
-      // Fortschrittsbalken
+      // Fortschrittsbalken mit Bootstrap
       const progCell = document.createElement('td');
       progCell.dataset.colKey = 'progress';
       const progWrap = document.createElement('div');
       progWrap.className = 'progress';
       const inner = document.createElement('div');
+      inner.className = 'progress-bar ' + progressBarClass(progress_pct);
       inner.style.width = progress_pct + '%';
-      inner.style.background = pctColor(progress_pct);
+      inner.setAttribute('role', 'progressbar');
+      inner.setAttribute('aria-valuenow', isFinite(progress_pct) ? progress_pct : 0);
+      inner.setAttribute('aria-valuemin', '0');
+      inner.setAttribute('aria-valuemax', '100');
       progWrap.appendChild(inner);
       const label = document.createElement('div');
-      label.style.fontSize='12px';
-      label.style.marginTop='4px';
+      label.className = 'small text-muted mt-1';
       label.textContent = (isFinite(progress_pct) ? progress_pct.toFixed(1) : '0.0') + '%';
       progCell.appendChild(progWrap);
       progCell.appendChild(label);
@@ -390,28 +401,25 @@ async function loadData(){
       actions.className = 'actions';
       actions.dataset.colKey = 'actions';
 
-      // Web-UI öffnen
       if (link) {
         const a1 = document.createElement('a');
         a1.href = link;
         a1.target = '_blank';
-        a1.className = 'btn';
+        a1.className = 'btn btn-primary btn-sm me-1';
         a1.textContent = BTN_OPEN_WEB_UI;
         actions.appendChild(a1);
       }
 
-      // Power-Button, nur wenn eine Tasmota-IP hinterlegt ist
       if (tasmota_host) {
         const btnPower = document.createElement('button');
-        btnPower.className = 'btn power-btn';
+        btnPower.className = 'btn btn-outline-secondary btn-sm power-btn';
         btnPower.dataset.printerId = printer_id;
         btnPower.dataset.state = 'UNKNOWN';
-        btnPower.textContent = '…';   // Platzhalter, bis Status geladen ist
+        btnPower.textContent = '…';
 
         btnPower.addEventListener('click', async () => {
           const current = btnPower.dataset.state || 'UNKNOWN';
 
-          // Sicherheitsabfrage nur beim Ausschalten
           if (current === 'ON') {
             const ok = confirm(
               "Drucker wirklich ausschalten?\n" +
@@ -426,7 +434,6 @@ async function loadData(){
             });
             const data = await resp.json();
             if (data.status === 'ok') {
-              // Neuen Zustand vom Server übernehmen
               updatePowerButton(btnPower, data.state);
             } else {
               alert("Fehler beim Schalten: " + (data.msg || "Unbekannt"));
@@ -437,21 +444,19 @@ async function loadData(){
           }
         });
 
-        // initialen Zustand vom Server laden
         initPowerButton(btnPower);
-
         actions.appendChild(btnPower);
       }
 
       const last = last_update ? (now - last_update) : 0;
       const lastTxt = (last >= 0) ? (last + ' s') : '';
 
-      // Error-Spalte: nur Kurztext + Button
+      // Error-Spalte
       const errorCell = document.createElement('td');
       errorCell.dataset.colKey = 'error';
       if (error) {
         const shortSpan = document.createElement('span');
-        shortSpan.textContent = ERROR_SHORT_LABEL; // z.B. "Keine Verbindung"
+        shortSpan.textContent = ERROR_SHORT_LABEL;
         errorCell.appendChild(shortSpan);
 
         const space = document.createTextNode(' ');
@@ -459,16 +464,15 @@ async function loadData(){
 
         const btnDetails = document.createElement('button');
         btnDetails.type = 'button';
-        btnDetails.className = 'btn btn-sm show-error-btn';
+        btnDetails.className = 'btn btn-outline-secondary btn-sm show-error-btn';
         btnDetails.textContent = BTN_SHOW_ERROR_DETAILS;
-        // komplette Fehlermeldung im Dataset speichern
         btnDetails.dataset.error = error;
         errorCell.appendChild(btnDetails);
       } else {
         errorCell.textContent = '';
       }
 
-      tr.appendChild(td(name, 'name'));  // Name bleibt immer sichtbar
+      tr.appendChild(td(name, 'name'));
       tr.appendChild(td(backend, 'backend'));
       tr.appendChild(tdHTML(badge, 'state'));
       tr.appendChild(td(filename, 'filename'));
@@ -484,7 +488,6 @@ async function loadData(){
       tbody.appendChild(tr);
     });
 
-    // Nach dem Neuaufbau der Tabelle Spalten-Sichtbarkeit anwenden
     applyColumnVisibility();
 
   } catch(e){

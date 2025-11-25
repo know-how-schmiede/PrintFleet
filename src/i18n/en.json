@@ -146,7 +146,18 @@
   "msg_import_invalid_structure": "Invalid JSON structure.",
 
   "dashboard_column_visibility": "Visible columns",
-  "btn_show_all_columns": "Show all columns"
+  "btn_show_all_columns": "Show all columns",
+
+  "printer_new_button": "Add printer",
+  "col_tasmota_host": "Tasmota host",
+  "btn_edit": "Edit",
+  "btn_delete": "Delete",
+  "confirm_delete_printer": "Really delete this printer?",
+
+  "settings_tab_general": "General",
+  "settings_tab_notifications": "Notifications & language"
+
+
 
 
 

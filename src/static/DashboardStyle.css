@@ -414,4 +414,22 @@ body.theme-dark-teal {
   /* nichts, aber falls du später Icons via ::before einsetzen willst */
 }
 
+.col-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+}
+
+.col-toggle input[type="checkbox"] {
+  margin: 0;
+}
+
+.btn-icon {
+  padding: 2px 4px;
+  line-height: 1;
+  min-width: 0;
+}
+
+
 }
