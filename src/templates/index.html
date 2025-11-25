@@ -3,23 +3,107 @@
 {% block title %}{{ _('page_overview_title') }}{% endblock %}
 
 {% block content %}
+
   <table id="tbl">
     <thead>
       <tr>
-        <th>{{ _('col_printer_name') }}</th>
-        <th>{{ _('col_backend') }}</th>
-        <th>{{ _('col_state') }}</th>
-        <th>{{ _('col_filename') }}</th>
-        <th style="min-width:160px">{{ _('col_progress') }}</th>
-        <th>{{ _('col_elapsed') }}</th>
-        <th>{{ _('col_eta') }}</th>
-        <th>{{ _('col_hotend') }} ({{ _('col_hotend_target') }})</th>
-        <th>{{ _('col_bed') }} ({{ _('col_bed_target') }})</th>
-        <th>{{ _('col_last_update') }}</th>
-        <th>{{ _('col_actions') }}</th>
-        <th>{{ _('col_error') }}</th>
+        <!-- Name: immer sichtbar, mit "Alle anzeigen"-Button -->
+        <th data-col-key="name">
+          <div class="col-toggle">
+            <span>{{ _('col_printer_name') }}</span>
+            <button
+              type="button"
+              id="showAllColumnsBtn"
+              class="btn btn-sm btn-icon"
+              style="margin-left: 0.5rem;"
+              title="{{ _('btn_show_all_columns') if _ else 'Alle Spalten anzeigen' }}"
+              aria-label="{{ _('btn_show_all_columns') if _ else 'Alle Spalten anzeigen' }}"
+            >
+              &#128065;
+            </button>
+          </div>
+        </th>
+
+
+        <th data-col-key="backend">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="backend" checked>
+            {{ _('col_backend') }}
+          </label>
+        </th>
+
+        <th data-col-key="state">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="state" checked>
+            {{ _('col_state') }}
+          </label>
+        </th>
+
+        <th data-col-key="filename">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="filename" checked>
+            {{ _('col_filename') }}
+          </label>
+        </th>
+
+        <th data-col-key="progress" style="min-width:160px;">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="progress" checked>
+            {{ _('col_progress') }}
+          </label>
+        </th>
+
+        <th data-col-key="elapsed">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="elapsed" checked>
+            {{ _('col_elapsed') }}
+          </label>
+        </th>
+
+        <th data-col-key="eta">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="eta" checked>
+            {{ _('col_eta') }}
+          </label>
+        </th>
+
+        <th data-col-key="hotend">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="hotend" checked>
+            {{ _('col_hotend') }} ({{ _('col_hotend_target') }})
+          </label>
+        </th>
+
+        <th data-col-key="bed">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="bed" checked>
+            {{ _('col_bed') }} ({{ _('col_bed_target') }})
+          </label>
+        </th>
+
+        <th data-col-key="last_update">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="last_update" checked>
+            {{ _('col_last_update') }}
+          </label>
+        </th>
+
+        <th data-col-key="actions">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="actions" checked>
+            {{ _('col_actions') }}
+          </label>
+        </th>
+
+        <th data-col-key="error">
+          <label class="col-toggle">
+            <input type="checkbox" data-col-toggle="error" checked>
+            {{ _('col_error') }}
+          </label>
+        </th>
       </tr>
     </thead>
+
     <tbody></tbody>
   </table>
 
@@ -54,6 +138,104 @@ const BTN_POWER_TOGGLE  = "{{ _('btn_power_toggle') }}"; // Fallback-/Unknown-Te
 // Texte für Error-Spalte
 const ERROR_SHORT_LABEL = "{{ _('printer_error_unreachable') }}";
 const BTN_SHOW_ERROR_DETAILS = "{{ _('btn_show_error_details') }}";
+
+// ---------------- Spalten-Sichtbarkeit ----------------
+
+const COLUMN_STORAGE_KEY = 'printfleet_dashboard_columns';
+
+// WICHTIG: 'name' ist NICHT in der Liste -> Name ist immer sichtbar
+const COLUMN_KEYS = [
+  'backend',
+  'state',
+  'filename',
+  'progress',
+  'elapsed',
+  'eta',
+  'hotend',
+  'bed',
+  'last_update',
+  'actions',
+  'error'
+];
+
+function loadColumnPrefs() {
+  try {
+    const raw = localStorage.getItem(COLUMN_STORAGE_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch (e) {
+    console.warn('column prefs parse failed', e);
+    return null;
+  }
+}
+
+function saveColumnPrefsFromUI() {
+  const prefs = {};
+  document.querySelectorAll('input[data-col-toggle]').forEach(cb => {
+    const key = cb.getAttribute('data-col-toggle');
+    prefs[key] = cb.checked;
+  });
+  try {
+    localStorage.setItem(COLUMN_STORAGE_KEY, JSON.stringify(prefs));
+  } catch (e) {
+    console.warn('column prefs save failed', e);
+  }
+}
+
+function applyColumnVisibility() {
+  const table = document.getElementById('tbl');
+  if (!table) return;
+
+  const prefs = loadColumnPrefs();
+  const hasPrefs = !!prefs;
+
+  COLUMN_KEYS.forEach(key => {
+    let visible;
+    if (hasPrefs && Object.prototype.hasOwnProperty.call(prefs, key)) {
+      visible = !!prefs[key];
+    } else {
+      // Standard: so wie Checkbox aktuell gesetzt ist (oder true, falls keine Checkbox gefunden)
+      const cb = document.querySelector('input[data-col-toggle="' + key + '"]');
+      visible = cb ? cb.checked : true;
+    }
+
+    // Checkbox-Zustand mitziehen
+    const cb = document.querySelector('input[data-col-toggle="' + key + '"]');
+    if (cb) cb.checked = visible;
+
+    // Zellen + Header umschalten
+    const cells = table.querySelectorAll('[data-col-key="' + key + '"]');
+    cells.forEach(cell => {
+      cell.style.display = visible ? '' : 'none';
+    });
+  });
+}
+
+// Event-Handler für Checkboxen
+document.querySelectorAll('input[data-col-toggle]').forEach(cb => {
+  cb.addEventListener('change', () => {
+    saveColumnPrefsFromUI();
+    applyColumnVisibility();
+  });
+});
+
+// Button "Alle anzeigen" im Name-Header
+const showAllBtn = document.getElementById('showAllColumnsBtn');
+if (showAllBtn) {
+  showAllBtn.addEventListener('click', () => {
+    // alle Checkboxen aktivieren
+    document.querySelectorAll('input[data-col-toggle]').forEach(cb => {
+      cb.checked = true;
+    });
+    saveColumnPrefsFromUI();
+    applyColumnVisibility();
+  });
+}
+
+// Beim ersten Laden: gespeicherte Einstellungen anwenden
+applyColumnVisibility();
+
+// ---------------- Restliches Dashboard-Skript ----------------
 
 function pctColor(p){
   if(p >= 80) return 'linear-gradient(90deg,#16a34a,#22c55e)'; // grün
@@ -171,14 +353,25 @@ async function loadData(){
       const tr = document.createElement('tr');
       tr.className = state;
 
-      const td = (t)=>{ const x=document.createElement('td'); x.textContent=t; return x; };
-      const tdHTML = (h)=>{ const x=document.createElement('td'); x.innerHTML=h; return x; };
+      const td = (t, key)=>{ 
+        const x=document.createElement('td'); 
+        x.textContent=t; 
+        if (key) x.dataset.colKey = key;
+        return x; 
+      };
+      const tdHTML = (h, key)=>{ 
+        const x=document.createElement('td'); 
+        x.innerHTML=h; 
+        if (key) x.dataset.colKey = key;
+        return x; 
+      };
 
       const stateLabel = STATE_LABELS[state] || state;
       const badge = '<span class="badge ' + state + '">' + stateLabel + '</span>';
 
       // Fortschrittsbalken
       const progCell = document.createElement('td');
+      progCell.dataset.colKey = 'progress';
       const progWrap = document.createElement('div');
       progWrap.className = 'progress';
       const inner = document.createElement('div');
@@ -195,6 +388,7 @@ async function loadData(){
       // Aktionen
       const actions = document.createElement('td');
       actions.className = 'actions';
+      actions.dataset.colKey = 'actions';
 
       // Web-UI öffnen
       if (link) {
@@ -254,6 +448,7 @@ async function loadData(){
 
       // Error-Spalte: nur Kurztext + Button
       const errorCell = document.createElement('td');
+      errorCell.dataset.colKey = 'error';
       if (error) {
         const shortSpan = document.createElement('span');
         shortSpan.textContent = ERROR_SHORT_LABEL; // z.B. "Keine Verbindung"
@@ -270,24 +465,28 @@ async function loadData(){
         btnDetails.dataset.error = error;
         errorCell.appendChild(btnDetails);
       } else {
-        errorCell.textContent = ''; // oder '-' wenn du willst
+        errorCell.textContent = '';
       }
 
-      tr.appendChild(td(name));
-      tr.appendChild(td(backend));
-      tr.appendChild(tdHTML(badge));
-      tr.appendChild(td(filename));
+      tr.appendChild(td(name, 'name'));  // Name bleibt immer sichtbar
+      tr.appendChild(td(backend, 'backend'));
+      tr.appendChild(tdHTML(badge, 'state'));
+      tr.appendChild(td(filename, 'filename'));
       tr.appendChild(progCell);
-      tr.appendChild(td(elapsed_hms));
-      tr.appendChild(td(eta_hms));
-      tr.appendChild(td(toFixed1(hotend) + ' / ' + toFixed1(hotend_t) + ' °C'));
-      tr.appendChild(td(toFixed1(bed)    + ' / ' + toFixed1(bed_t)    + ' °C'));
-      tr.appendChild(td(lastTxt));
+      tr.appendChild(td(elapsed_hms, 'elapsed'));
+      tr.appendChild(td(eta_hms, 'eta'));
+      tr.appendChild(td(toFixed1(hotend) + ' / ' + toFixed1(hotend_t) + ' °C', 'hotend'));
+      tr.appendChild(td(toFixed1(bed)    + ' / ' + toFixed1(bed_t)    + ' °C', 'bed'));
+      tr.appendChild(td(lastTxt, 'last_update'));
       tr.appendChild(actions);
       tr.appendChild(errorCell);
 
       tbody.appendChild(tr);
     });
+
+    // Nach dem Neuaufbau der Tabelle Spalten-Sichtbarkeit anwenden
+    applyColumnVisibility();
+
   } catch(e){
     console.error('fetch error', e);
   }

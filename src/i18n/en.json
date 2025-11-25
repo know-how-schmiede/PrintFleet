@@ -143,7 +143,11 @@
   "msg_import_invalid_json": "Invalid JSON file.",
   "msg_import_wrong_type_printers": "This file is not a printer export.",
   "msg_import_wrong_type_settings": "This file is not a settings export.",
-  "msg_import_invalid_structure": "Invalid JSON structure."
+  "msg_import_invalid_structure": "Invalid JSON structure.",
+
+  "dashboard_column_visibility": "Visible columns",
+  "btn_show_all_columns": "Show all columns"
+
 
 
 }

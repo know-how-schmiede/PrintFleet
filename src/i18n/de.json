@@ -143,7 +143,12 @@
   "msg_import_invalid_json": "Ungültige JSON-Datei.",
   "msg_import_wrong_type_printers": "Diese Datei ist kein Drucker-Export.",
   "msg_import_wrong_type_settings": "Diese Datei ist kein Settings-Export.",
-  "msg_import_invalid_structure": "Ungültige JSON-Struktur."
+  "msg_import_invalid_structure": "Ungültige JSON-Struktur.",
+
+  "dashboard_column_visibility": "Sichtbare Spalten",
+  "btn_show_all_columns": "Alle anzeigen"
+
+
 
 
 

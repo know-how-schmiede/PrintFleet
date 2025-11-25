@@ -379,4 +379,39 @@ body.theme-dark-teal {
   --nav-link-hover: #ffffff;
   --nav-link-active-border: #14b8a6;
   --nav-border-color: #064e53;
+
+  .col-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.col-toggle input[type="checkbox"] {
+  margin: 0;
+}
+
+.col-toggle {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  user-select: none;
+}
+
+.col-toggle input[type="checkbox"] {
+  margin: 0;
+}
+
+/* Icon-Button im Header kompakt machen */
+.btn-icon {
+  padding: 2px 4px;
+  line-height: 1;
+  min-width: 0;
+}
+
+.btn-icon::before {
+  /* nichts, aber falls du später Icons via ::before einsetzen willst */
+}
+
 }
