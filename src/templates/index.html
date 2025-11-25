@@ -332,6 +332,26 @@ async function initPowerButton(btn) {
   }
 }
 
+function removeFileExtension(name) {
+  if (!name) return '';
+  const idx = name.lastIndexOf('.');
+  if (idx > 0) return name.substring(0, idx);
+  return name;
+}
+
+function shortenFileName(name, max = 22) {
+  if (!name) return '';
+  if (name.length <= max) return name;
+  return name.substring(0, max - 1) + '…';
+}
+
+function pctColor(p) {
+  if (p >= 80) return '#16a34a';      // grün
+  if (p >= 40) return '#eab308';      // gelb
+  return '#dc2626';                   // rot
+}
+
+
 async function loadData(){
   try{
     const r = await fetch('/api/status', {cache:'no-store'});
@@ -377,24 +397,27 @@ async function loadData(){
       const stateLabel = STATE_LABELS[state] || state;
       const badge = '<span class="badge ' + stateBadgeClass(state) + '">' + stateLabel + '</span>';
 
-      // Fortschrittsbalken mit Bootstrap
+      // Fortschrittsbalken
       const progCell = document.createElement('td');
-      progCell.dataset.colKey = 'progress';
+
       const progWrap = document.createElement('div');
-      progWrap.className = 'progress';
+      progWrap.className = 'dashboard-progress-wrap';
+
       const inner = document.createElement('div');
-      inner.className = 'progress-bar ' + progressBarClass(progress_pct);
+      inner.className = 'dashboard-progress-inner';
       inner.style.width = progress_pct + '%';
-      inner.setAttribute('role', 'progressbar');
-      inner.setAttribute('aria-valuenow', isFinite(progress_pct) ? progress_pct : 0);
-      inner.setAttribute('aria-valuemin', '0');
-      inner.setAttribute('aria-valuemax', '100');
-      progWrap.appendChild(inner);
-      const label = document.createElement('div');
-      label.className = 'small text-muted mt-1';
+      inner.style.background = pctColor(progress_pct);
+
+      // Prozentzahl direkt nebendran statt darunter
+      const label = document.createElement('span');
       label.textContent = (isFinite(progress_pct) ? progress_pct.toFixed(1) : '0.0') + '%';
+      label.style.marginLeft = '6px';
+      label.style.whiteSpace = 'nowrap';
+
+      progWrap.appendChild(inner);
       progCell.appendChild(progWrap);
       progCell.appendChild(label);
+
 
       // Aktionen
       const actions = document.createElement('td');
@@ -475,7 +498,14 @@ async function loadData(){
       tr.appendChild(td(name, 'name'));
       tr.appendChild(td(backend, 'backend'));
       tr.appendChild(tdHTML(badge, 'state'));
-      tr.appendChild(td(filename, 'filename'));
+      
+      // Filename kürzen & Suffix entfernen
+      const cleanName = removeFileExtension(filename);
+      const shortName = shortenFileName(cleanName, 22);
+      const tdFilename = td(shortName, 'filename');
+      tdFilename.title = filename;  // Tooltip -> vollständiger Name
+      tr.appendChild(tdFilename);
+
       tr.appendChild(progCell);
       tr.appendChild(td(elapsed_hms, 'elapsed'));
       tr.appendChild(td(eta_hms, 'eta'));

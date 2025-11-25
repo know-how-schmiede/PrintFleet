@@ -431,5 +431,19 @@ body.theme-dark-teal {
   min-width: 0;
 }
 
+/* Kompakterer Fortschrittsbalken */
+.dashboard-progress-wrap {
+    width: 60%;        /* vorher: volle Zelle -> jetzt kompakt */
+    height: 6px;       /* dünner */
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.dashboard-progress-inner {
+    height: 100%;
+    border-radius: 4px;
+}
+
+
 
 }
