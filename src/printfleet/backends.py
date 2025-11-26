@@ -2,8 +2,11 @@
 # -*- coding: utf-8 -*-
 
 from typing import Optional, Any, Dict
-
+from typing import Tuple
 import requests
+
+import json
+import websocket  # aus dem Paket websocket-client
 
 
 def _num(x: Any) -> float:
@@ -12,6 +15,82 @@ def _num(x: Any) -> float:
         return float(x)
     except Exception:
         return 0.0
+
+
+def fetch_centauri(base_url: str, timeout: float = 5.0) -> Tuple[
+    str, str, float, float, float, float, float, float
+]:
+    """
+    Elegoo Centurio / Centauri Carbon Backend.
+
+    Holt eine Status-Nachricht vom WebSocket:
+        ws://<IP>:3030/websocket
+
+    und liefert im PrintFleet-Format:
+      state:    "standby" | "printing" | "paused" | "stopped" | "complete"
+      filename: aktueller Dateiname (oder "" wenn keiner)
+      elapsed:  Sekunden seit Druckstart (CurrentTicks)
+      progress: 0.0–1.0
+      hotend:   aktuelle Nozzle-Temperatur (°C)
+      hotend_t: Ziel-Temperatur Nozzle (°C)
+      bed:      aktuelle Bett-Temperatur (°C)
+      bed_t:    Ziel-Temperatur Bett (°C)
+    """
+
+    # Aus base_url (z.B. "http://192.168.88.106:80") nur die IP extrahieren
+    # Elegoo verwendet Port 3030 für den Status-WebSocket
+    host_part = base_url.split("://", 1)[-1]
+    ip = host_part.split(":", 1)[0]
+    ws_url = f"ws://{ip}:3030/websocket"
+
+    # WebSocket verbinden und genau eine Nachricht holen
+    ws = websocket.create_connection(ws_url, timeout=timeout)
+    try:
+        raw_msg = ws.recv()
+        data = json.loads(raw_msg)
+    finally:
+        ws.close()
+
+    status = data.get("Status", {})
+    pi = status.get("PrintInfo", {})
+
+    # Temperaturen
+    hotend = float(status.get("TempOfNozzle", 0.0))
+    hotend_t = float(status.get("TempTargetNozzle", 0.0))
+    bed = float(status.get("TempOfHotbed", 0.0))
+    bed_t = float(status.get("TempTargetHotbed", 0.0))
+
+    # Zeit
+    elapsed = float(pi.get("CurrentTicks", 0.0))
+    total = float(pi.get("TotalTicks", 0.0)) or 0.0
+
+    # Fortschritt
+    prog_raw = float(pi.get("Progress", 0.0))
+    if prog_raw > 1.0:
+        progress = prog_raw / 100.0
+    elif 0.0 < prog_raw <= 1.0:
+        progress = prog_raw
+    elif total > 0.0:
+        progress = max(0.0, min(1.0, elapsed / total))
+    else:
+        progress = 0.0
+
+    filename = pi.get("Filename", "") or ""
+
+    # PrintInfo.Status:
+    # Du hast bisher nur 0 gesehen, aber wir mappen schon mal:
+    # 0 = idle/standby, 1 = printing, 2 = paused, 3 = stopped, 4 = complete
+    st_raw = int(pi.get("Status", 0))
+    state_map = {
+        0: "standby",
+        1: "printing",
+        2: "paused",
+        3: "stopped",
+        4: "complete",
+    }
+    state = state_map.get(st_raw, "standby")
+
+    return state, filename, elapsed, progress, hotend, hotend_t, bed, bed_t
 
 
 def fetch_moonraker(base_url: str, token: Optional[str], timeout: float):

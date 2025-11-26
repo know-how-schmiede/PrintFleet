@@ -105,10 +105,18 @@
                 required
               >
                 {% set current_backend = printer['backend'] if printer else 'moonraker' %}
-                <option value="moonraker" {% if current_backend == 'moonraker' %}selected{% endif %}>Moonraker</option>
-                <option value="octoprint" {% if current_backend == 'octoprint' %}selected{% endif %}>OctoPrint</option>
+                <option value="moonraker" {% if current_backend == 'moonraker' %}selected{% endif %}>
+                  {{ _('backend_moonraker') }}
+                </option>
+                <option value="octoprint" {% if current_backend == 'octoprint' %}selected{% endif %}>
+                  {{ _('backend_octoprint') }}
+                </option>
+                <option value="centauri" {% if current_backend == 'centauri' %}selected{% endif %}>
+                  {{ _('backend_centauri') }}
+                </option>
               </select>
             </div>
+
 
             <!-- Enabled (nur im Edit-Modus) -->
             {% if mode == 'edit' %}

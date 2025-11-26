@@ -155,6 +155,11 @@
   "confirm_delete_printer": "Voulez-vous vraiment supprimer cette imprimante ?",
 
   "printer_tab_general": "Général",
-  "printer_tab_connection": "Connexion & API"
+  "printer_tab_connection": "Connexion & API",
+
+  "backend_moonraker": "Moonraker",
+  "backend_octoprint": "OctoPrint",
+  "backend_centauri": "Elegoo Centurio Carbon"
+
 
 }

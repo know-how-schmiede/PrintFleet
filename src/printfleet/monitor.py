@@ -10,7 +10,12 @@ import requests
 
 from printfleet.db import get_db_connection, load_settings_from_db, load_printers_from_db
 from printfleet.state import state_lock, printer_state
-from printfleet.backends import fetch_moonraker, fetch_octoprint
+from printfleet.backends import (
+    fetch_moonraker,
+    fetch_octoprint,
+    fetch_centauri,
+)
+
 
 # Konfiguration (GLOBAL) aus der bestehenden Datei laden
 try:
@@ -104,7 +109,7 @@ def monitor_printer(
             poll_default = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
             poll_interval = poll_default
 
-        try:
+        try:         
             # Backend-Abfrage
             if be == "octoprint":
                 res = fetch_octoprint(
@@ -112,7 +117,14 @@ def monitor_printer(
                     api_key=api_key,
                     timeout=max(5.0, poll_interval + 2.0),
                 )
+            elif be == "centauri":
+                # Elegoo Centurio Carbon (WebSocket-Backend)
+                res = fetch_centauri(
+                    base_url,
+                    timeout=max(5.0, poll_interval + 2.0),
+                )
             else:
+                # Standard: Moonraker / Klipper
                 res = fetch_moonraker(
                     base_url,
                     token=token,
@@ -120,6 +132,7 @@ def monitor_printer(
                 )
 
             state, filename, elapsed, progress, hotend, hotend_t, bed, bed_t = res
+
 
             eta_s = 0.0
             if progress and progress > 0 and elapsed and elapsed > 0:

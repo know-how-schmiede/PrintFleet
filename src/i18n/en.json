@@ -157,6 +157,11 @@
   "settings_tab_notifications": "Notifications & language",
 
   "printer_tab_general": "General",
-  "printer_tab_connection": "Connection & API"
+  "printer_tab_connection": "Connection & API",
+
+  "backend_moonraker": "Moonraker",
+  "backend_octoprint": "OctoPrint",
+  "backend_centauri": "Elegoo Centurio Carbon"
+
 
 }
