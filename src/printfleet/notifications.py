@@ -3,15 +3,20 @@
 
 from typing import Optional, Dict, Any
 
+from printfleet import __version__ as PRINTFLEET_VERSION
 from printfleet.db import load_settings_from_db, load_printers_from_db
 from printfleet.telegram_bot import send_telegram_message
 from printfleet.state import printer_state, state_lock
+
+import socket
+import time
+
+START_TIME = time.time()  # ganz oben im Modul setzen
 
 
 def notify_printfleet_started(version: Optional[str] = None) -> bool:
     """
     Sendet eine Telegram-Nachricht beim Starten von PrintFleet.
-    Nutzt die telegram_chat_id aus der Settings-Tabelle.
     """
     settings = load_settings_from_db()
     chat_id = settings.get("telegram_chat_id")
@@ -30,19 +35,11 @@ def notify_printfleet_started(version: Optional[str] = None) -> bool:
 def _format_printer_status(state_info: Dict[str, Any]) -> str:
     """
     Formatiert den Status aus dem printer_state-Eintrag.
-    Erwartet ein Dict wie:
-    {
-        "id": ...,
-        "name": ...,
-        "state": "offline" | "standby" | "printing" | ...
-        ...
-    }
+    Erwartet ein Dict mit Feld 'state'.
     """
     if not state_info:
         return "⚪ Noch keine Statusdaten"
 
-    # Die eigentliche Status-Quelle – so wie in deinem Beispiel:
-    # 'state': 'offline' / 'standby' / 'printing' ...
     raw_state = (
         state_info.get("state")
         or state_info.get("status")
@@ -55,43 +52,34 @@ def _format_printer_status(state_info: Dict[str, Any]) -> str:
 
     s = str(raw_state).lower()
 
-    # 🔵 Aktiver Druck
+    # 🔵 aktiv druckend
     if s in ("printing", "busy", "processing"):
         return f"🔵 Druckt ({raw_state})"
 
-    # ⏸️ Pause
+    # ⏸️ pausiert
     if s in ("paused", "pausing"):
         return f"⏸️ Pausiert ({raw_state})"
 
-    # 🔴 Offline / Fehler
+    # 🔴 offline/fehler
     if s in ("offline", "error", "disconnected"):
         return f"🔴 Offline / Fehler ({raw_state})"
 
-    # 🟢 Bereit / Standby
+    # 🟢 bereit / standby
     if s in ("standby", "idle", "ready"):
         return f"🟢 Bereit ({raw_state})"
 
-    # Fallback
     return f"❓ Unbekannter Status: {raw_state}"
 
 
-
-def notify_printer_overview() -> bool:
+def build_printer_overview_text() -> str:
     """
-    Sendet eine Übersicht der aktuell in PrintFleet konfigurierten Drucker
-    inkl. Status per Telegram.
+    Baut den Status-Text für alle Drucker (ohne ihn zu versenden).
+    Wird von notify_printer_overview UND vom /status-Command genutzt.
     """
-    settings = load_settings_from_db()
-    chat_id = settings.get("telegram_chat_id")
-
-    if not chat_id:
-        return False
-
     printers = load_printers_from_db()
 
     if not printers:
-        text = "ℹ️ PrintFleet wurde gestartet, aber es sind noch keine Drucker konfiguriert."
-        return send_telegram_message(chat_id, text)
+        return "ℹ️ Es sind noch keine Drucker in PrintFleet konfiguriert."
 
     lines = ["🖨️ Aktuelle Drucker in PrintFleet:"]
 
@@ -102,7 +90,7 @@ def notify_printer_overview() -> bool:
             backend = p.get("backend", "?")
             host = p.get("host", "?")
 
-            # Mögliche Schlüssel, unter denen der Drucker im printer_state liegen könnte
+            # Mögliche Schlüssel im printer_state testen
             keys_to_try = []
             if printer_id is not None:
                 keys_to_try.extend([printer_id, str(printer_id)])
@@ -118,8 +106,50 @@ def notify_printer_overview() -> bool:
                     break
 
             status_text = _format_printer_status(state_info)
-
             lines.append(f"• {name} ({backend} @ {host}) – {status_text}")
 
-    text = "\n".join(lines)
+    return "\n".join(lines)
+
+
+def notify_printer_overview() -> bool:
+    """
+    Sendet die Druckerübersicht an die Chat-ID aus den Settings.
+    """
+    settings = load_settings_from_db()
+    chat_id = settings.get("telegram_chat_id")
+
+    if not chat_id:
+        return False
+
+    text = build_printer_overview_text()
     return send_telegram_message(chat_id, text)
+
+def build_info_text() -> str:
+    settings = load_settings_from_db()
+    printers = load_printers_from_db()
+
+    version = PRINTFLEET_VERSION
+    hostname = socket.gethostname()
+
+    uptime_s = time.time() - START_TIME
+    uptime_h = int(uptime_s // 3600)
+    uptime_m = int((uptime_s % 3600) // 60)
+
+    total = len(printers)
+    num_octoprint = sum(1 for p in printers if p.get("backend") == "octoprint")
+    num_moonraker = sum(1 for p in printers if p.get("backend") == "moonraker")
+
+    lines = [
+        "ℹ️ PrintFleet Info",
+        f"• Version: {version}",
+        f"• Uptime: {uptime_h}h {uptime_m}min",
+        f"• Drucker insgesamt: {total}",
+        f"  - OctoPrint: {num_octoprint}",
+        f"  - Moonraker: {num_moonraker}",
+        f"• Server: {hostname}",
+        "",
+        "Verfügbare Commands:",
+        "• /status – aktueller Druckerstatus",
+        "• /info – Systeminfo zu PrintFleet",
+    ]
+    return "\n".join(lines)

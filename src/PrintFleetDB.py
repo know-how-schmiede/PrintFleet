@@ -18,6 +18,8 @@ from printfleet import __version__ as PRINTFLEET_VERSION
 
 # Telegram Nachrichten
 from printfleet.notifications import notify_printfleet_started, notify_printer_overview
+from printfleet.telegram_commands import telegram_command_loop
+
 
 # PrintFleet Datenbank
 from printfleet.db import (
@@ -161,6 +163,14 @@ if __name__ == "__main__":
     )
     watcher_thread.start()
 
+    # Telegram-Command-Loop für /status starten
+    telegram_thread = threading.Thread(
+        target=telegram_command_loop,
+        args=(global_stop_evt,),
+        daemon=True,
+    )
+    telegram_thread.start()
+
     # PrintFleet Start Log-Print in Console
     print("=========================")
     print("===    PrintFleet     ===")
@@ -198,3 +208,4 @@ if __name__ == "__main__":
         global_stop_evt.set()
         join_monitor_threads(timeout=2.0)
         watcher_thread.join(timeout=2.0)
+        telegram_thread.join(timeout=2.0)
