@@ -444,6 +444,33 @@ body.theme-dark-teal {
     border-radius: 4px;
 }
 
+.status-printing {
+    background-color: #3498db;   /* Blau */
+}
+
+.status-ready {
+    background-color: #2ecc71;   /* Grün */
+}
+
+.status-offline {
+    background-color: #e74c3c;   /* Rot */
+}
+
+.status-unknown {
+    background-color: #95a5a6;   /* Grau */
+}
+
+.status-paused {
+    background-color: #f1c40f;   /* Gelb */
+}
+
+.status-dot {
+    display: inline-block;
+    width: 0.8em;
+    height: 0.8em;
+    border-radius: 50%;
+    margin-right: 0.3em;
+}
 
 
 }
