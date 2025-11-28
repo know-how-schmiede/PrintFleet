@@ -1,4 +1,7 @@
 # Versionen PrintFleet
+## 3.3.7
+- Entfernen von Protokollen in IP-Adresse bei Add / Edit Printer
+- Verbesserung Elegoo CentauriCarbon Anbindung (Problem SDCP Nachrichten)
 ## 0.3.6
 - Integration Telegram
 - debug / Test Telegram

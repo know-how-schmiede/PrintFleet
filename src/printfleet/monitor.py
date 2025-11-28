@@ -109,7 +109,7 @@ def monitor_printer(
             poll_default = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
             poll_interval = poll_default
 
-        try:         
+        try:
             # Backend-Abfrage
             if be == "octoprint":
                 res = fetch_octoprint(
@@ -117,11 +117,12 @@ def monitor_printer(
                     api_key=api_key,
                     timeout=max(5.0, poll_interval + 2.0),
                 )
-            elif be == "centauri":
-                # Elegoo Centurio Carbon (WebSocket-Backend)
+            elif be in ("centauri", "centurio", "centuri", "elegoo"):
+                # Elegoo Centurio / Centauri Carbon (WebSocket-Backend)
+                centauri_timeout = max(10.0, poll_interval * 2.0)
                 res = fetch_centauri(
                     base_url,
-                    timeout=max(5.0, poll_interval + 2.0),
+                    timeout=centauri_timeout,
                 )
             else:
                 # Standard: Moonraker / Klipper
@@ -130,6 +131,8 @@ def monitor_printer(
                     token=token,
                     timeout=max(5.0, poll_interval + 2.0),
                 )
+
+        
 
             state, filename, elapsed, progress, hotend, hotend_t, bed, bed_t = res
 
@@ -212,9 +215,9 @@ def monitor_printer(
                 last_error_report_ts = now
 
         except Exception as e:
-            # unerwarteter Fehler
+            # unerwarteter Fehler (Backend-, JSON-, WebSocket-, sonstige Fehler)
             consecutive_errors += 1
-            err = f"Unerwarteter Fehler: {e}"
+            err = f"Unerwarteter Fehler im Backend '{be}' mit URL {base_url}: {e}"
             now = time.time()
 
             with state_lock:
@@ -226,28 +229,38 @@ def monitor_printer(
                         "backend": be,
                         "host": host,
                         "tasmota_host": current_tasmota_host,
+                        "link": f"{scheme}://{host}:{port}/",
                     },
                 )
-                st.update(
-                    {
-                        "state": "error",
-                        "filename": "",
-                        "progress_pct": 0.0,
-                        "elapsed_s": 0.0,
-                        "eta_s": 0.0,
-                        "elapsed_hms": "00:00 min",
-                        "eta_hms": "00:00 min",
-                        "hotend": 0.0,
-                        "hotend_t": 0.0,
-                        "bed": 0.0,
-                        "bed_t": 0.0,
-                        "last_update": int(now),
-                        "error": err,
-                        "link": f"{scheme}://{host}:{port}/",
-                    }
-                )
+
+                if be in ("centauri", "centurio", "centuri", "elegoo"):
+                    # Für den Centauri: letzten gültigen Zustand behalten,
+                    # nur Fehlertext und Zeitstempel aktualisieren
+                    st["error"] = err
+                    st["last_update"] = int(now)
+                else:
+                    # Für alle anderen Backends wie bisher hart auf "error" setzen
+                    st.update(
+                        {
+                            "state": "error",
+                            "filename": "",
+                            "progress_pct": 0.0,
+                            "elapsed_s": 0.0,
+                            "eta_s": 0.0,
+                            "elapsed_hms": "00:00 min",
+                            "eta_hms": "00:00 min",
+                            "hotend": 0.0,
+                            "hotend_t": 0.0,
+                            "bed": 0.0,
+                            "bed_t": 0.0,
+                            "last_update": int(now),
+                            "error": err,
+                        }
+                    )
+
                 printer_state[name] = st
 
+            # Logging nur am Anfang oder wenn neue Meldung
             if (
                 (consecutive_errors == 1)
                 or (err != last_error_text)
@@ -256,6 +269,18 @@ def monitor_printer(
                 print(f"[{name}] {err}", file=sys.stderr)
                 last_error_text = err
                 last_error_report_ts = now
+
+
+            # Logging nur am Anfang oder wenn neue Meldung
+            if (
+                (consecutive_errors == 1)
+                or (err != last_error_text)
+                or (now - last_error_report_ts >= err_interval)
+            ):
+                print(f"[{name}] {err}", file=sys.stderr)
+                last_error_text = err
+                last_error_report_ts = now
+    
 
         # Schleifenpause
         time.sleep(max(0.2, poll_interval))

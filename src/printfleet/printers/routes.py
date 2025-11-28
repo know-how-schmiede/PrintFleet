@@ -18,6 +18,30 @@ from printfleet.db import get_db_connection, get_printer_by_id
 from printfleet.i18n import _
 from . import bp
 
+def _normalize_host(raw: str) -> str:
+    """
+    Bereinigt die Host-Eingabe:
+    - entfernt führendes http://, https://, http//, https//
+    - trennt nach erstem / (Pfadangaben)
+    - trimmt Leerzeichen
+    """
+    if not raw:
+        return ""
+
+    h = raw.strip()
+
+    prefixes = ("http://", "https://", "http//", "https//")
+    hl = h.lower()
+    for p in prefixes:
+        if hl.startswith(p):
+            h = h[len(p):]
+            break
+
+    if "/" in h:
+        h = h.split("/", 1)[0]
+
+    return h.strip()
+
 
 @bp.route("/printers")
 def printer_list() -> str:
@@ -38,8 +62,14 @@ def printer_new() -> str:
     if request.method == "POST":
         name = (request.form.get("name") or "").strip()
         backend = (request.form.get("backend") or "").strip()
-        host = (request.form.get("host") or "").strip()
+
+        # Host zuerst roh holen, dann normalisieren
+        host_raw = (request.form.get("host") or "").strip()
+        host = _normalize_host(host_raw)
+
+        # Port-String wie vorher
         port_raw = (request.form.get("port") or "").strip()
+
         https_flag = 1 if request.form.get("https") == "on" else 0
         token = (request.form.get("token") or "").strip() or None
         api_key = (request.form.get("api_key") or "").strip() or None
@@ -94,7 +124,7 @@ def printer_new() -> str:
                 (
                     name,
                     backend,
-                    host,
+                    host,   # hier die bereinigte Variante verwenden
                     port,
                     https_flag,
                     token,
@@ -136,7 +166,11 @@ def printer_edit(printer_id: int) -> str:
         # Update-Formular
         name = (request.form.get("name") or "").strip()
         backend = (request.form.get("backend") or "").strip()
-        host = (request.form.get("host") or "").strip()
+
+        # Host normalisieren
+        host_raw = (request.form.get("host") or "").strip()
+        host = _normalize_host(host_raw)
+
         port_raw = (request.form.get("port") or "").strip()
         https_flag = 1 if request.form.get("https") == "on" else 0
         token = (request.form.get("token") or "").strip() or None
@@ -192,7 +226,7 @@ def printer_edit(printer_id: int) -> str:
                 (
                     name,
                     backend,
-                    host,
+                    host,  # wieder die bereinigte Variante
                     port,
                     https_flag,
                     token,
@@ -219,6 +253,8 @@ def printer_edit(printer_id: int) -> str:
         error=error,
         mode="edit",
     )
+
+
 
 
 @bp.route("/printers/<int:printer_id>/delete", methods=["POST"])
