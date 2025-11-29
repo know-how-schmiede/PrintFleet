@@ -136,6 +136,28 @@ def monitor_printer(
 
             state, filename, elapsed, progress, hotend, hotend_t, bed, bed_t = res
 
+            # ---- Centauri: "printing" nicht unnötig auf "standby" zurückfallen lassen ----
+            if be in ("centauri", "centurio", "centuri", "elegoo"):
+                try:
+                    prev = printer_state.get(name)
+                except Exception:
+                    prev = None
+
+                # Wenn wir vorher schon "printing" waren und jetzt "standby" wären,
+                # aber noch ein Job/Heizphase erkennbar ist: "printing" beibehalten.
+                if (
+                    prev
+                    and prev.get("state") == "printing"
+                    and state == "standby"
+                    and (
+                        filename                    # es gibt einen Dateinamen
+                        or progress > 0.0          # oder schon Fortschritt
+                        or hotend_t > 0.0          # oder Nozzle hat ein Ziel
+                        or bed_t > 0.0             # oder Bett hat ein Ziel
+                    )
+                ):
+                    state = "printing"
+
 
             eta_s = 0.0
             if progress and progress > 0 and elapsed and elapsed > 0:
