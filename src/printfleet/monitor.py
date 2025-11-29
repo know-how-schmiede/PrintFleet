@@ -144,19 +144,20 @@ def monitor_printer(
                     prev = None
 
                 # Wenn wir vorher schon "printing" waren und jetzt "standby" wären,
-                # aber noch ein Job/Heizphase erkennbar ist: "printing" beibehalten.
+                # aber noch Heizphase / echter Fortschritt erkennbar ist:
+                # "printing" beibehalten.
                 if (
                     prev
                     and prev.get("state") == "printing"
                     and state == "standby"
                     and (
-                        filename                    # es gibt einen Dateinamen
-                        or progress > 0.0          # oder schon Fortschritt
-                        or hotend_t > 0.0          # oder Nozzle hat ein Ziel
-                        or bed_t > 0.0             # oder Bett hat ein Ziel
+                        progress > 0.0      # es gibt schon Fortschritt
+                        or hotend_t > 0.0   # oder Nozzle-Zieltemp > 0
+                        or bed_t > 0.0      # oder Bett-Zieltemp > 0
                     )
                 ):
                     state = "printing"
+
 
 
             eta_s = 0.0
