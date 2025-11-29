@@ -19,18 +19,19 @@ def _num(x: Any) -> float:
         return 0.0
 
 
-
 def fetch_centauri(base_url: str, timeout: float = 5.0) -> Tuple[
     str, str, float, float, float, float, float, float
 ]:
     """
     Elegoo Centurio / Centauri Carbon Backend (SDCP über WebSocket).
 
-    Laut OpenCentauri-Doku:
-      - WebSocket-Port: 3030
-      - Mögliche Pfade:
-          /websocket, /ws, /, /api/websocket, /sdcp
-      - Nachrichten-Format: JSON mit "Status" / "PrintInfo" etc.
+    Strategie:
+      - Aus base_url Host extrahieren
+      - WebSocket zu ws://<host>:3030/websocket
+      - 'ping' senden
+      - genau EINE Status-Message empfangen
+      - Verbindung schließen
+      - State anhand von PrintInfo.Status UND Progress/Elapsed heuristisch bestimmen
     """
 
     parsed = urlparse(base_url)
@@ -38,100 +39,90 @@ def fetch_centauri(base_url: str, timeout: float = 5.0) -> Tuple[
     if not host:
         raise RuntimeError(f"Ungültige base_url für Centauri: {base_url!r}")
 
-    ws_paths = ["/websocket", "/ws", "/", "/api/websocket", "/sdcp"]
+    ws_url = f"ws://{host}:3030/websocket"
 
-    last_error: Optional[Exception] = None
+    # WebSocket verbinden
+    ws = websocket.create_connection(ws_url, timeout=timeout)
 
-    for path in ws_paths:
-        ws_url = f"ws://{host}:3030{path}"
-
+    try:
+        # Ping schicken – wie im Testscript
         try:
-            ws = websocket.create_connection(ws_url, timeout=timeout)
-        except Exception as e:
-            last_error = e
-            continue
+            ws.send("ping")
+        except Exception:
+            # Wenn das schiefgeht, versuchen wir trotzdem zu lesen
+            pass
 
+        # Eine Nachricht lesen
+        ws.settimeout(timeout)
+        raw_msg = ws.recv()
+
+        # JSON parsen
+        data = json.loads(raw_msg)
+
+        status = data.get("Status")
+        if not isinstance(status, dict):
+            raise RuntimeError("Keine gültigen Status-Daten im SDCP-Response")
+
+        pi = status.get("PrintInfo", {}) or {}
+
+        # Temperaturen
+        hotend = float(status.get("TempOfNozzle", 0.0))
+        hotend_t = float(status.get("TempTargetNozzle", 0.0))
+        bed = float(status.get("TempOfHotbed", 0.0))
+        bed_t = float(status.get("TempTargetHotbed", 0.0))
+
+        # Zeit
+        elapsed = float(pi.get("CurrentTicks", 0.0))
+        total = float(pi.get("TotalTicks", 0.0)) or 0.0
+
+        # Fortschritt-Rohwert und normiert 0..1
+        prog_raw = float(pi.get("Progress", 0.0))
+        if prog_raw > 1.0:
+            progress = prog_raw / 100.0
+        elif 0.0 < prog_raw <= 1.0:
+            progress = prog_raw
+        elif total > 0.0:
+            progress = max(0.0, min(1.0, elapsed / total))
+        else:
+            progress = 0.0
+
+        filename = pi.get("Filename", "") or ""
+
+        # Roh-Status aus PrintInfo.Status (Elegoo nutzt hier offenbar 0 sehr häufig)
+        st_raw = int(pi.get("Status", 0))
+        state_map = {
+            0: "standby",
+            1: "printing",
+            2: "paused",
+            3: "stopped",
+            4: "complete",
+        }
+        state = state_map.get(st_raw, "standby")
+
+        # --- Heuristik: Status aus Progress/Elapsed ableiten ---
+
+        # Wenn Fortschritt > 0 und < 1: wir drucken
+        if 0.0 < progress < 1.0:
+            state = "printing"
+
+        # Falls Progress >= 1 (oder total/elapsed gleichgezogen): Druck fertig
+        if progress >= 1.0 or (total > 0.0 and elapsed >= total):
+            state = "complete"
+
+        # Falls bereits Zeit/Layer laufen, aber Progress noch 0:
+        if state == "standby" and filename and (elapsed > 0.0 or prog_raw > 0.0):
+            state = "printing"
+
+        return state, filename, elapsed, progress, hotend, hotend_t, bed, bed_t
+
+    finally:
         try:
-            # Optionales Ping, manche Geräte senden erst dann Status
-            try:
-                ws.send("ping")
-            except Exception:
-                pass
+            ws.close()
+        except Exception:
+            pass
 
-            data = None
-            deadline = time.time() + timeout
 
-            # Mehrere Nachrichten lesen, bis eine Status-Message kommt
-            while time.time() < deadline:
-                try:
-                    raw_msg = ws.recv()
-                except Exception as e:
-                    last_error = e
-                    data = None
-                    break
 
-                # JSON versuchen
-                try:
-                    obj = json.loads(raw_msg)
-                except Exception:
-                    continue
-
-                # Status gefunden?
-                if isinstance(obj, dict) and "Status" in obj:
-                    data = obj
-                    break
-
-            if data is None:
-                if last_error is None:
-                    last_error = RuntimeError(f"Keine Status-Message über SDCP auf Pfad {path}")
-                continue
-
-            # Ab hier haben wir gültige Daten
-            status = data.get("Status", {}) or {}
-            pi = status.get("PrintInfo", {}) or {}
-
-            hotend = float(status.get("TempOfNozzle", 0.0))
-            hotend_t = float(status.get("TempTargetNozzle", 0.0))
-            bed = float(status.get("TempOfHotbed", 0.0))
-            bed_t = float(status.get("TempTargetHotbed", 0.0))
-
-            elapsed = float(pi.get("CurrentTicks", 0.0))
-            total = float(pi.get("TotalTicks", 0.0)) or 0.0
-
-            prog_raw = float(pi.get("Progress", 0.0))
-            if prog_raw > 1.0:
-                progress = prog_raw / 100.0
-            elif 0.0 < prog_raw <= 1.0:
-                progress = prog_raw
-            elif total > 0.0:
-                progress = max(0.0, min(1.0, elapsed / total))
-            else:
-                progress = 0.0
-
-            filename = pi.get("Filename", "") or ""
-
-            st_raw = int(pi.get("Status", 0))
-            state_map = {
-                0: "standby",
-                1: "printing",
-                2: "paused",
-                3: "stopped",
-                4: "complete",
-            }
-            state = state_map.get(st_raw, "standby")
-
-            return state, filename, elapsed, progress, hotend, hotend_t, bed, bed_t
-
-        finally:
-            try:
-                ws.close()
-            except Exception:
-                pass
-
-    if last_error:
-        raise RuntimeError(f"SDCP-Status konnte nicht gelesen werden: {last_error}")
-    else:
-        raise RuntimeError("SDCP-Status konnte nicht gelesen werden (unbekannter Fehler)")
 
 
 def fetch_moonraker(base_url: str, token: Optional[str], timeout: float):

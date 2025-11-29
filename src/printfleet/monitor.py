@@ -269,19 +269,7 @@ def monitor_printer(
                 print(f"[{name}] {err}", file=sys.stderr)
                 last_error_text = err
                 last_error_report_ts = now
-
-
-            # Logging nur am Anfang oder wenn neue Meldung
-            if (
-                (consecutive_errors == 1)
-                or (err != last_error_text)
-                or (now - last_error_report_ts >= err_interval)
-            ):
-                print(f"[{name}] {err}", file=sys.stderr)
-                last_error_text = err
-                last_error_report_ts = now
-    
-
+ 
         # Schleifenpause
         time.sleep(max(0.2, poll_interval))
 

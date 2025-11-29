@@ -4,4 +4,4 @@
 __all__ = ["__version__"]
 
 # hier einfach die aktuelle Projektversion pflegen
-__version__ = "0.3.7"
+__version__ = "0.3.8"

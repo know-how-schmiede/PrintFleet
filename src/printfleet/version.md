@@ -1,4 +1,6 @@
 # Versionen PrintFleet
+## 3.3.8
+- Status "Standby" und "Printing" fixen
 ## 3.3.7
 - Entfernen von Protokollen in IP-Adresse bei Add / Edit Printer
 - Verbesserung Elegoo CentauriCarbon Anbindung (Problem SDCP Nachrichten)
