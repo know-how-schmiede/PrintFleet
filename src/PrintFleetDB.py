@@ -203,7 +203,7 @@ if __name__ == "__main__":
 
 
     try:
-        app.run(host="0.0.0.0", port=5000, debug=False, threaded=True)
+        app.run(host="0.0.0.0", port=8080, debug=False, threaded=True)
     finally:
         global_stop_evt.set()
         join_monitor_threads(timeout=2.0)

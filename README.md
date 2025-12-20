@@ -26,7 +26,7 @@ Das Projekt befindet sich aktuell in aktiver Entwicklung und dient als Basis fü
 - Basis-Setup-Anleitung für Debian 13 LXC auf Proxmox
 - Repository kann bereits geklont und lokal gestartet werden
 - SSH-Unterstützung (z. B. PuTTY)
-- Flask-Server läuft lokal auf Port 5000
+- Flask-Server läuft lokal auf Port 8080
 
 ✔ Tasmota-Integration (Grundlage)
 - Hinterlegung der Steckdosen pro Drucker

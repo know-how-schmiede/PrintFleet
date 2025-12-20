@@ -103,7 +103,7 @@ sudo systemctl restart printfleet
 
 ## 4. Chat-ID in PrintFleet eintragen
 
-PrintFleet öffnen (http://SERVER:5000/)
+PrintFleet öffnen (http://SERVER:8080/)
 
 Menü Settings
 

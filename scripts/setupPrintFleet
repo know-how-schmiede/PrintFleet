@@ -75,7 +75,7 @@ echo
 echo "Installation done."
 echo "Test command:"
 echo "  cd ${REPO_DIR}/src && ${VENV_DIR}/bin/python PrintFleetDB.py"
-echo "Open: http://<container-ip>:5000"
+echo "Open: http://<container-ip>:8080"
 echo
 echo "After a successful test, run:"
 echo "  ${script_dir}/setupPrintFleetService"

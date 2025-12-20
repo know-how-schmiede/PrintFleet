@@ -52,7 +52,7 @@ The script will:
 After the test starts, open:
 
 ```
-http://<container-ip>:5000
+http://<container-ip>:8080
 ```
 
 Stop the test with Ctrl+C.
