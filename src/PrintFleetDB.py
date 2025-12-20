@@ -14,7 +14,7 @@ from flask import Flask, jsonify, render_template
 from tasmota_power import tasmota_get_state, tasmota_set_state
 
 # Version
-from printfleet import __version__ as PRINTFLEET_VERSION
+from printfleet.version import APP_VERSION as PRINTFLEET_VERSION
 
 # Telegram Nachrichten
 from printfleet.notifications import notify_printfleet_started, notify_printer_overview

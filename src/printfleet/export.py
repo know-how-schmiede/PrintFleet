@@ -10,7 +10,7 @@ from printfleet.db import (
     load_settings_from_db,
     get_db_connection,
 )
-from printfleet import __version__ as PRINTFLEET_VERSION  # NEU
+from printfleet.version import APP_VERSION as PRINTFLEET_VERSION  # NEU
 
 bp = Blueprint("export", __name__)
 

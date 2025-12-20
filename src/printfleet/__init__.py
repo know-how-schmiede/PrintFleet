@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-__all__ = ["__version__"]
+from .version import APP_VERSION
 
-# hier einfach die aktuelle Projektversion pflegen
-__version__ = "0.3.8"
+__all__ = ["APP_VERSION", "__version__"]
+
+# Backwards-compatible alias
+__version__ = APP_VERSION

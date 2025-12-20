@@ -3,7 +3,7 @@
 
 from typing import Optional, Dict, Any
 
-from printfleet import __version__ as PRINTFLEET_VERSION
+from printfleet.version import APP_VERSION as PRINTFLEET_VERSION
 from printfleet.db import load_settings_from_db, load_printers_from_db
 from printfleet.telegram_bot import send_telegram_message
 from printfleet.state import printer_state, state_lock
