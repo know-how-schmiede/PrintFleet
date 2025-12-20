@@ -1,5 +1,13 @@
 # Versionen PrintFleet
 
+## Version 0.4.3
+
+Settings-Export Erweiterung User
+
+## Version 0.4.2
+
+Dashboard "Refreshing every 5 seconds" entfernt
+
 ## Version 0.4.1
 
 Userverwaltung unter Settings

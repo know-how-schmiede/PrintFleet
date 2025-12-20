@@ -117,13 +117,6 @@
 
   <!-- Hauptinhalt -->
   <div class="{% block container_class %}container{% endblock %} my-3 flex-grow-1">
-    {% if current_user %}
-      <header class="mb-3">
-        <h1 class="h3 mb-1">PrintFleet v{{ app_version }}</h1>
-        <p class="text-muted small mono">{{ _('refresh_interval_info') }}</p>
-      </header>
-    {% endif %}
-
     <main>
       {% block content %}{% endblock %}
     </main>
@@ -134,8 +127,8 @@
       <div class="flex-grow-0">PrintFleet v{{ app_version }}</div>
       <div class="d-flex justify-content-center flex-grow-1 gap-3">
         <a href="{{ url_for('info.info_page') }}">About PrintFleet</a>
-        <span>Impressum</span>
-        <span>Datenschutz</span>
+        <a href="{{ url_for('legal.imprint') }}">Impressum</a>
+        <a href="{{ url_for('legal.privacy') }}">Datenschutz</a>
       </div>
       <div class="flex-grow-0">
         <a href="https://www.know-how-schmiede.de" target="_blank" rel="noopener">(c) Know-How-Schmiede</a>

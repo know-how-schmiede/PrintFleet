@@ -47,6 +47,30 @@
   "profile_error_password_mismatch": "Die neuen Passwoerter stimmen nicht ueberein.",
   "profile_password_updated": "Passwort erfolgreich aktualisiert.",
 
+  "users_title": "Benutzerverwaltung",
+  "users_username_label": "Benutzername",
+  "users_password_label": "Passwort",
+  "users_password_confirm_label": "Passwort bestaetigen",
+  "users_create_button": "Benutzer anlegen",
+  "users_created_at": "Erstellt",
+  "users_new_password_label": "Neues Passwort",
+  "users_confirm_new_password_label": "Neues Passwort bestaetigen",
+  "users_update_password_button": "Passwort aktualisieren",
+  "users_delete_button": "Loeschen",
+  "users_delete_confirm": "Diesen Benutzer loeschen?",
+  "users_actions": "Aktionen",
+  "users_empty": "Keine Benutzer gefunden.",
+  "users_error_required": "Benutzername und Passwort sind erforderlich.",
+  "users_error_password_required": "Passwortfelder sind erforderlich.",
+  "users_error_password_mismatch": "Die Passwoerter stimmen nicht ueberein.",
+  "users_error_username_exists": "Benutzername ist bereits vorhanden.",
+  "users_error_not_found": "Benutzer nicht gefunden.",
+  "users_error_delete_self": "Du kannst dich nicht selbst loeschen.",
+  "users_error_last_user": "Es muss mindestens ein Benutzer vorhanden sein.",
+  "users_user_created": "Benutzer erstellt.",
+  "users_user_deleted": "Benutzer geloescht.",
+  "users_password_updated": "Passwort aktualisiert.",
+
   "page_overview_title": "Druckerübersicht",
   "page_settings_title": "Einstellungen",
 
@@ -118,6 +142,7 @@
 
   "settings_tab_general": "Allgemein",
   "settings_tab_notifications": "Benachrichtigungen & Sprache",
+  "settings_tab_users": "Benutzerverwaltung",
 
   "printer_setup_title": "Drucker verwalten",
   "printer_new_button": "Drucker hinzufügen",

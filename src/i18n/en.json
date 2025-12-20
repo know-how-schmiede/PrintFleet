@@ -47,6 +47,30 @@
   "profile_error_password_mismatch": "New passwords do not match.",
   "profile_password_updated": "Password updated successfully.",
 
+  "users_title": "User management",
+  "users_username_label": "Username",
+  "users_password_label": "Password",
+  "users_password_confirm_label": "Confirm password",
+  "users_create_button": "Create user",
+  "users_created_at": "Created",
+  "users_new_password_label": "New password",
+  "users_confirm_new_password_label": "Confirm new password",
+  "users_update_password_button": "Update password",
+  "users_delete_button": "Delete",
+  "users_delete_confirm": "Delete this user?",
+  "users_actions": "Actions",
+  "users_empty": "No users found.",
+  "users_error_required": "Username and password are required.",
+  "users_error_password_required": "Password fields are required.",
+  "users_error_password_mismatch": "Passwords do not match.",
+  "users_error_username_exists": "Username already exists.",
+  "users_error_not_found": "User not found.",
+  "users_error_delete_self": "You cannot delete your own account.",
+  "users_error_last_user": "At least one user must remain.",
+  "users_user_created": "User created.",
+  "users_user_deleted": "User deleted.",
+  "users_password_updated": "Password updated.",
+
   "page_overview_title": "Printer Overview",
   "page_settings_title": "Settings",
 
@@ -118,6 +142,7 @@
 
   "settings_tab_general": "General",
   "settings_tab_notifications": "Notifications & language",
+  "settings_tab_users": "User management",
 
   "printer_setup_title": "Printer Setup",
   "printer_new_button": "Add Printer",

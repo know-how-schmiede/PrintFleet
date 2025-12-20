@@ -32,6 +32,12 @@ Das Projekt befindet sich aktuell in aktiver Entwicklung und dient als Basis fü
 - Hinterlegung der Steckdosen pro Drucker
 - Vorbereitung für API-basierte Schaltbefehle (Ein/Aus)
 
+## Sicherheit / Passwoerter
+- Passwoerter werden als Hash in der lokalen SQLite-Datenbank gespeichert: `src/PrintFleet.sqlite3`
+- Der Einstellungen-Export kann Benutzer inkl. Passwort-Hash enthalten
+- Die DB-Datei ist in `.gitignore` enthalten und wird nicht nach GitHub uebertragen
+- Bitte die Datenbank niemals manuell committen oder hochladen
+
 ## 🛠 Ziel des Projekts
 PrintFleet soll eine modulare, erweiterbare Plattform sein, mit der 3D-Drucker-Farmen zuverlässig verwaltet werden können.
 Im Fokus stehen:

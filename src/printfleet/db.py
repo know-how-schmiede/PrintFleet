@@ -278,3 +278,23 @@ def update_user_password(user_id: int, password_hash: str) -> None:
     )
     conn.commit()
     conn.close()
+
+
+def delete_user(user_id: int) -> None:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("DELETE FROM users WHERE id = ?", (user_id,))
+    conn.commit()
+    conn.close()
+
+
+def list_users() -> list[dict]:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id, username, created_at FROM users ORDER BY username")
+    rows = cur.fetchall()
+    conn.close()
+    return [
+        {"id": r["id"], "username": r["username"], "created_at": r["created_at"]}
+        for r in rows
+    ]

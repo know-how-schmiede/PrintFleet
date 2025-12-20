@@ -47,6 +47,30 @@
   "profile_error_password_mismatch": "Les nouveaux mots de passe ne correspondent pas.",
   "profile_password_updated": "Mot de passe mis a jour.",
 
+  "users_title": "Gestion des utilisateurs",
+  "users_username_label": "Nom d'utilisateur",
+  "users_password_label": "Mot de passe",
+  "users_password_confirm_label": "Confirmer le mot de passe",
+  "users_create_button": "Creer un utilisateur",
+  "users_created_at": "Cree",
+  "users_new_password_label": "Nouveau mot de passe",
+  "users_confirm_new_password_label": "Confirmer le nouveau mot de passe",
+  "users_update_password_button": "Mettre a jour le mot de passe",
+  "users_delete_button": "Supprimer",
+  "users_delete_confirm": "Supprimer cet utilisateur ?",
+  "users_actions": "Actions",
+  "users_empty": "Aucun utilisateur.",
+  "users_error_required": "Nom d'utilisateur et mot de passe requis.",
+  "users_error_password_required": "Les champs mot de passe sont requis.",
+  "users_error_password_mismatch": "Les mots de passe ne correspondent pas.",
+  "users_error_username_exists": "Le nom d'utilisateur existe deja.",
+  "users_error_not_found": "Utilisateur introuvable.",
+  "users_error_delete_self": "Vous ne pouvez pas vous supprimer.",
+  "users_error_last_user": "Au moins un utilisateur doit rester.",
+  "users_user_created": "Utilisateur cree.",
+  "users_user_deleted": "Utilisateur supprime.",
+  "users_password_updated": "Mot de passe mis a jour.",
+
   "page_overview_title": "Vue d’ensemble des imprimantes",
   "page_settings_title": "Paramètres",
 
@@ -118,6 +142,7 @@
 
   "settings_tab_general": "Général",
   "settings_tab_notifications": "Notifications & langue",
+  "settings_tab_users": "Gestion des utilisateurs",
 
   "printer_setup_title": "Gestion des imprimantes",
   "printer_new_button": "Ajouter une imprimante",

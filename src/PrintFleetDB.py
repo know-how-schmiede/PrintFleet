@@ -47,6 +47,7 @@ from printfleet.state import state_lock, printer_state
 from printfleet.backends import fetch_moonraker, fetch_octoprint
 from printfleet.info import bp as info_bp
 from printfleet.auth import bp as auth_bp
+from printfleet.legal import bp as legal_bp
 
 
 # Monitoring
@@ -95,6 +96,7 @@ app.register_blueprint(debug_bp)
 app.register_blueprint(info_bp)
 app.register_blueprint(export_bp)
 app.register_blueprint(auth_bp)
+app.register_blueprint(legal_bp)
 
 
 

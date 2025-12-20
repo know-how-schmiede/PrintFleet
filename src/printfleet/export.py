@@ -34,6 +34,19 @@ def _fetch_all_printers_for_export() -> list[dict]:
     return [dict(r) for r in rows]
 
 
+def _fetch_all_users_for_export() -> list[dict]:
+    """
+    Holt alle User direkt aus der DB und gibt Liste von Dicts zurueck.
+    """
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT id, username, password_hash, created_at FROM users ORDER BY id")
+    rows = cur.fetchall()
+    conn.close()
+
+    return [dict(r) for r in rows]
+
+
 def make_export_payload(export_type: str) -> bytes:
     """
     Erzeugt Export-Daten mit schema_version und software_version.
@@ -43,6 +56,7 @@ def make_export_payload(export_type: str) -> bytes:
     elif export_type == "settings":
         settings = load_settings_from_db() or {}
         items = [settings]
+        users = _fetch_all_users_for_export()
     else:
         raise ValueError(f"Unsupported export_type: {export_type}")
 
@@ -53,6 +67,8 @@ def make_export_payload(export_type: str) -> bytes:
         "exported_at": time.strftime("%Y-%m-%dT%H:%M:%S"),
         "items": items,
     }
+    if export_type == "settings":
+        data["users"] = users
 
     return json.dumps(data, ensure_ascii=False, indent=2).encode("utf-8")
 
@@ -179,6 +195,9 @@ def import_settings():
 
     # Später könnte man hier auf data.get("schema_version") reagieren
     _insert_items_into_table("settings", [items[0]])
+    users = data.get("users")
+    if isinstance(users, list):
+        _insert_items_into_table("users", users)
 
     flash(_("msg_import_settings_success"), "success")
     return redirect(url_for("settings.settings_page"))

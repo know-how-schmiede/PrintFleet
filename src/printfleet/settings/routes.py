@@ -1,11 +1,22 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
+import sqlite3
 from typing import Any, Dict
 
-from flask import render_template, request
+from flask import flash, g, redirect, render_template, request, url_for
+from werkzeug.security import generate_password_hash
 
-from printfleet.db import get_db_connection, load_settings_from_db
+from printfleet.db import (
+    count_users,
+    create_user,
+    delete_user,
+    get_db_connection,
+    get_user_by_id,
+    list_users,
+    load_settings_from_db,
+    update_user_password,
+)
 from printfleet.i18n import _
 from . import bp
 
@@ -92,10 +103,83 @@ def settings_page() -> str:
             form_values["telegram_chat_id"] = saved.get("telegram_chat_id") or ""
             form_values["language"] = saved.get("language", language)
 
+    users = list_users()
+    current_user_id = g.user["id"] if getattr(g, "user", None) else None
+
     return render_template(
         "settings.html",
         page="settings",
         settings=form_values,
         error=error,
         message=message,
+        users=users,
+        current_user_id=current_user_id,
+        user_count=len(users),
     )
+
+
+@bp.route("/settings/users/create", methods=["POST"])
+def create_user_from_settings() -> str:
+    username = (request.form.get("username") or "").strip()
+    password = request.form.get("password") or ""
+    confirm = request.form.get("password_confirm") or ""
+
+    if not username or not password:
+        flash(_("users_error_required"), "danger")
+        return redirect(url_for("settings.settings_page") + "#tab-users")
+
+    if password != confirm:
+        flash(_("users_error_password_mismatch"), "danger")
+        return redirect(url_for("settings.settings_page") + "#tab-users")
+
+    try:
+        create_user(username, generate_password_hash(password))
+    except sqlite3.IntegrityError:
+        flash(_("users_error_username_exists"), "danger")
+        return redirect(url_for("settings.settings_page") + "#tab-users")
+
+    flash(_("users_user_created"), "success")
+    return redirect(url_for("settings.settings_page") + "#tab-users")
+
+
+@bp.route("/settings/users/<int:user_id>/password", methods=["POST"])
+def reset_user_password(user_id: int) -> str:
+    user = get_user_by_id(user_id)
+    if not user:
+        flash(_("users_error_not_found"), "danger")
+        return redirect(url_for("settings.settings_page") + "#tab-users")
+
+    new_password = request.form.get("new_password") or ""
+    confirm = request.form.get("confirm_password") or ""
+
+    if not new_password or not confirm:
+        flash(_("users_error_password_required"), "danger")
+        return redirect(url_for("settings.settings_page") + "#tab-users")
+
+    if new_password != confirm:
+        flash(_("users_error_password_mismatch"), "danger")
+        return redirect(url_for("settings.settings_page") + "#tab-users")
+
+    update_user_password(user_id, generate_password_hash(new_password))
+    flash(_("users_password_updated"), "success")
+    return redirect(url_for("settings.settings_page") + "#tab-users")
+
+
+@bp.route("/settings/users/<int:user_id>/delete", methods=["POST"])
+def delete_user_from_settings(user_id: int) -> str:
+    if getattr(g, "user", None) and g.user["id"] == user_id:
+        flash(_("users_error_delete_self"), "danger")
+        return redirect(url_for("settings.settings_page") + "#tab-users")
+
+    if count_users() <= 1:
+        flash(_("users_error_last_user"), "danger")
+        return redirect(url_for("settings.settings_page") + "#tab-users")
+
+    user = get_user_by_id(user_id)
+    if not user:
+        flash(_("users_error_not_found"), "danger")
+        return redirect(url_for("settings.settings_page") + "#tab-users")
+
+    delete_user(user_id)
+    flash(_("users_user_deleted"), "success")
+    return redirect(url_for("settings.settings_page") + "#tab-users")
