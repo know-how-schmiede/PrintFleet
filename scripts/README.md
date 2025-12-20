@@ -4,6 +4,7 @@ This folder contains two Bash scripts:
 
 - `setupPrintFleet` installs PrintFleet inside an existing Debian 13 LXC container.
 - `setupPrintFleetService` installs PrintFleet as a systemd service.
+- `updatePrintFleetService` updates the repo and restarts the service.
 
 Both scripts are designed for beginners. You can press Enter to accept defaults.
 
@@ -32,7 +33,7 @@ cd /opt/printfleet/scripts
 3. Make the scripts executable:
 
 ```bash
-chmod +x setupPrintFleet setupPrintFleetService
+chmod +x setupPrintFleet setupPrintFleetService updatePrintFleetService
 ```
 
 4. Run the installer:
@@ -78,6 +79,14 @@ cd /opt/printfleet/src && /opt/printfleet/.venv/bin/python PrintFleetDB.py
 Stop with Ctrl+C.
 
 ## Update PrintFleet
+
+Recommended:
+
+```bash
+./updatePrintFleetService
+```
+
+Manual:
 
 ```bash
 cd /opt/printfleet && git pull
