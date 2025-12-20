@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}{{ _('login_title') }}{% endblock %}
+{% block container_class %}container{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-12 col-md-6 col-lg-4">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h1 class="h4 mb-3">{{ _('login_title') }}</h1>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }} py-2" role="alert">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% if first_user %}
+          <p class="text-muted small">{{ _('login_first_user_hint') }}</p>
+        {% else %}
+          <p class="text-muted small">{{ _('login_hint') }}</p>
+        {% endif %}
+
+        <form method="post" autocomplete="off">
+          <div class="mb-3">
+            <label class="form-label" for="username">{{ _('login_username') }}</label>
+            <input id="username" name="username" class="form-control" type="text" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="password">{{ _('login_password') }}</label>
+            <input id="password" name="password" class="form-control" type="password" required>
+          </div>
+          {% if first_user %}
+            <div class="mb-3">
+              <label class="form-label" for="password_confirm">{{ _('login_password_confirm') }}</label>
+              <input id="password_confirm" name="password_confirm" class="form-control" type="password" required>
+            </div>
+          {% endif %}
+          <button class="btn btn-primary w-100" type="submit">
+            {{ _('login_create_account') if first_user else _('login_button') }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

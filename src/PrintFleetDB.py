@@ -8,7 +8,7 @@ import os
 from typing import Dict, Any
 
 # from flask import Flask, jsonify, render_template
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request, redirect, session, url_for, g
 
 # Tasmota Steckdosen Steuerung
 from tasmota_power import tasmota_get_state, tasmota_set_state
@@ -28,6 +28,7 @@ from printfleet.db import (
     load_settings_from_db,
     load_printers_from_db,
     get_printer_by_id,
+    get_user_by_id,
 )
 
 # PrintFleet Sprachen und Übersetzungen
@@ -45,6 +46,7 @@ from printfleet.debug import bp as debug_bp
 from printfleet.state import state_lock, printer_state
 from printfleet.backends import fetch_moonraker, fetch_octoprint
 from printfleet.info import bp as info_bp
+from printfleet.auth import bp as auth_bp
 
 
 # Monitoring
@@ -92,6 +94,7 @@ app.register_blueprint(settings_bp)
 app.register_blueprint(debug_bp)
 app.register_blueprint(info_bp)
 app.register_blueprint(export_bp)
+app.register_blueprint(auth_bp)
 
 
 
@@ -138,6 +141,29 @@ def inject_app_version():
 @app.context_processor
 def inject_config():
     return {"config": app.config}
+
+
+@app.context_processor
+def inject_user():
+    return {"current_user": getattr(g, "user", None)}
+
+
+@app.before_request
+def require_login():
+    g.user = None
+    user_id = session.get("user_id")
+    if user_id:
+        g.user = get_user_by_id(int(user_id))
+        if g.user is None:
+            session.clear()
+
+    endpoint = request.endpoint or ""
+    if endpoint.startswith("static"):
+        return None
+    if endpoint in ("auth.login", "auth.logout"):
+        return None
+    if g.user is None:
+        return redirect(url_for("auth.login", next=request.full_path))
 
 
 # ----------------- MAIN -----------------

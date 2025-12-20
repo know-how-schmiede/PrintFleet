@@ -1,5 +1,13 @@
 # Versionen PrintFleet
 
+## Version 0.4.1
+
+Userverwaltung unter Settings
+
+## Version 0.4.0
+
+Anmeldung und User-Verwaltung
+
 ## Version 0.3.10
 
 Designanpassungen Footer

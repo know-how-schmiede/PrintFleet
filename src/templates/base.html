@@ -38,6 +38,7 @@
         <span>PrintFleet</span>
       </a>
 
+      {% if current_user %}
       <!-- Toggler für Mobile -->
       <button class="navbar-toggler" type="button"
               data-bs-toggle="collapse"
@@ -76,11 +77,11 @@
             </a>
           </li>
 
-          <!-- Info-Seite -->
+          <!-- Mein Profil -->
           <li class="nav-item">
-            <a href="{{ url_for('info.info_page') }}"
-               class="nav-link {% if page == 'info' %}active{% endif %}">
-              Info
+            <a href="{{ url_for('auth.profile') }}"
+               class="nav-link {% if page == 'profile' %}active{% endif %}">
+              {{ _('menu_profile') }}
             </a>
           </li>
         </ul>
@@ -110,15 +111,18 @@
           </select>
         </div>
       </div>
+      {% endif %}
     </div>
   </nav>
 
   <!-- Hauptinhalt -->
   <div class="{% block container_class %}container{% endblock %} my-3 flex-grow-1">
-    <header class="mb-3">
-      <h1 class="h3 mb-1">PrintFleet v{{ app_version }}</h1>
-      <p class="text-muted small mono">{{ _('refresh_interval_info') }}</p>
-    </header>
+    {% if current_user %}
+      <header class="mb-3">
+        <h1 class="h3 mb-1">PrintFleet v{{ app_version }}</h1>
+        <p class="text-muted small mono">{{ _('refresh_interval_info') }}</p>
+      </header>
+    {% endif %}
 
     <main>
       {% block content %}{% endblock %}

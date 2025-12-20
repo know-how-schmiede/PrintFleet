@@ -107,6 +107,20 @@ def init_db_schema_only() -> None:
         """
     )
 
+    # ---------------------------
+    # users: Ziel-Schema
+    # ---------------------------
+    cur.execute(
+        """
+        CREATE TABLE IF NOT EXISTS users (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL UNIQUE,
+            password_hash TEXT NOT NULL,
+            created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+        );
+        """
+    )
+
     # Migration für bestehende Installationen (settings)
     cur.execute("PRAGMA table_info(settings)")
     settings_cols = [r[1] for r in cur.fetchall()]
@@ -213,3 +227,54 @@ def get_printer_by_id(printer_id: int) -> Optional[sqlite3.Row]:
     row = cur.fetchone()
     conn.close()
     return row
+
+
+def count_users() -> int:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT COUNT(*) AS cnt FROM users")
+    row = cur.fetchone()
+    conn.close()
+    return int(row["cnt"] if row else 0)
+
+
+def get_user_by_username(username: str) -> Optional[sqlite3.Row]:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users WHERE username = ?", (username,))
+    row = cur.fetchone()
+    conn.close()
+    return row
+
+
+def get_user_by_id(user_id: int) -> Optional[sqlite3.Row]:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute("SELECT * FROM users WHERE id = ?", (user_id,))
+    row = cur.fetchone()
+    conn.close()
+    return row
+
+
+def create_user(username: str, password_hash: str) -> int:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "INSERT INTO users (username, password_hash) VALUES (?, ?)",
+        (username, password_hash),
+    )
+    conn.commit()
+    user_id = cur.lastrowid
+    conn.close()
+    return int(user_id)
+
+
+def update_user_password(user_id: int, password_hash: str) -> None:
+    conn = get_db_connection()
+    cur = conn.cursor()
+    cur.execute(
+        "UPDATE users SET password_hash = ? WHERE id = ?",
+        (password_hash, user_id),
+    )
+    conn.commit()
+    conn.close()
