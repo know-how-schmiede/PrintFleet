@@ -86,6 +86,18 @@ Recommended:
 ./updatePrintFleetService
 ```
 
+If you want to avoid auto-stashing local changes:
+
+```bash
+./updatePrintFleetService --no-stash
+```
+
+If you want to keep Python cache files:
+
+```bash
+./updatePrintFleetService --skip-clean-pyc
+```
+
 Manual:
 
 ```bash
