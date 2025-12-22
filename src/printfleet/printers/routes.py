@@ -71,6 +71,7 @@ def printer_new() -> str:
         port_raw = (request.form.get("port") or "").strip()
 
         https_flag = 1 if request.form.get("https") == "on" else 0
+        no_scanning_flag = 1 if request.form.get("no_scanning") == "on" else 0
         token = (request.form.get("token") or "").strip() or None
         api_key = (request.form.get("api_key") or "").strip() or None
         err_int_raw = (request.form.get("error_report_interval") or "").strip()
@@ -110,6 +111,7 @@ def printer_new() -> str:
                      host,
                      port,
                      https,
+                     no_scanning,
                      token,
                      api_key,
                      error_report_interval,
@@ -119,7 +121,7 @@ def printer_new() -> str:
                      printer_type,
                      notes,
                      enabled)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
                 """,
                 (
                     name,
@@ -127,6 +129,7 @@ def printer_new() -> str:
                     host,   # hier die bereinigte Variante verwenden
                     port,
                     https_flag,
+                    no_scanning_flag,
                     token,
                     api_key,
                     error_report_interval,
@@ -173,6 +176,7 @@ def printer_edit(printer_id: int) -> str:
 
         port_raw = (request.form.get("port") or "").strip()
         https_flag = 1 if request.form.get("https") == "on" else 0
+        no_scanning_flag = 1 if request.form.get("no_scanning") == "on" else 0
         token = (request.form.get("token") or "").strip() or None
         api_key = (request.form.get("api_key") or "").strip() or None
         err_int_raw = (request.form.get("error_report_interval") or "").strip()
@@ -212,6 +216,7 @@ def printer_edit(printer_id: int) -> str:
                     host = ?,
                     port = ?,
                     https = ?,
+                    no_scanning = ?,
                     token = ?,
                     api_key = ?,
                     error_report_interval = ?,
@@ -229,6 +234,7 @@ def printer_edit(printer_id: int) -> str:
                     host,  # wieder die bereinigte Variante
                     port,
                     https_flag,
+                    no_scanning_flag,
                     token,
                     api_key,
                     error_report_interval,

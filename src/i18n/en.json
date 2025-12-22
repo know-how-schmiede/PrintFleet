@@ -103,6 +103,7 @@
   "state_offline": "Offline",
   "state_standby": "Standby",
   "state_unknown": "Unknown",
+  "state_no_scanning": "No monitoring",
 
   "status_no_printers": "No printers configured.",
   "status_loading": "Loading printer status…",
@@ -164,6 +165,7 @@
   "printer_form_host_label": "Host",
   "printer_form_port_label": "Port",
   "printer_form_https_label": "Use HTTPS",
+  "printer_form_no_scanning_label": "No scanning",
   "printer_form_token_label": "Token (Moonraker)",
   "printer_form_api_key_label": "API key (OctoPrint)",
   "printer_form_error_interval_label": "Error reporting interval (seconds)",

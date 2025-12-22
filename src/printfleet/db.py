@@ -53,6 +53,7 @@ def init_db_schema_only() -> None:
             host TEXT NOT NULL,
             port INTEGER NOT NULL,
             https INTEGER NOT NULL DEFAULT 0,
+            no_scanning INTEGER NOT NULL DEFAULT 0,
             token TEXT,
             api_key TEXT,
             error_report_interval REAL NOT NULL DEFAULT 30.0,
@@ -76,6 +77,9 @@ def init_db_schema_only() -> None:
 
     if "tasmota_host" not in printer_cols:
         cur.execute("ALTER TABLE printers ADD COLUMN tasmota_host TEXT")
+
+    if "no_scanning" not in printer_cols:
+        cur.execute("ALTER TABLE printers ADD COLUMN no_scanning INTEGER NOT NULL DEFAULT 0")
 
     if "tasmota_topic" not in printer_cols:
         cur.execute("ALTER TABLE printers ADD COLUMN tasmota_topic TEXT")
@@ -204,6 +208,7 @@ def load_printers_from_db() -> list[dict]:
                 "host": r["host"],
                 "port": r["port"],
                 "https": https_flag,
+                "no_scanning": bool(r["no_scanning"]) if "no_scanning" in r.keys() else False,
                 "token": r["token"],
                 "api_key": r["api_key"],
                 "error_report_interval": err_interval,

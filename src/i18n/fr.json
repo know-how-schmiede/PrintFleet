@@ -103,6 +103,7 @@
   "state_offline": "Hors ligne",
   "state_standby": "En attente",
   "state_unknown": "Inconnu",
+  "state_no_scanning": "Aucune surveillance",
 
   "status_no_printers": "Aucune imprimante configurée.",
   "status_loading": "Chargement du statut des imprimantes…",
@@ -164,6 +165,7 @@
   "printer_form_host_label": "Hôte",
   "printer_form_port_label": "Port",
   "printer_form_https_label": "Utiliser HTTPS",
+  "printer_form_no_scanning_label": "Pas de scan",
   "printer_form_token_label": "Token (Moonraker)",
   "printer_form_api_key_label": "Clé API (OctoPrint)",
   "printer_form_error_interval_label": "Intervalle d’erreur (secondes)",

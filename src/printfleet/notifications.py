@@ -68,6 +68,9 @@ def _format_printer_status(state_info: Dict[str, Any]) -> str:
     if s in ("standby", "idle", "ready"):
         return f"🟢 Bereit ({raw_state})"
 
+    if s in ("no_scanning", "no_monitoring", "no-monitoring"):
+        return "⚪ Keine Ueberwachung"
+
     return f"❓ Unbekannter Status: {raw_state}"
 
 

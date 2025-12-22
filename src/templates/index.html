@@ -133,7 +133,8 @@ const STATE_LABELS = {
   "error": "{{ _('state_error') }}",
   "offline": "{{ _('state_offline') }}",
   "standby": "{{ _('state_standby') }}",
-  "unknown": "{{ _('state_unknown') }}"
+  "unknown": "{{ _('state_unknown') }}",
+  "no_scanning": "{{ _('state_no_scanning') }}"
 };
 
 // Button-Text für Aktionen
@@ -253,6 +254,7 @@ function stateBadgeClass(state) {
     case 'error':     return 'bg-danger';
     case 'offline':   return 'bg-secondary';
     case 'standby':   return 'bg-info text-dark';
+    case 'no_scanning': return 'bg-secondary';
     default:          return 'bg-light text-dark';
   }
 }
@@ -362,24 +364,27 @@ async function loadData(){
 
     (data || []).forEach(p => {
       const printer_id   = p.id;
-      const tasmota_host = p.tasmota_host || null;
       const name         = p.name || '';
       const backend      = p.backend || '';
       const state        = p.state || 'standby';
-      const filename     = p.filename || '';
-      const progress_pct = (typeof p.progress_pct === 'number' && isFinite(p.progress_pct)) ? p.progress_pct : 0;
-      const elapsed_hms  = p.elapsed_hms || '';
-      const eta_hms      = p.eta_hms || '';
-      const hotend       = (typeof p.hotend === 'number') ? p.hotend : 0;
-      const hotend_t     = (typeof p.hotend_t === 'number') ? p.hotend_t : 0;
-      const bed          = (typeof p.bed === 'number') ? p.bed : 0;
-      const bed_t        = (typeof p.bed_t === 'number') ? p.bed_t : 0;
-      const last_update  = (typeof p.last_update === 'number') ? p.last_update : 0;
-      const error        = p.error || '';
+      const noScanning   = !!p.no_scanning || state === 'no_scanning';
+      const stateKey     = noScanning ? 'no_scanning' : state;
       const link         = p.link || '';
 
+      const tasmota_host = (!noScanning && p.tasmota_host) ? p.tasmota_host : null;
+      const filename     = noScanning ? '' : (p.filename || '');
+      const progress_pct = noScanning ? 0 : ((typeof p.progress_pct === 'number' && isFinite(p.progress_pct)) ? p.progress_pct : 0);
+      const elapsed_hms  = noScanning ? '' : (p.elapsed_hms || '');
+      const eta_hms      = noScanning ? '' : (p.eta_hms || '');
+      const hotend       = noScanning ? null : ((typeof p.hotend === 'number') ? p.hotend : 0);
+      const hotend_t     = noScanning ? null : ((typeof p.hotend_t === 'number') ? p.hotend_t : 0);
+      const bed          = noScanning ? null : ((typeof p.bed === 'number') ? p.bed : 0);
+      const bed_t        = noScanning ? null : ((typeof p.bed_t === 'number') ? p.bed_t : 0);
+      const last_update  = noScanning ? 0 : ((typeof p.last_update === 'number') ? p.last_update : 0);
+      const error        = noScanning ? '' : (p.error || '');
+
       const tr = document.createElement('tr');
-      tr.className = state;
+      tr.className = stateKey;
 
       const td = (t, key)=>{ 
         const x=document.createElement('td'); 
@@ -394,29 +399,35 @@ async function loadData(){
         return x; 
       };
 
-      const stateLabel = STATE_LABELS[state] || state;
-      const badge = '<span class="badge ' + stateBadgeClass(state) + '">' + stateLabel + '</span>';
+      const stateLabel = STATE_LABELS[stateKey] || stateKey;
+      const badge = '<span class="badge ' + stateBadgeClass(stateKey) + '">' + stateLabel + '</span>';
 
       // Fortschrittsbalken
-      const progCell = document.createElement('td');
+      let progCell;
+      if (noScanning) {
+        progCell = td('', 'progress');
+      } else {
+        progCell = document.createElement('td');
+        progCell.dataset.colKey = 'progress';
 
-      const progWrap = document.createElement('div');
-      progWrap.className = 'dashboard-progress-wrap';
+        const progWrap = document.createElement('div');
+        progWrap.className = 'dashboard-progress-wrap';
 
-      const inner = document.createElement('div');
-      inner.className = 'dashboard-progress-inner';
-      inner.style.width = progress_pct + '%';
-      inner.style.background = pctColor(progress_pct);
+        const inner = document.createElement('div');
+        inner.className = 'dashboard-progress-inner';
+        inner.style.width = progress_pct + '%';
+        inner.style.background = pctColor(progress_pct);
 
-      // Prozentzahl direkt nebendran statt darunter
-      const label = document.createElement('span');
-      label.textContent = (isFinite(progress_pct) ? progress_pct.toFixed(1) : '0.0') + '%';
-      label.style.marginLeft = '6px';
-      label.style.whiteSpace = 'nowrap';
+        // Prozentzahl direkt nebendran statt darunter
+        const label = document.createElement('span');
+        label.textContent = (isFinite(progress_pct) ? progress_pct.toFixed(1) : '0.0') + '%';
+        label.style.marginLeft = '6px';
+        label.style.whiteSpace = 'nowrap';
 
-      progWrap.appendChild(inner);
-      progCell.appendChild(progWrap);
-      progCell.appendChild(label);
+        progWrap.appendChild(inner);
+        progCell.appendChild(progWrap);
+        progCell.appendChild(label);
+      }
 
 
       // Aktionen
@@ -472,12 +483,12 @@ async function loadData(){
       }
 
       const last = last_update ? (now - last_update) : 0;
-      const lastTxt = (last >= 0) ? (last + ' s') : '';
+      const lastTxt = noScanning ? '' : ((last >= 0) ? (last + ' s') : '');
 
       // Error-Spalte
       const errorCell = document.createElement('td');
       errorCell.dataset.colKey = 'error';
-      if (error) {
+      if (error && !noScanning) {
         const shortSpan = document.createElement('span');
         shortSpan.textContent = ERROR_SHORT_LABEL;
         errorCell.appendChild(shortSpan);
@@ -507,10 +518,13 @@ async function loadData(){
       tr.appendChild(tdFilename);
 
       tr.appendChild(progCell);
+      const hotendTxt = noScanning ? '' : (toFixed1(hotend) + ' / ' + toFixed1(hotend_t) + ' °C');
+      const bedTxt = noScanning ? '' : (toFixed1(bed)    + ' / ' + toFixed1(bed_t)    + ' °C');
+
       tr.appendChild(td(elapsed_hms, 'elapsed'));
       tr.appendChild(td(eta_hms, 'eta'));
-      tr.appendChild(td(toFixed1(hotend) + ' / ' + toFixed1(hotend_t) + ' °C', 'hotend'));
-      tr.appendChild(td(toFixed1(bed)    + ' / ' + toFixed1(bed_t)    + ' °C', 'bed'));
+      tr.appendChild(td(hotendTxt, 'hotend'));
+      tr.appendChild(td(bedTxt, 'bed'));
       tr.appendChild(td(lastTxt, 'last_update'));
       tr.appendChild(actions);
       tr.appendChild(errorCell);

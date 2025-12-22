@@ -1,5 +1,9 @@
 # Versionen PrintFleet
 
+## Version 0.4.4
+
+No Scanning Checkbox
+
 ## Version 0.4.3
 
 Settings-Export Erweiterung User

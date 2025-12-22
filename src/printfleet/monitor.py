@@ -37,6 +37,32 @@ def progress_bar_pct(progress: float) -> float:
     return round(max(0.0, min(1.0, float(progress or 0.0))) * 100.0, 1)
 
 
+def build_no_scanning_state(prn: dict, name: str, host: str, port: int, https: bool) -> dict:
+    scheme = "https" if https else "http"
+    return {
+        "id": prn.get("id"),
+        "name": name,
+        "backend": (prn.get("backend") or "moonraker"),
+        "host": host,
+        "state": "no_scanning",
+        "filename": "",
+        "progress_pct": 0.0,
+        "elapsed_s": 0.0,
+        "eta_s": 0.0,
+        "elapsed_hms": "",
+        "eta_hms": "",
+        "hotend": None,
+        "hotend_t": None,
+        "bed": None,
+        "bed_t": None,
+        "last_update": 0,
+        "error": None,
+        "link": f"{scheme}://{host}:{port}/",
+        "tasmota_host": prn.get("tasmota_host"),
+        "no_scanning": True,
+    }
+
+
 # ----------------- Monitor-Thread -----------------
 
 def monitor_printer(
@@ -83,7 +109,10 @@ def monitor_printer(
         try:
             conn = get_db_connection()
             cur = conn.cursor()
-            cur.execute("SELECT enabled, tasmota_host FROM printers WHERE id = ?", (printer_id,))
+            cur.execute(
+                "SELECT enabled, tasmota_host, no_scanning, host, port, https FROM printers WHERE id = ?",
+                (printer_id,),
+            )
             row = cur.fetchone()
             conn.close()
             if (row is None) or (row["enabled"] != 1):
@@ -96,6 +125,14 @@ def monitor_printer(
                 break
 
             current_tasmota_host = row["tasmota_host"]
+
+            if row["no_scanning"] == 1:
+                host = row["host"] or host
+                port = row["port"] or port
+                https = bool(row["https"]) if row["https"] is not None else https
+                with state_lock:
+                    printer_state[name] = build_no_scanning_state(prn, name, host, port, https)
+                break
 
         except Exception as e:
             print(f"[{name}] Warnung: Konnte enabled-Status/Tasmota-Host nicht prüfen: {e}", file=sys.stderr)
@@ -185,6 +222,7 @@ def monitor_printer(
                     "error": None,
                     "link": f"{scheme}://{host}:{port}/",
                     "tasmota_host": current_tasmota_host,
+                    "no_scanning": False,
                 }
 
             consecutive_errors = 0
@@ -224,6 +262,7 @@ def monitor_printer(
                         "last_update": int(now),
                         "error": err,
                         "link": f"{scheme}://{host}:{port}/",
+                        "no_scanning": False,
                     }
                 )
                 printer_state[name] = st
@@ -261,6 +300,7 @@ def monitor_printer(
                     # nur Fehlertext und Zeitstempel aktualisieren
                     st["error"] = err
                     st["last_update"] = int(now)
+                    st["no_scanning"] = False
                 else:
                     # Für alle anderen Backends wie bisher hart auf "error" setzen
                     st.update(
@@ -278,6 +318,7 @@ def monitor_printer(
                             "bed_t": 0.0,
                             "last_update": int(now),
                             "error": err,
+                            "no_scanning": False,
                         }
                     )
 
@@ -312,6 +353,15 @@ def start_monitor_threads(initial_printers: list[dict], stop_evt: threading.Even
     for prn in initial_printers:
         pid = prn["id"]
         if pid in monitor_threads and monitor_threads[pid].is_alive():
+            continue
+
+        if prn.get("no_scanning"):
+            name = prn.get("name", prn.get("host", "UNNAMED"))
+            host = prn["host"]
+            port = prn.get("port", defaults.get("port", 80))
+            https = prn.get("https", defaults.get("https", False))
+            with state_lock:
+                printer_state[name] = build_no_scanning_state(prn, name, host, port, https)
             continue
 
         t = threading.Thread(
@@ -366,6 +416,10 @@ def create_initial_state(printers: list[dict]) -> None:
                 port = prn.get("port", 80)
                 https = prn.get("https", False)
 
+            if prn.get("no_scanning"):
+                printer_state[name] = build_no_scanning_state(prn, name, host, port, https)
+                continue
+
             scheme = "https" if https else "http"
 
             printer_state[name] = {
@@ -388,6 +442,7 @@ def create_initial_state(printers: list[dict]) -> None:
                 "error": None,
                 "link": f"{scheme}://{host}:{port}/",
                 "tasmota_host": prn.get("tasmota_host"),
+                "no_scanning": False,
             }
 
 
