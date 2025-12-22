@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from flask import render_template
+from html.parser import HTMLParser
+from html import escape as html_escape
+import re
+
 from markupsafe import Markup, escape
 
 try:
@@ -89,5 +93,94 @@ def _render_markdown(text: str) -> Markup:
         protocols=allowed_protocols,
         strip=True,
     )
-    cleaned = bleach.linkify(cleaned)
-    return Markup(cleaned)
+    linked = _linkify_html(cleaned)
+    return Markup(linked)
+
+
+_EMAIL_RE = re.compile(
+    r"(?<![\\w@])([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,})(?![\\w@])"
+)
+_URL_RE = re.compile(r"(https?://[^\\s<]+)", re.IGNORECASE)
+_SKIP_TAGS = {"a", "pre", "code"}
+
+
+def _strip_trailing_punct(value: str) -> tuple[str, str]:
+    trailing = ""
+    while value and value[-1] in ".,);:":
+        trailing = value[-1] + trailing
+        value = value[:-1]
+    return value, trailing
+
+
+def _linkify_text(text: str) -> str:
+    def repl_email(match: re.Match) -> str:
+        email = match.group(1)
+        return f'<a href="mailto:{email}">{email}</a>'
+
+    def repl_url(match: re.Match) -> str:
+        url = match.group(1)
+        url, trailing = _strip_trailing_punct(url)
+        return f'<a href="{url}" target="_blank" rel="noopener">{url}</a>{trailing}'
+
+    text = _EMAIL_RE.sub(repl_email, text)
+    text = _URL_RE.sub(repl_url, text)
+    return text
+
+
+class _LinkifyHTML(HTMLParser):
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=False)
+        self._parts: list[str] = []
+        self._skip_depth = 0
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag in _SKIP_TAGS:
+            self._skip_depth += 1
+        self._parts.append(self._format_starttag(tag, attrs))
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag in _SKIP_TAGS and self._skip_depth > 0:
+            self._skip_depth -= 1
+        self._parts.append(f"</{tag}>")
+
+    def handle_data(self, data: str) -> None:
+        if self._skip_depth > 0:
+            self._parts.append(data)
+        else:
+            self._parts.append(_linkify_text(data))
+
+    def handle_entityref(self, name: str) -> None:
+        self._parts.append(f"&{name};")
+
+    def handle_charref(self, name: str) -> None:
+        self._parts.append(f"&#{name};")
+
+    def handle_startendtag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        self._parts.append(self._format_starttag(tag, attrs, close_empty=True))
+
+    def get_html(self) -> str:
+        return "".join(self._parts)
+
+    def _format_starttag(
+        self,
+        tag: str,
+        attrs: list[tuple[str, str | None]],
+        close_empty: bool = False,
+    ) -> str:
+        if not attrs:
+            return f"<{tag}{' /' if close_empty else ''}>"
+
+        rendered = []
+        for key, value in attrs:
+            if value is None:
+                rendered.append(f" {key}")
+            else:
+                rendered.append(f' {key}="{html_escape(value, quote=True)}"')
+        return f"<{tag}{''.join(rendered)}{' /' if close_empty else ''}>"
+
+
+def _linkify_html(html: str) -> str:
+    parser = _LinkifyHTML()
+    parser.feed(html)
+    parser.close()
+    return parser.get_html()
