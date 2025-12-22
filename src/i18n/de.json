@@ -129,6 +129,8 @@
   "settings_db_reload_interval_help": "Wie oft die Druckerkonfiguration aus der Datenbank neu geladen wird.",
   "settings_telegram_chat_id_help": "Chat-ID für Telegram-Benachrichtigungen (optional). Leer lassen, falls nicht verwendet.",
   "settings_language_help": "Wählt die Übersetzungsdatei aus dem i18n-Ordner aus (Englisch ist der Fallback).",
+  "settings_imprint_label": "Impressum (Markdown)",
+  "settings_privacy_label": "Datenschutz (Markdown)",
 
   "settings_language_en": "Englisch",
   "settings_language_de": "Deutsch",
@@ -140,10 +142,12 @@
   "settings_info_restart_hint": "Einige Änderungen können einen Neustart des Dienstes erfordern.",
   "settings_error_poll_interval": "Das Abfrageintervall muss eine positive Zahl sein.",
   "settings_error_db_reload": "Das DB-Neuintervall muss eine Zahl sein.",
+  "settings_markdown_help": "Markdown wird unterstuetzt.",
 
   "settings_tab_general": "Allgemein",
   "settings_tab_notifications": "Benachrichtigungen & Sprache",
   "settings_tab_users": "Benutzerverwaltung",
+  "settings_tab_legal": "Impressum & Datenschutz",
 
   "printer_setup_title": "Drucker verwalten",
   "printer_new_button": "Drucker hinzufügen",
@@ -190,6 +194,7 @@
   "printer_error_unreachable": "Nicht erreichbar",
 
   "dialog_error_title": "Fehlerdetails",
+  "legal_content_missing": "Kein Inhalt hinterlegt.",
 
   "msg_export_printers_success": "Drucker wurden erfolgreich exportiert.",
   "msg_export_settings_success": "Einstellungen wurden erfolgreich exportiert.",

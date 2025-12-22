@@ -87,6 +87,8 @@ Recommended:
 /opt/printfleet/scripts/updatePrintFleetService
 ```
 
+This also updates Python dependencies in the venv if available.
+
 If you want to avoid auto-stashing local changes:
 
 ```bash

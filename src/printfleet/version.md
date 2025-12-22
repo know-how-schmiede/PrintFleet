@@ -1,5 +1,9 @@
 # Versionen PrintFleet
 
+## Version 0.4.5
+
+Impressum / Datenschutz als MarkDown-Textfeld
+
 ## Version 0.4.4
 
 No Scanning Checkbox

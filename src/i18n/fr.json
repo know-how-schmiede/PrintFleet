@@ -129,6 +129,8 @@
   "settings_db_reload_interval_help": "Fréquence de rechargement de la configuration depuis la base de données.",
   "settings_telegram_chat_id_help": "ID du chat pour les notifications Telegram (optionnel).",
   "settings_language_help": "Sélectionne le fichier de traduction à utiliser (anglais par défaut).",
+  "settings_imprint_label": "Imprint (Markdown)",
+  "settings_privacy_label": "Privacy (Markdown)",
 
   "settings_language_en": "Anglais",
   "settings_language_de": "Allemand",
@@ -140,10 +142,12 @@
   "settings_info_restart_hint": "Certaines modifications peuvent nécessiter un redémarrage du service.",
   "settings_error_poll_interval": "L’intervalle doit être un nombre positif.",
   "settings_error_db_reload": "Le rechargement doit être un nombre.",
+  "settings_markdown_help": "Markdown is supported.",
 
   "settings_tab_general": "Général",
   "settings_tab_notifications": "Notifications & langue",
   "settings_tab_users": "Gestion des utilisateurs",
+  "settings_tab_legal": "Imprint & Privacy",
 
   "printer_setup_title": "Gestion des imprimantes",
   "printer_new_button": "Ajouter une imprimante",
@@ -190,6 +194,7 @@
   "printer_error_unreachable": "Inaccessible",
 
   "dialog_error_title": "Détails de l’erreur",
+  "legal_content_missing": "No content set.",
 
   "msg_export_printers_success": "Liste des imprimantes exportée avec succès.",
   "msg_export_settings_success": "Paramètres exportés avec succès.",

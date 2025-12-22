@@ -36,6 +36,8 @@ def settings_page() -> str:
     current_reload = float(current_settings.get("db_reload_interval", 30.0))
     current_chat_id = current_settings.get("telegram_chat_id") or ""
     current_lang = current_settings.get("language", "en")
+    current_imprint_md = current_settings.get("imprint_markdown") or ""
+    current_privacy_md = current_settings.get("privacy_markdown") or ""
 
     # Werte, die wir ans Template geben
     form_values = {
@@ -43,6 +45,8 @@ def settings_page() -> str:
         "db_reload_interval": current_reload,
         "telegram_chat_id": current_chat_id,
         "language": current_lang,
+        "imprint_markdown": current_imprint_md,
+        "privacy_markdown": current_privacy_md,
     }
 
     if request.method == "POST":
@@ -50,6 +54,8 @@ def settings_page() -> str:
         reload_raw = (request.form.get("db_reload_interval") or "").strip()
         chat_id = (request.form.get("telegram_chat_id") or "").strip()
         language = (request.form.get("language") or "").strip() or "en"
+        imprint_markdown = request.form.get("imprint_markdown") or ""
+        privacy_markdown = request.form.get("privacy_markdown") or ""
 
         # Standardmäßig: leere Chat-ID als NULL in der DB
         chat_id_db = chat_id if chat_id else None
@@ -78,6 +84,8 @@ def settings_page() -> str:
         form_values["db_reload_interval"] = reload_raw or reload_interval
         form_values["telegram_chat_id"] = chat_id
         form_values["language"] = language
+        form_values["imprint_markdown"] = imprint_markdown
+        form_values["privacy_markdown"] = privacy_markdown
 
         if not error:
             # In DB schreiben
@@ -86,10 +94,15 @@ def settings_page() -> str:
             cur.execute(
                 """
                 UPDATE settings
-                SET poll_interval = ?, db_reload_interval = ?, telegram_chat_id = ?, language = ?
+                SET poll_interval = ?,
+                    db_reload_interval = ?,
+                    telegram_chat_id = ?,
+                    language = ?,
+                    imprint_markdown = ?,
+                    privacy_markdown = ?
                 WHERE id = 1
                 """,
-                (poll, reload_interval, chat_id_db, language),
+                (poll, reload_interval, chat_id_db, language, imprint_markdown, privacy_markdown),
             )
             conn.commit()
             conn.close()
@@ -102,6 +115,8 @@ def settings_page() -> str:
             form_values["db_reload_interval"] = saved.get("db_reload_interval", reload_interval)
             form_values["telegram_chat_id"] = saved.get("telegram_chat_id") or ""
             form_values["language"] = saved.get("language", language)
+            form_values["imprint_markdown"] = saved.get("imprint_markdown") or ""
+            form_values["privacy_markdown"] = saved.get("privacy_markdown") or ""
 
     users = list_users()
     current_user_id = g.user["id"] if getattr(g, "user", None) else None

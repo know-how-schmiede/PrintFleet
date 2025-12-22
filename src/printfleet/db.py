@@ -106,7 +106,9 @@ def init_db_schema_only() -> None:
             poll_interval REAL,
             db_reload_interval REAL,
             telegram_chat_id TEXT,
-            language TEXT
+            language TEXT,
+            imprint_markdown TEXT,
+            privacy_markdown TEXT
         );
         """
     )
@@ -132,6 +134,12 @@ def init_db_schema_only() -> None:
     if "language" not in settings_cols:
         cur.execute("ALTER TABLE settings ADD COLUMN language TEXT")
 
+    if "imprint_markdown" not in settings_cols:
+        cur.execute("ALTER TABLE settings ADD COLUMN imprint_markdown TEXT")
+
+    if "privacy_markdown" not in settings_cols:
+        cur.execute("ALTER TABLE settings ADD COLUMN privacy_markdown TEXT")
+
     # Falls noch kein Settings-Datensatz existiert, einen Default-Eintrag erzeugen
     cur.execute("SELECT COUNT(*) AS cnt FROM settings")
     row = cur.fetchone()
@@ -140,8 +148,16 @@ def init_db_schema_only() -> None:
         default_reload = 30.0
         cur.execute(
             """
-            INSERT INTO settings (id, poll_interval, db_reload_interval, telegram_chat_id, language)
-            VALUES (1, ?, ?, NULL, 'en')
+            INSERT INTO settings (
+                id,
+                poll_interval,
+                db_reload_interval,
+                telegram_chat_id,
+                language,
+                imprint_markdown,
+                privacy_markdown
+            )
+            VALUES (1, ?, ?, NULL, 'en', NULL, NULL)
             """,
             (default_poll, default_reload),
         )
@@ -156,7 +172,19 @@ def load_settings_from_db() -> Dict[str, Any]:
 
     conn = get_db_connection()
     cur = conn.cursor()
-    cur.execute("SELECT poll_interval, db_reload_interval, telegram_chat_id, language FROM settings WHERE id = 1")
+    cur.execute(
+        """
+        SELECT
+            poll_interval,
+            db_reload_interval,
+            telegram_chat_id,
+            language,
+            imprint_markdown,
+            privacy_markdown
+        FROM settings
+        WHERE id = 1
+        """
+    )
     row = cur.fetchone()
     conn.close()
 
@@ -166,11 +194,15 @@ def load_settings_from_db() -> Dict[str, Any]:
         settings["db_reload_interval"] = float(row["db_reload_interval"] or 30.0)
         settings["telegram_chat_id"] = row["telegram_chat_id"]
         settings["language"] = row["language"] or "en"
+        settings["imprint_markdown"] = row["imprint_markdown"] or ""
+        settings["privacy_markdown"] = row["privacy_markdown"] or ""
     else:
         settings["poll_interval"] = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
         settings["db_reload_interval"] = 30.0
         settings["telegram_chat_id"] = None
         settings["language"] = "en"
+        settings["imprint_markdown"] = ""
+        settings["privacy_markdown"] = ""
 
     return settings
 

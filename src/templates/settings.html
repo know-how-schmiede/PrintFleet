@@ -86,6 +86,21 @@
             {{ _('settings_tab_users') if _ else 'User management' }}
           </button>
         </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
+            id="legal-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-legal"
+            type="button"
+            role="tab"
+            aria-controls="tab-legal"
+            aria-selected="false"
+          >
+            <i class="bi bi-file-text me-1"></i>
+            {{ _('settings_tab_legal') if _ else 'Impressum & Datenschutz' }}
+          </button>
+        </li>
       </ul>
 
       <div class="tab-content" id="settingsTabsContent">
@@ -301,6 +316,46 @@
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TAB: Impressum & Datenschutz -->
+        <div
+          class="tab-pane fade"
+          id="tab-legal"
+          role="tabpanel"
+          aria-labelledby="legal-tab"
+        >
+          <div class="row g-3">
+            <div class="col-12">
+              <label for="imprint_markdown" class="form-label">
+                <i class="bi bi-file-text me-1"></i>
+                {{ _('settings_imprint_label') if _ else 'Impressum (Markdown)' }}
+              </label>
+              <textarea
+                class="form-control"
+                id="imprint_markdown"
+                name="imprint_markdown"
+                rows="8"
+                form="settingsForm"
+              >{{ settings.imprint_markdown }}</textarea>
+              <div class="form-text">{{ _('settings_markdown_help') if _ else 'Markdown supported.' }}</div>
+            </div>
+
+            <div class="col-12">
+              <label for="privacy_markdown" class="form-label">
+                <i class="bi bi-shield-lock me-1"></i>
+                {{ _('settings_privacy_label') if _ else 'Datenschutz (Markdown)' }}
+              </label>
+              <textarea
+                class="form-control"
+                id="privacy_markdown"
+                name="privacy_markdown"
+                rows="8"
+                form="settingsForm"
+              >{{ settings.privacy_markdown }}</textarea>
+              <div class="form-text">{{ _('settings_markdown_help') if _ else 'Markdown supported.' }}</div>
             </div>
           </div>
         </div>

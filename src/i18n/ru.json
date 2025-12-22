@@ -78,6 +78,8 @@
   "settings_db_reload_interval_help": "Как часто обновляется конфигурация принтеров из базы данных.",
   "settings_telegram_chat_id_help": "ID чата Telegram для уведомлений (необязательно).",
   "settings_language_help": "Выбирает файл перевода из папки i18n (английский по умолчанию).",
+  "settings_imprint_label": "Imprint (Markdown)",
+  "settings_privacy_label": "Privacy (Markdown)",
 
   "settings_language_en": "Английский",
   "settings_language_de": "Немецкий",
@@ -89,9 +91,12 @@
   "settings_info_restart_hint": "Некоторые параметры требуют перезапуска службы.",
   "settings_error_poll_interval": "Интервал опроса должен быть положительным числом.",
   "settings_error_db_reload": "Интервал перезагрузки должен быть числом.",
+  "settings_markdown_help": "Markdown is supported.",
 
   "settings_tab_general": "Общие",
   "settings_tab_notifications": "Уведомления и язык",
+  "settings_tab_users": "User management",
+  "settings_tab_legal": "Imprint & Privacy",
 
   "printer_setup_title": "Управление принтерами",
   "printer_new_button": "Добавить принтер",
@@ -138,6 +143,7 @@
   "printer_error_unreachable": "Недоступен",
 
   "dialog_error_title": "Детали ошибки",
+  "legal_content_missing": "No content set.",
 
   "msg_export_printers_success": "Список принтеров успешно экспортирован.",
   "msg_export_settings_success": "Настройки успешно экспортированы.",

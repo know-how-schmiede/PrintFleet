@@ -129,6 +129,8 @@
   "settings_db_reload_interval_help": "How often the printer configuration is reloaded from the database.",
   "settings_telegram_chat_id_help": "Chat ID for Telegram notifications (optional). Leave empty if you don't use Telegram.",
   "settings_language_help": "Selects which translation file from the i18n folder is used (English is the fallback).",
+  "settings_imprint_label": "Imprint (Markdown)",
+  "settings_privacy_label": "Privacy (Markdown)",
 
   "settings_language_en": "English",
   "settings_language_de": "German",
@@ -140,10 +142,12 @@
   "settings_info_restart_hint": "Some changes may require a restart of the service.",
   "settings_error_poll_interval": "Poll interval must be a positive number.",
   "settings_error_db_reload": "DB reload interval must be a number.",
+  "settings_markdown_help": "Markdown is supported.",
 
   "settings_tab_general": "General",
   "settings_tab_notifications": "Notifications & language",
   "settings_tab_users": "User management",
+  "settings_tab_legal": "Imprint & Privacy",
 
   "printer_setup_title": "Printer Setup",
   "printer_new_button": "Add Printer",
@@ -190,6 +194,7 @@
   "printer_error_unreachable": "Not reachable",
 
   "dialog_error_title": "Error details",
+  "legal_content_missing": "No content set.",
 
   "msg_export_printers_success": "Printer list exported successfully.",
   "msg_export_settings_success": "Settings exported successfully.",

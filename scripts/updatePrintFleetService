@@ -35,6 +35,7 @@ SERVICE_NAME=""
 NON_INTERACTIVE=0
 AUTO_STASH=1
 AUTO_CLEAN_PYC=1
+REQ_FILE=""
 
 for arg in "$@"; do
   case "$arg" in
@@ -116,6 +117,14 @@ clean_pycache() {
   find "$REPO_DIR" -type f -name '*.pyc' -delete 2>/dev/null || true
 }
 
+run_as_service_user() {
+  if id -u "$SERVICE_USER" >/dev/null 2>&1; then
+    runuser -u "$SERVICE_USER" -- "$@"
+  else
+    "$@"
+  fi
+}
+
 git_cmd() {
   if id -u "$SERVICE_USER" >/dev/null 2>&1; then
     runuser -u "$SERVICE_USER" -- git -C "$REPO_DIR" "$@"
@@ -140,6 +149,30 @@ apply_stash() {
     return 0
   fi
   git_cmd stash pop "$ref"
+}
+
+find_requirements() {
+  if [[ -f "$REPO_DIR/requirements.txt" ]]; then
+    REQ_FILE="$REPO_DIR/requirements.txt"
+    return
+  fi
+  if [[ -f "$REPO_DIR/src/requirements.txt" ]]; then
+    REQ_FILE="$REPO_DIR/src/requirements.txt"
+  fi
+}
+
+install_requirements() {
+  local py_bin="$REPO_DIR/.venv/bin/python"
+  find_requirements
+
+  if [[ -x "$py_bin" && -n "$REQ_FILE" ]]; then
+    echo "Installing Python dependencies..."
+    if ! run_as_service_user "$py_bin" -m pip install -r "$REQ_FILE"; then
+      echo "WARNING: pip install failed. The service may start without new deps."
+    fi
+  else
+    echo "WARNING: Python venv or requirements.txt not found. Skipping pip install."
+  fi
 }
 
 echo "Updating repo..."
@@ -184,6 +217,8 @@ if [[ -n "$STASHED_REF" ]]; then
     exit 1
   fi
 fi
+
+install_requirements
 
 echo "Starting service: ${SERVICE_NAME}"
 systemctl start "$SERVICE_NAME"
