@@ -371,7 +371,7 @@ async function loadData(){
       const stateKey     = noScanning ? 'no_scanning' : state;
       const link         = p.link || '';
 
-      const tasmota_host = (!noScanning && p.tasmota_host) ? p.tasmota_host : null;
+      const tasmota_host = p.tasmota_host || null;
       const filename     = noScanning ? '' : (p.filename || '');
       const progress_pct = noScanning ? 0 : ((typeof p.progress_pct === 'number' && isFinite(p.progress_pct)) ? p.progress_pct : 0);
       const elapsed_hms  = noScanning ? '' : (p.elapsed_hms || '');

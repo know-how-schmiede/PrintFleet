@@ -127,6 +127,7 @@ def monitor_printer(
             current_tasmota_host = row["tasmota_host"]
 
             if row["no_scanning"] == 1:
+                prn["tasmota_host"] = current_tasmota_host
                 host = row["host"] or host
                 port = row["port"] or port
                 https = bool(row["https"]) if row["https"] is not None else https
