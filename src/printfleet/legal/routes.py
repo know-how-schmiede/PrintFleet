@@ -100,8 +100,9 @@ def _render_markdown(text: str) -> Markup:
 _EMAIL_RE = re.compile(
     r"(?<![\\w@])([A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,})(?![\\w@])"
 )
-_URL_RE = re.compile(r"(https?://[^\\s<]+)", re.IGNORECASE)
+_URL_RE = re.compile(r"(https?://[^\\t\\n\\r\\f\\v <]+)", re.IGNORECASE)
 _SKIP_TAGS = {"a", "pre", "code"}
+_URL_BREAK_CHARS = ("\u00a0", "\u200b", "\u00ad", "\u202f", "\u2060")
 
 
 def _strip_trailing_punct(value: str) -> tuple[str, str]:
@@ -119,6 +120,8 @@ def _linkify_text(text: str) -> str:
 
     def repl_url(match: re.Match) -> str:
         url = match.group(1)
+        for ch in _URL_BREAK_CHARS:
+            url = url.replace(ch, "")
         url, trailing = _strip_trailing_punct(url)
         return f'<a href="{url}" target="_blank" rel="noopener">{url}</a>{trailing}'
 
