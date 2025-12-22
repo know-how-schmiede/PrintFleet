@@ -11,7 +11,7 @@ Both scripts are designed for beginners. You can press Enter to accept defaults.
 ## Prerequisites
 
 - Debian 13 LXC container already created in Proxmox.
-- You are logged in as `root` in the container console.
+- You are logged in as `root` in the container console (directly after login).
 - Internet access from the container (to install packages and Python deps).
 
 ## Quick Start (recommended)
@@ -27,19 +27,20 @@ apt -y install git
 
 ```bash
 git clone https://github.com/know-how-schmiede/PrintFleet.git /opt/printfleet
-cd /opt/printfleet/scripts
 ```
 
 3. Make the scripts executable:
 
 ```bash
-chmod +x setupPrintFleet setupPrintFleetService updatePrintFleetService
+chmod +x /opt/printfleet/scripts/setupPrintFleet \
+  /opt/printfleet/scripts/setupPrintFleetService \
+  /opt/printfleet/scripts/updatePrintFleetService
 ```
 
 4. Run the installer:
 
 ```bash
-./setupPrintFleet
+/opt/printfleet/scripts/setupPrintFleet
 ```
 
 The script will:
@@ -61,7 +62,7 @@ Stop the test with Ctrl+C.
 ## Install the Service (after the test)
 
 ```bash
-./setupPrintFleetService
+/opt/printfleet/scripts/setupPrintFleetService
 ```
 
 Check status:
@@ -83,19 +84,19 @@ Stop with Ctrl+C.
 Recommended:
 
 ```bash
-./updatePrintFleetService
+/opt/printfleet/scripts/updatePrintFleetService
 ```
 
 If you want to avoid auto-stashing local changes:
 
 ```bash
-./updatePrintFleetService --no-stash
+/opt/printfleet/scripts/updatePrintFleetService --no-stash
 ```
 
 If you want to keep Python cache files:
 
 ```bash
-./updatePrintFleetService --skip-clean-pyc
+/opt/printfleet/scripts/updatePrintFleetService --skip-clean-pyc
 ```
 
 Manual:

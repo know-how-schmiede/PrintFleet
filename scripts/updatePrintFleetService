@@ -116,19 +116,22 @@ clean_pycache() {
   find "$REPO_DIR" -type f -name '*.pyc' -delete 2>/dev/null || true
 }
 
+git_cmd() {
+  if id -u "$SERVICE_USER" >/dev/null 2>&1; then
+    runuser -u "$SERVICE_USER" -- git -C "$REPO_DIR" "$@"
+  else
+    git -C "$REPO_DIR" "$@"
+  fi
+}
+
 is_dirty() {
-  [[ -n "$(git -C "$REPO_DIR" status --porcelain)" ]]
+  [[ -n "$(git_cmd status --porcelain)" ]]
 }
 
 stash_changes() {
   local message="$1"
-  if id -u "$SERVICE_USER" >/dev/null 2>&1; then
-    runuser -u "$SERVICE_USER" -- git -C "$REPO_DIR" stash push -u -m "$message" >/dev/null
-    STASHED_REF="$(runuser -u "$SERVICE_USER" -- git -C "$REPO_DIR" stash list -1 --format=%H)"
-  else
-    git -C "$REPO_DIR" stash push -u -m "$message" >/dev/null
-    STASHED_REF="$(git -C "$REPO_DIR" stash list -1 --format=%H)"
-  fi
+  git_cmd stash push -u -m "$message" >/dev/null
+  STASHED_REF="$(git_cmd stash list -1 --format=%gd)"
 }
 
 apply_stash() {
@@ -136,14 +139,13 @@ apply_stash() {
   if [[ -z "$ref" ]]; then
     return 0
   fi
-  if id -u "$SERVICE_USER" >/dev/null 2>&1; then
-    runuser -u "$SERVICE_USER" -- git -C "$REPO_DIR" stash pop "$ref"
-  else
-    git -C "$REPO_DIR" stash pop "$ref"
-  fi
+  git_cmd stash pop "$ref"
 }
 
 echo "Updating repo..."
+if id -u "$SERVICE_USER" >/dev/null 2>&1; then
+  chown -R "${SERVICE_USER}:${SERVICE_USER}" "$REPO_DIR"
+fi
 if [[ "$AUTO_CLEAN_PYC" -eq 1 ]]; then
   echo "Removing Python cache files..."
   clean_pycache
@@ -169,12 +171,10 @@ if is_dirty; then
   fi
 fi
 
-if id -u "$SERVICE_USER" >/dev/null 2>&1; then
-  runuser -u "$SERVICE_USER" -- git -C "$REPO_DIR" pull
-else
+if ! id -u "$SERVICE_USER" >/dev/null 2>&1; then
   echo "WARNING: User ${SERVICE_USER} not found. Running git pull as root."
-  git -C "$REPO_DIR" pull
 fi
+git_cmd pull
 
 if [[ -n "$STASHED_REF" ]]; then
   echo "Re-applying local changes..."
