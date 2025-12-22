@@ -36,6 +36,7 @@ NON_INTERACTIVE=0
 AUTO_STASH=1
 AUTO_CLEAN_PYC=1
 REQ_FILE=""
+GIT_RUN_USER=""
 
 for arg in "$@"; do
   case "$arg" in
@@ -125,9 +126,34 @@ run_as_service_user() {
   fi
 }
 
-git_cmd() {
+clean_git_locks() {
+  local lock_dir="$REPO_DIR/.git"
+  local lock_file=""
+  for lock_file in index.lock HEAD.lock packed-refs.lock shallow.lock; do
+    if [[ -f "$lock_dir/$lock_file" ]]; then
+      echo "Removing stale git lock: $lock_file"
+      rm -f "$lock_dir/$lock_file"
+    fi
+  done
+}
+
+select_git_user() {
   if id -u "$SERVICE_USER" >/dev/null 2>&1; then
-    runuser -u "$SERVICE_USER" -- git -C "$REPO_DIR" "$@"
+    if runuser -u "$SERVICE_USER" -- test -w "$REPO_DIR/.git/index" 2>/dev/null; then
+      GIT_RUN_USER="$SERVICE_USER"
+    else
+      echo "WARNING: Repo not writable by ${SERVICE_USER}. Running git as root."
+      GIT_RUN_USER=""
+    fi
+  else
+    echo "WARNING: User ${SERVICE_USER} not found. Running git as root."
+    GIT_RUN_USER=""
+  fi
+}
+
+git_cmd() {
+  if [[ -n "$GIT_RUN_USER" ]]; then
+    runuser -u "$GIT_RUN_USER" -- git -C "$REPO_DIR" "$@"
   else
     git -C "$REPO_DIR" "$@"
   fi
@@ -178,7 +204,10 @@ install_requirements() {
 echo "Updating repo..."
 if id -u "$SERVICE_USER" >/dev/null 2>&1; then
   chown -R "${SERVICE_USER}:${SERVICE_USER}" "$REPO_DIR"
+  chmod -R u+rwX "$REPO_DIR/.git"
 fi
+select_git_user
+clean_git_locks
 if [[ "$AUTO_CLEAN_PYC" -eq 1 ]]; then
   echo "Removing Python cache files..."
   clean_pycache
@@ -204,9 +233,6 @@ if is_dirty; then
   fi
 fi
 
-if ! id -u "$SERVICE_USER" >/dev/null 2>&1; then
-  echo "WARNING: User ${SERVICE_USER} not found. Running git pull as root."
-fi
 git_cmd pull
 
 if [[ -n "$STASHED_REF" ]]; then
