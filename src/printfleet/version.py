@@ -1,4 +1,4 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-APP_VERSION = "0.5.0"
+APP_VERSION = "0.5.2"

@@ -1,5 +1,13 @@
 # Versionen PrintFleet
 
+## Version 0.5.2
+
+Standort im Dashboard
+
+## Version 0.5.1
+
+Icons in der NavLeiste
+
 ## Version 0.5.0
 
 Lokaler Netzwerkscan nach Druckern (Octoprint, Moonraker, Centurio Carbon)

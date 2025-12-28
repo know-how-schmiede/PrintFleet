@@ -365,6 +365,7 @@ async function loadData(){
     (data || []).forEach(p => {
       const printer_id   = p.id;
       const name         = p.name || '';
+      const location     = p.location || '';
       const backend      = p.backend || '';
       const state        = p.state || 'standby';
       const noScanning   = !!p.no_scanning || state === 'no_scanning';
@@ -506,7 +507,18 @@ async function loadData(){
         errorCell.textContent = '';
       }
 
-      tr.appendChild(td(name, 'name'));
+      const nameCell = document.createElement('td');
+      nameCell.dataset.colKey = 'name';
+      const nameSpan = document.createElement('span');
+      nameSpan.textContent = name;
+      nameCell.appendChild(nameSpan);
+      if (location) {
+        const locationSpan = document.createElement('span');
+        locationSpan.className = 'text-muted small d-block';
+        locationSpan.textContent = location;
+        nameCell.appendChild(locationSpan);
+      }
+      tr.appendChild(nameCell);
       tr.appendChild(td(backend, 'backend'));
       tr.appendChild(tdHTML(badge, 'state'));
       
