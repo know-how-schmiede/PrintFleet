@@ -364,24 +364,4 @@
   </div>
 </div>
 
-{% if mode == 'edit' %}
-<div class="card border-danger">
-  <div class="card-header bg-danger text-white">
-    <h3 class="h6 mb-0">{{ _('printer_form_delete_title') }}</h3>
-  </div>
-  <div class="card-body">
-    <p class="mb-2">
-      {{ _('printer_form_delete_confirm') }}
-    </p>
-    <form method="post"
-          action="{{ url_for('printers.printer_delete', printer_id=printer['id']) }}"
-          onsubmit="return confirm('{{ _('printer_form_delete_confirm') }}');">
-      <button type="submit" class="btn btn-danger">
-        {{ _('printer_form_delete_button') }}
-      </button>
-    </form>
-  </div>
-</div>
-{% endif %}
-
 {% endblock %}

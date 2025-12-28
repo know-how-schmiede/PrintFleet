@@ -124,4 +124,188 @@
   </div>
 </div>
 
+<div class="card mt-3" id="printer-scan-card">
+  <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
+    <h3 class="h6 mb-0">{{ _('printer_scan_title') }}</h3>
+    <button type="button" class="btn btn-outline-primary btn-sm" id="printerScanButton">
+      {{ _('printer_scan_button') }}
+    </button>
+  </div>
+
+  <div class="card-body">
+    <p class="text-muted small mb-2">{{ _('printer_scan_description') }}</p>
+    <div id="printerScanStatus" class="text-muted small mb-2" aria-live="polite">
+      {{ _('printer_scan_status_idle') }}
+    </div>
+    <div id="printerScanLast" class="text-muted small mb-2">
+      {{ _('printer_scan_last_label') }}
+      <span id="printerScanLastValue">{{ _('printer_scan_last_unknown') }}</span>
+    </div>
+
+    <div class="table-responsive">
+      <table class="table table-sm align-middle mb-0 d-none" id="printerScanTable">
+        <thead>
+          <tr>
+            <th>{{ _('printer_scan_col_type') }}</th>
+            <th>{{ _('printer_scan_col_host') }}</th>
+            <th>{{ _('printer_scan_col_ports') }}</th>
+          </tr>
+        </thead>
+        <tbody id="printerScanBody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  (function () {
+    const scanButton = document.getElementById('printerScanButton');
+    const scanStatus = document.getElementById('printerScanStatus');
+    const scanTable = document.getElementById('printerScanTable');
+    const scanBody = document.getElementById('printerScanBody');
+    const scanLastValue = document.getElementById('printerScanLastValue');
+
+    if (!scanButton || !scanStatus || !scanTable || !scanBody || !scanLastValue) return;
+
+    const statusIdle = "{{ _('printer_scan_status_idle') }}";
+    const statusRunning = "{{ _('printer_scan_status_running') }}";
+    const statusDone = "{{ _('printer_scan_status_done') }}";
+    const statusEmpty = "{{ _('printer_scan_status_empty') }}";
+    const statusError = "{{ _('printer_scan_status_error') }}";
+    const statusLastUnknown = "{{ _('printer_scan_last_unknown') }}";
+
+    const storageResultsKey = 'printfleet-printer-scan-results';
+    const storageLastKey = 'printfleet-printer-scan-last';
+
+    const typeLabels = {
+      "OctoPrint": "{{ _('backend_octoprint') }}",
+      "Klipper": "{{ _('backend_moonraker') }}",
+      "Elegoo Centurio": "{{ _('backend_centauri') }}"
+    };
+
+    function clearResults() {
+      scanBody.innerHTML = '';
+      scanTable.classList.add('d-none');
+    }
+
+    function formatScanTime(isoString) {
+      if (!isoString) return '';
+      const date = new Date(isoString);
+      if (Number.isNaN(date.getTime())) return '';
+      const lang = document.documentElement.lang || undefined;
+      return date.toLocaleString(lang);
+    }
+
+    function updateLastScan(isoString) {
+      const formatted = formatScanTime(isoString);
+      scanLastValue.textContent = formatted || statusLastUnknown;
+    }
+
+    function safeStorageGet(key) {
+      try {
+        return localStorage.getItem(key);
+      } catch (err) {
+        return null;
+      }
+    }
+
+    function safeStorageSet(key, value) {
+      try {
+        localStorage.setItem(key, value);
+      } catch (err) {
+        // ignore storage errors
+      }
+    }
+
+    function saveScanState(results, isoString) {
+      safeStorageSet(storageResultsKey, JSON.stringify(results));
+      safeStorageSet(storageLastKey, isoString);
+    }
+
+    function loadScanState() {
+      const last = safeStorageGet(storageLastKey);
+      if (!last) {
+        scanStatus.textContent = statusIdle;
+        updateLastScan('');
+        return;
+      }
+
+      updateLastScan(last);
+      try {
+        const raw = safeStorageGet(storageResultsKey);
+        const results = raw ? JSON.parse(raw) : [];
+        renderResults(Array.isArray(results) ? results : []);
+      } catch (err) {
+        scanStatus.textContent = statusIdle;
+      }
+    }
+
+    function renderResults(results) {
+      clearResults();
+      if (!results.length) {
+        scanStatus.textContent = statusEmpty;
+        return;
+      }
+
+      results.forEach((item) => {
+        const row = document.createElement('tr');
+
+        const typeCell = document.createElement('td');
+        typeCell.textContent = typeLabels[item.type] || item.type || 'Unknown';
+
+        const hostCell = document.createElement('td');
+        hostCell.textContent = item.ip || '';
+
+        const portsCell = document.createElement('td');
+        portsCell.textContent = Array.isArray(item.ports) ? item.ports.join(', ') : '';
+
+        row.appendChild(typeCell);
+        row.appendChild(hostCell);
+        row.appendChild(portsCell);
+        scanBody.appendChild(row);
+      });
+
+      scanTable.classList.remove('d-none');
+      scanStatus.textContent = statusDone + ' (' + results.length + ')';
+    }
+
+    async function runScan() {
+      scanButton.disabled = true;
+      scanStatus.textContent = statusRunning;
+      clearResults();
+      saveScanState([], '');
+      updateLastScan('');
+
+      try {
+        const response = await fetch("{{ url_for('printers.api_printer_scan') }}", {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' }
+        });
+        const data = await response.json();
+        if (!response.ok || data.status !== 'ok') {
+          scanStatus.textContent = statusError + (data.msg ? ' ' + data.msg : '');
+          return;
+        }
+        const results = Array.isArray(data.results) ? data.results : [];
+        const nowIso = new Date().toISOString();
+        renderResults(results);
+        updateLastScan(nowIso);
+        saveScanState(results, nowIso);
+      } catch (err) {
+        scanStatus.textContent = statusError;
+      } finally {
+        scanButton.disabled = false;
+        if (scanStatus.textContent === statusRunning) {
+          scanStatus.textContent = statusError;
+        }
+      }
+    }
+
+    scanButton.addEventListener('click', runScan);
+    loadScanState();
+  })();
+</script>
 {% endblock %}

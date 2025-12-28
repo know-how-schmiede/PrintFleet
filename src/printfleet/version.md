@@ -1,5 +1,9 @@
 # Versionen PrintFleet
 
+## Version 0.5.0
+
+Lokaler Netzwerkscan nach Druckern (Octoprint, Moonraker, Centurio Carbon)
+
 ## Version 0.4.5
 
 Impressum / Datenschutz als MarkDown-Textfeld

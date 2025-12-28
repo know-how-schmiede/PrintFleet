@@ -2,6 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from typing import Optional, Dict, Any
+import json
+import os
+import subprocess
+import sys
 
 from flask import (
     render_template,
@@ -17,6 +21,9 @@ from tasmota_power import tasmota_get_state, tasmota_set_state
 from printfleet.db import get_db_connection, get_printer_by_id
 from printfleet.i18n import _
 from . import bp
+
+LAN_SCAN_TIMEOUT = 120
+
 
 def _normalize_host(raw: str) -> str:
     """
@@ -41,6 +48,20 @@ def _normalize_host(raw: str) -> str:
         h = h.split("/", 1)[0]
 
     return h.strip()
+
+
+def _resolve_lan_scan_path() -> str:
+    env_path = os.environ.get("PRINTFLEET_LAN_SCAN_PATH")
+    if env_path:
+        return env_path
+    return os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            "..",
+            "..",
+            "lan_scan.py",
+        )
+    )
 
 
 @bp.route("/printers")
@@ -273,6 +294,77 @@ def printer_delete(printer_id: int):
     conn.close()
     # Liste neu anzeigen
     return redirect(url_for("printers.printer_list"))
+
+
+@bp.route("/api/printers/scan", methods=["POST"])
+def api_printer_scan():
+    scan_path = _resolve_lan_scan_path()
+    if not os.path.isfile(scan_path):
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "msg": "Lan scan script not found.",
+                    "details": scan_path,
+                }
+            ),
+            500,
+        )
+
+    payload = request.get_json(silent=True) or {}
+    hosts = payload.get("hosts")
+    cidr = payload.get("cidr")
+
+    cmd = [sys.executable, scan_path, "--json", "--no-progress"]
+    if isinstance(hosts, list):
+        host_arg = ",".join(str(h).strip() for h in hosts if str(h).strip())
+        if host_arg:
+            cmd += ["--hosts", host_arg]
+    elif isinstance(hosts, str) and hosts.strip():
+        cmd += ["--hosts", hosts.strip()]
+
+    if isinstance(cidr, str) and cidr.strip():
+        cmd += ["--cidr", cidr.strip()]
+
+    try:
+        result = subprocess.run(
+            cmd,
+            capture_output=True,
+            text=True,
+            timeout=LAN_SCAN_TIMEOUT,
+        )
+    except subprocess.TimeoutExpired:
+        return jsonify({"status": "error", "msg": "Scan timed out."}), 504
+
+    if result.returncode != 0:
+        details = (result.stderr or result.stdout or "").strip()
+        return (
+            jsonify({"status": "error", "msg": "Scan failed.", "details": details}),
+            500,
+        )
+
+    try:
+        data = json.loads(result.stdout) if result.stdout else {}
+    except json.JSONDecodeError:
+        return (
+            jsonify(
+                {
+                    "status": "error",
+                    "msg": "Invalid scan output.",
+                    "details": (result.stdout or "").strip(),
+                }
+            ),
+            500,
+        )
+
+    return jsonify(
+        {
+            "status": "ok",
+            "results": data.get("results", []),
+            "networks": data.get("networks", []),
+            "hosts": data.get("hosts", []),
+        }
+    )
 
 
 @bp.route("/api/printer/<int:printer_id>/power/status")
