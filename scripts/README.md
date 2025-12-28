@@ -1,9 +1,10 @@
 # PrintFleet Setup Scripts (Debian 13 LXC)
 
-This folder contains two Bash scripts:
+This folder contains Bash scripts:
 
 - `setupPrintFleet` installs PrintFleet inside an existing Debian 13 LXC container.
 - `setupPrintFleetService` installs PrintFleet as a systemd service.
+- `setupPrintFleetTelegram` configures the Telegram bot token and chat ID.
 - `updatePrintFleetService` updates the repo and restarts the service.
 
 Both scripts are designed for beginners. You can press Enter to accept defaults.
@@ -34,6 +35,7 @@ git clone https://github.com/know-how-schmiede/PrintFleet.git /opt/printfleet
 ```bash
 chmod +x /opt/printfleet/scripts/setupPrintFleet \
   /opt/printfleet/scripts/setupPrintFleetService \
+  /opt/printfleet/scripts/setupPrintFleetTelegram \
   /opt/printfleet/scripts/updatePrintFleetService
 ```
 
@@ -107,3 +109,12 @@ Manual:
 cd /opt/printfleet && git pull
 systemctl restart printfleet
 ```
+
+## Configure Telegram
+
+```bash
+/opt/printfleet/scripts/setupPrintFleetTelegram
+```
+
+This writes a systemd drop-in for `PRINTFLEET_TELEGRAM_TOKEN`, updates the
+Telegram chat ID in the database, and restarts the service.

@@ -1,5 +1,8 @@
 # Versionen PrintFleet
 
+## Version 0.5.3
+Setup-Script Telegram
+
 ## Version 0.5.2
 
 Standort im Dashboard

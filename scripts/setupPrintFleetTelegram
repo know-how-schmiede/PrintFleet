@@ -1,0 +1,208 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+default_repo_dir="$(cd "${script_dir}/.." && pwd)"
+
+if [[ "${1:-}" == "-h" || "${1:-}" == "--help" ]]; then
+  cat <<'EOF'
+Usage: setupPrintFleetTelegram [options]
+
+Options:
+  --repo-dir=PATH        Repo directory (default: repo root)
+  --service-user=USER    Service user (default: printfleet)
+  --service-name=NAME    systemd service name (default: printfleet)
+  --bot-token=TOKEN      Telegram bot token (required)
+  --chat-id=ID           Telegram chat ID (required)
+  --skip-restart         Do not restart the service
+  --non-interactive      Use defaults for missing values (no prompts)
+EOF
+  exit 0
+fi
+
+if [[ "$(id -u)" -ne 0 ]]; then
+  echo "ERROR: Run as root (sudo -i)."
+  exit 1
+fi
+
+if ! command -v systemctl >/dev/null 2>&1; then
+  echo "ERROR: systemctl not found. This container must use systemd."
+  exit 1
+fi
+
+REPO_DIR=""
+SERVICE_USER=""
+SERVICE_NAME=""
+BOT_TOKEN=""
+CHAT_ID=""
+NON_INTERACTIVE=0
+SKIP_RESTART=0
+
+for arg in "$@"; do
+  case "$arg" in
+    --repo-dir=*)
+      REPO_DIR="${arg#*=}"
+      ;;
+    --service-user=*)
+      SERVICE_USER="${arg#*=}"
+      ;;
+    --service-name=*)
+      SERVICE_NAME="${arg#*=}"
+      ;;
+    --bot-token=*)
+      BOT_TOKEN="${arg#*=}"
+      ;;
+    --chat-id=*)
+      CHAT_ID="${arg#*=}"
+      ;;
+    --skip-restart)
+      SKIP_RESTART=1
+      ;;
+    --non-interactive)
+      NON_INTERACTIVE=1
+      ;;
+    *)
+      echo "Unknown option: $arg"
+      exit 1
+      ;;
+  esac
+done
+
+prompt() {
+  local label="$1"
+  local default="$2"
+  local value=""
+  if [[ "$NON_INTERACTIVE" -eq 1 ]]; then
+    printf '%s' "$default"
+    return
+  fi
+  read -r -p "${label} [${default}]: " value
+  if [[ -z "$value" ]]; then
+    value="$default"
+  fi
+  printf '%s' "$value"
+}
+
+prompt_required() {
+  local label="$1"
+  local value=""
+  if [[ "$NON_INTERACTIVE" -eq 1 ]]; then
+    echo "ERROR: ${label} is required in non-interactive mode."
+    exit 1
+  fi
+  while [[ -z "$value" ]]; do
+    read -r -p "${label}: " value
+  done
+  printf '%s' "$value"
+}
+
+REPO_DIR="${REPO_DIR:-$(prompt "Repo directory" "$default_repo_dir")}"
+SERVICE_USER="${SERVICE_USER:-$(prompt "Service user" "printfleet")}"
+SERVICE_NAME="${SERVICE_NAME:-$(prompt "Service name" "printfleet")}"
+
+REPO_DIR="$(cd "$REPO_DIR" && pwd)"
+
+if [[ ! -f "$REPO_DIR/src/PrintFleetDB.py" ]]; then
+  echo "ERROR: PrintFleet not found at ${REPO_DIR}/src/PrintFleetDB.py"
+  exit 1
+fi
+
+if ! systemctl list-unit-files --type=service --no-legend | awk '{print $1}' | grep -Fxq "${SERVICE_NAME}.service"; then
+  echo "ERROR: Service not found: ${SERVICE_NAME}"
+  exit 1
+fi
+
+if [[ -z "$BOT_TOKEN" ]]; then
+  BOT_TOKEN="$(prompt_required "Telegram bot token")"
+fi
+
+if [[ -z "$CHAT_ID" ]]; then
+  CHAT_ID="$(prompt_required "Telegram chat ID")"
+fi
+
+run_as_service_user() {
+  if id -u "$SERVICE_USER" >/dev/null 2>&1; then
+    runuser -u "$SERVICE_USER" -- "$@"
+  else
+    "$@"
+  fi
+}
+
+escape_systemd_value() {
+  printf '%s' "$1" | sed 's/\\/\\\\/g; s/"/\\"/g'
+}
+
+echo "Writing systemd drop-in for Telegram token..."
+DROPIN_DIR="/etc/systemd/system/${SERVICE_NAME}.service.d"
+DROPIN_FILE="${DROPIN_DIR}/telegram.conf"
+mkdir -p "$DROPIN_DIR"
+ESCAPED_TOKEN="$(escape_systemd_value "$BOT_TOKEN")"
+cat > "$DROPIN_FILE" <<EOF
+[Service]
+Environment="PRINTFLEET_TELEGRAM_TOKEN=${ESCAPED_TOKEN}"
+EOF
+
+echo "Updating Telegram chat ID in the database..."
+DB_PATH="${REPO_DIR}/src/PrintFleet.sqlite3"
+PY_BIN="${REPO_DIR}/.venv/bin/python"
+if [[ ! -x "$PY_BIN" ]]; then
+  PY_BIN="python3"
+fi
+if ! command -v "$PY_BIN" >/dev/null 2>&1; then
+  echo "ERROR: Python not found. Install python3 or create a venv at ${REPO_DIR}/.venv"
+  exit 1
+fi
+
+REPO_DIR="$REPO_DIR" TELEGRAM_CHAT_ID="$CHAT_ID" run_as_service_user "$PY_BIN" - <<'PY'
+import os
+import sqlite3
+import sys
+
+repo_dir = os.environ.get("REPO_DIR")
+chat_id = os.environ.get("TELEGRAM_CHAT_ID")
+if not repo_dir or not chat_id:
+    print("ERROR: Missing REPO_DIR or TELEGRAM_CHAT_ID", file=sys.stderr)
+    sys.exit(1)
+
+db_path = os.path.join(repo_dir, "src", "PrintFleet.sqlite3")
+conn = sqlite3.connect(db_path)
+cur = conn.cursor()
+cur.execute(
+    """
+    CREATE TABLE IF NOT EXISTS settings (
+        id INTEGER PRIMARY KEY CHECK (id = 1),
+        poll_interval REAL,
+        db_reload_interval REAL,
+        telegram_chat_id TEXT,
+        language TEXT,
+        imprint_markdown TEXT,
+        privacy_markdown TEXT
+    );
+    """
+)
+cur.execute("PRAGMA table_info(settings)")
+cols = [row[1] for row in cur.fetchall()]
+if "telegram_chat_id" not in cols:
+    cur.execute("ALTER TABLE settings ADD COLUMN telegram_chat_id TEXT")
+
+cur.execute("SELECT COUNT(*) FROM settings WHERE id = 1")
+row = cur.fetchone()
+if row and row[0] > 0:
+    cur.execute("UPDATE settings SET telegram_chat_id = ? WHERE id = 1", (chat_id,))
+else:
+    cur.execute("INSERT INTO settings (id, telegram_chat_id) VALUES (1, ?)", (chat_id,))
+
+conn.commit()
+conn.close()
+PY
+
+systemctl daemon-reload
+if [[ "$SKIP_RESTART" -eq 1 ]]; then
+  echo "Skipping service restart."
+else
+  echo "Restarting service: ${SERVICE_NAME}"
+  systemctl restart "$SERVICE_NAME"
+  systemctl status "$SERVICE_NAME" --no-pager
+fi
+
+echo "Telegram setup complete."
