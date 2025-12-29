@@ -234,86 +234,136 @@
           aria-labelledby="stream-tab"
         >
           <div class="row g-3">
-            <!-- Kiosk Stream -->
             <div class="col-12">
-              <label for="kiosk_stream_url" class="form-label">
-                <i class="bi bi-camera-video me-1"></i>
-                {{ _('settings_kiosk_stream_label') if _ else 'Kiosk stream URL' }}
+              <label for="kiosk_stream_layout" class="form-label">
+                <i class="bi bi-layout-split me-1"></i>
+                {{ _('settings_kiosk_stream_layout_label') if _ else 'Kiosk layout' }}
               </label>
-              <input
-                type="text"
-                class="form-control"
-                id="kiosk_stream_url"
-                name="kiosk_stream_url"
-                value="{{ settings.kiosk_stream_url }}"
-                title="{{ _('settings_kiosk_stream_help') if _ else 'Browser-compatible stream or embed URL' }}"
-                placeholder="https://..."
+              <select
+                class="form-select"
+                id="kiosk_stream_layout"
+                name="kiosk_stream_layout"
                 form="settingsForm"
               >
-              <div class="form-text">{{ _('settings_kiosk_stream_help') if _ else 'Browser-compatible stream or embed URL' }}</div>
-            </div>
-
-            <!-- Kiosk Camera RTSP -->
-            <div class="col-md-4">
-              <label for="kiosk_camera_host" class="form-label">
-                <i class="bi bi-router me-1"></i>
-                {{ _('settings_kiosk_camera_host_label') if _ else 'Camera IP' }}
-              </label>
-              <input
-                type="text"
-                class="form-control"
-                id="kiosk_camera_host"
-                name="kiosk_camera_host"
-                value="{{ settings.kiosk_camera_host }}"
-                placeholder="192.168.1.10"
-                form="settingsForm"
-              >
-            </div>
-
-            <div class="col-md-4">
-              <label for="kiosk_camera_user" class="form-label">
-                <i class="bi bi-person me-1"></i>
-                {{ _('settings_kiosk_camera_user_label') if _ else 'Camera user' }}
-              </label>
-              <input
-                type="text"
-                class="form-control"
-                id="kiosk_camera_user"
-                name="kiosk_camera_user"
-                value="{{ settings.kiosk_camera_user }}"
-                placeholder="admin"
-                form="settingsForm"
-              >
-            </div>
-
-            <div class="col-md-4">
-              <label for="kiosk_camera_password" class="form-label">
-                <i class="bi bi-key me-1"></i>
-                {{ _('settings_kiosk_camera_password_label') if _ else 'Camera password' }}
-              </label>
-              <input
-                type="password"
-                class="form-control"
-                id="kiosk_camera_password"
-                name="kiosk_camera_password"
-                value="{{ settings.kiosk_camera_password }}"
-                form="settingsForm"
-              >
+                <option value="standard" {% if settings.kiosk_stream_layout == 'standard' %}selected{% endif %}>
+                  {{ _('settings_kiosk_stream_layout_standard') if _ else 'Standard' }}
+                </option>
+                <option value="compact" {% if settings.kiosk_stream_layout == 'compact' %}selected{% endif %}>
+                  {{ _('settings_kiosk_stream_layout_compact') if _ else 'Compact' }}
+                </option>
+              </select>
+              <div class="form-text">{{ _('settings_kiosk_stream_layout_help') if _ else 'Controls spacing and logo size on the kiosk page.' }}</div>
             </div>
 
             <div class="col-12">
-              <label for="kiosk_stream_generated" class="form-label">
-                <i class="bi bi-link-45deg me-1"></i>
-                {{ _('settings_kiosk_stream_generated_label') if _ else 'Generated RTSP URL' }}
-              </label>
-              <input
-                type="text"
-                class="form-control"
-                id="kiosk_stream_generated"
-                value="{{ settings.kiosk_stream_generated }}"
-                readonly
-              >
-              <div class="form-text">{{ _('settings_kiosk_stream_generated_help') if _ else 'Generated from camera credentials (rtsp://.../stream1).' }}</div>
+              <div class="accordion" id="streamAccordion">
+                {% for idx in range(1, 5) %}
+                  <div class="accordion-item">
+                    <h2 class="accordion-header" id="streamHeading{{ idx }}">
+                      <button
+                        class="accordion-button {% if idx != 1 %}collapsed{% endif %}"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#streamCollapse{{ idx }}"
+                        aria-expanded="{% if idx == 1 %}true{% else %}false{% endif %}"
+                        aria-controls="streamCollapse{{ idx }}"
+                      >
+                        {{ _('settings_kiosk_stream_section_title') if _ else 'Stream' }} {{ idx }}
+                      </button>
+                    </h2>
+                    <div
+                      id="streamCollapse{{ idx }}"
+                      class="accordion-collapse collapse {% if idx == 1 %}show{% endif %}"
+                      aria-labelledby="streamHeading{{ idx }}"
+                      data-bs-parent="#streamAccordion"
+                    >
+                      <div class="accordion-body">
+                        <div class="row g-3">
+                          <div class="col-12">
+                            <label for="kiosk_stream_url_{{ idx }}" class="form-label">
+                              <i class="bi bi-camera-video me-1"></i>
+                              {{ _('settings_kiosk_stream_label') if _ else 'Kiosk stream URL' }} {{ idx }}
+                            </label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="kiosk_stream_url_{{ idx }}"
+                              name="kiosk_stream_url_{{ idx }}"
+                              value="{{ settings.get('kiosk_stream_url_' ~ idx, '') }}"
+                              title="{{ _('settings_kiosk_stream_help') if _ else 'Browser-compatible stream or embed URL' }}"
+                              placeholder="https://..."
+                              form="settingsForm"
+                            >
+                            <div class="form-text">{{ _('settings_kiosk_stream_help') if _ else 'Browser-compatible stream or embed URL' }}</div>
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="kiosk_camera_host_{{ idx }}" class="form-label">
+                              <i class="bi bi-router me-1"></i>
+                              {{ _('settings_kiosk_camera_host_label') if _ else 'Camera IP' }} {{ idx }}
+                            </label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="kiosk_camera_host_{{ idx }}"
+                              name="kiosk_camera_host_{{ idx }}"
+                              value="{{ settings.get('kiosk_camera_host_' ~ idx, '') }}"
+                              placeholder="192.168.1.10"
+                              form="settingsForm"
+                            >
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="kiosk_camera_user_{{ idx }}" class="form-label">
+                              <i class="bi bi-person me-1"></i>
+                              {{ _('settings_kiosk_camera_user_label') if _ else 'Camera user' }} {{ idx }}
+                            </label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="kiosk_camera_user_{{ idx }}"
+                              name="kiosk_camera_user_{{ idx }}"
+                              value="{{ settings.get('kiosk_camera_user_' ~ idx, '') }}"
+                              placeholder="admin"
+                              form="settingsForm"
+                            >
+                          </div>
+
+                          <div class="col-md-4">
+                            <label for="kiosk_camera_password_{{ idx }}" class="form-label">
+                              <i class="bi bi-key me-1"></i>
+                              {{ _('settings_kiosk_camera_password_label') if _ else 'Camera password' }} {{ idx }}
+                            </label>
+                            <input
+                              type="password"
+                              class="form-control"
+                              id="kiosk_camera_password_{{ idx }}"
+                              name="kiosk_camera_password_{{ idx }}"
+                              value="{{ settings.get('kiosk_camera_password_' ~ idx, '') }}"
+                              form="settingsForm"
+                            >
+                          </div>
+
+                          <div class="col-12">
+                            <label for="kiosk_stream_generated_{{ idx }}" class="form-label">
+                              <i class="bi bi-link-45deg me-1"></i>
+                              {{ _('settings_kiosk_stream_generated_label') if _ else 'Generated RTSP URL' }} {{ idx }}
+                            </label>
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="kiosk_stream_generated_{{ idx }}"
+                              value="{{ settings.get('kiosk_stream_generated_' ~ idx, '') }}"
+                              readonly
+                            >
+                            <div class="form-text">{{ _('settings_kiosk_stream_generated_help') if _ else 'Generated from camera credentials (rtsp://.../stream1).' }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
             </div>
           </div>
         </div>

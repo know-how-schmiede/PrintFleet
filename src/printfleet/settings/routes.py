@@ -50,11 +50,7 @@ def settings_page() -> str:
     current_kiosk_host = current_settings.get("kiosk_camera_host") or ""
     current_kiosk_user = current_settings.get("kiosk_camera_user") or ""
     current_kiosk_password = current_settings.get("kiosk_camera_password") or ""
-    current_kiosk_generated = build_rtsp_url(
-        current_kiosk_host,
-        current_kiosk_user,
-        current_kiosk_password,
-    )
+    current_kiosk_layout = current_settings.get("kiosk_stream_layout") or "standard"
 
     # Werte, die wir ans Template geben
     form_values = {
@@ -68,8 +64,20 @@ def settings_page() -> str:
         "kiosk_camera_host": current_kiosk_host,
         "kiosk_camera_user": current_kiosk_user,
         "kiosk_camera_password": current_kiosk_password,
-        "kiosk_stream_generated": current_kiosk_generated,
+        "kiosk_stream_layout": current_kiosk_layout,
     }
+
+    for idx in range(1, 5):
+        stream_url = current_settings.get(f"kiosk_stream_url_{idx}") or ""
+        cam_host = current_settings.get(f"kiosk_camera_host_{idx}") or ""
+        cam_user = current_settings.get(f"kiosk_camera_user_{idx}") or ""
+        cam_password = current_settings.get(f"kiosk_camera_password_{idx}") or ""
+        generated = build_rtsp_url(cam_host, cam_user, cam_password)
+        form_values[f"kiosk_stream_url_{idx}"] = stream_url
+        form_values[f"kiosk_camera_host_{idx}"] = cam_host
+        form_values[f"kiosk_camera_user_{idx}"] = cam_user
+        form_values[f"kiosk_camera_password_{idx}"] = cam_password
+        form_values[f"kiosk_stream_generated_{idx}"] = generated
 
     if request.method == "POST":
         poll_raw = (request.form.get("poll_interval") or "").strip()
@@ -82,6 +90,7 @@ def settings_page() -> str:
         kiosk_camera_host = (request.form.get("kiosk_camera_host") or "").strip()
         kiosk_camera_user = (request.form.get("kiosk_camera_user") or "").strip()
         kiosk_camera_password = request.form.get("kiosk_camera_password") or ""
+        kiosk_stream_layout = (request.form.get("kiosk_stream_layout") or "").strip() or "standard"
 
         # Standardmäßig: leere Chat-ID als NULL in der DB
         chat_id_db = chat_id if chat_id else None
@@ -116,11 +125,24 @@ def settings_page() -> str:
         form_values["kiosk_camera_host"] = kiosk_camera_host
         form_values["kiosk_camera_user"] = kiosk_camera_user
         form_values["kiosk_camera_password"] = kiosk_camera_password
-        form_values["kiosk_stream_generated"] = build_rtsp_url(
-            kiosk_camera_host,
-            kiosk_camera_user,
-            kiosk_camera_password,
-        )
+        form_values["kiosk_stream_layout"] = kiosk_stream_layout
+
+        stream_values: Dict[str, str] = {}
+        for idx in range(1, 5):
+            stream_values[f"kiosk_stream_url_{idx}"] = (request.form.get(f"kiosk_stream_url_{idx}") or "").strip()
+            stream_values[f"kiosk_camera_host_{idx}"] = (request.form.get(f"kiosk_camera_host_{idx}") or "").strip()
+            stream_values[f"kiosk_camera_user_{idx}"] = (request.form.get(f"kiosk_camera_user_{idx}") or "").strip()
+            stream_values[f"kiosk_camera_password_{idx}"] = request.form.get(f"kiosk_camera_password_{idx}") or ""
+
+            form_values[f"kiosk_stream_url_{idx}"] = stream_values[f"kiosk_stream_url_{idx}"]
+            form_values[f"kiosk_camera_host_{idx}"] = stream_values[f"kiosk_camera_host_{idx}"]
+            form_values[f"kiosk_camera_user_{idx}"] = stream_values[f"kiosk_camera_user_{idx}"]
+            form_values[f"kiosk_camera_password_{idx}"] = stream_values[f"kiosk_camera_password_{idx}"]
+            form_values[f"kiosk_stream_generated_{idx}"] = build_rtsp_url(
+                stream_values[f"kiosk_camera_host_{idx}"],
+                stream_values[f"kiosk_camera_user_{idx}"],
+                stream_values[f"kiosk_camera_password_{idx}"],
+            )
 
         if not error:
             # In DB schreiben
@@ -138,7 +160,24 @@ def settings_page() -> str:
                     kiosk_stream_url = ?,
                     kiosk_camera_host = ?,
                     kiosk_camera_user = ?,
-                    kiosk_camera_password = ?
+                    kiosk_camera_password = ?,
+                    kiosk_stream_layout = ?,
+                    kiosk_stream_url_1 = ?,
+                    kiosk_camera_host_1 = ?,
+                    kiosk_camera_user_1 = ?,
+                    kiosk_camera_password_1 = ?,
+                    kiosk_stream_url_2 = ?,
+                    kiosk_camera_host_2 = ?,
+                    kiosk_camera_user_2 = ?,
+                    kiosk_camera_password_2 = ?,
+                    kiosk_stream_url_3 = ?,
+                    kiosk_camera_host_3 = ?,
+                    kiosk_camera_user_3 = ?,
+                    kiosk_camera_password_3 = ?,
+                    kiosk_stream_url_4 = ?,
+                    kiosk_camera_host_4 = ?,
+                    kiosk_camera_user_4 = ?,
+                    kiosk_camera_password_4 = ?
                 WHERE id = 1
                 """,
                 (
@@ -152,6 +191,23 @@ def settings_page() -> str:
                     kiosk_camera_host,
                     kiosk_camera_user,
                     kiosk_camera_password,
+                    kiosk_stream_layout,
+                    stream_values["kiosk_stream_url_1"],
+                    stream_values["kiosk_camera_host_1"],
+                    stream_values["kiosk_camera_user_1"],
+                    stream_values["kiosk_camera_password_1"],
+                    stream_values["kiosk_stream_url_2"],
+                    stream_values["kiosk_camera_host_2"],
+                    stream_values["kiosk_camera_user_2"],
+                    stream_values["kiosk_camera_password_2"],
+                    stream_values["kiosk_stream_url_3"],
+                    stream_values["kiosk_camera_host_3"],
+                    stream_values["kiosk_camera_user_3"],
+                    stream_values["kiosk_camera_password_3"],
+                    stream_values["kiosk_stream_url_4"],
+                    stream_values["kiosk_camera_host_4"],
+                    stream_values["kiosk_camera_user_4"],
+                    stream_values["kiosk_camera_password_4"],
                 ),
             )
             conn.commit()
@@ -171,11 +227,18 @@ def settings_page() -> str:
             form_values["kiosk_camera_host"] = saved.get("kiosk_camera_host") or ""
             form_values["kiosk_camera_user"] = saved.get("kiosk_camera_user") or ""
             form_values["kiosk_camera_password"] = saved.get("kiosk_camera_password") or ""
-            form_values["kiosk_stream_generated"] = build_rtsp_url(
-                form_values["kiosk_camera_host"],
-                form_values["kiosk_camera_user"],
-                form_values["kiosk_camera_password"],
-            )
+            form_values["kiosk_stream_layout"] = saved.get("kiosk_stream_layout") or "standard"
+
+            for idx in range(1, 5):
+                form_values[f"kiosk_stream_url_{idx}"] = saved.get(f"kiosk_stream_url_{idx}") or ""
+                form_values[f"kiosk_camera_host_{idx}"] = saved.get(f"kiosk_camera_host_{idx}") or ""
+                form_values[f"kiosk_camera_user_{idx}"] = saved.get(f"kiosk_camera_user_{idx}") or ""
+                form_values[f"kiosk_camera_password_{idx}"] = saved.get(f"kiosk_camera_password_{idx}") or ""
+                form_values[f"kiosk_stream_generated_{idx}"] = build_rtsp_url(
+                    form_values[f"kiosk_camera_host_{idx}"],
+                    form_values[f"kiosk_camera_user_{idx}"],
+                    form_values[f"kiosk_camera_password_{idx}"],
+                )
 
     users = list_users()
     current_user_id = g.user["id"] if getattr(g, "user", None) else None

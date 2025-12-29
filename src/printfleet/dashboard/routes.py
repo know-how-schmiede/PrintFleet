@@ -39,21 +39,29 @@ def api_status():
 @bp.route("/kiosk")
 def kiosk() -> str:
     settings = load_settings_from_db()
-    kiosk_stream_url = settings.get("kiosk_stream_url") or ""
-    kiosk_stream_is_rtsp = kiosk_stream_url.lower().startswith("rtsp://")
-    kiosk_camera_host = settings.get("kiosk_camera_host") or ""
-    kiosk_camera_user = settings.get("kiosk_camera_user") or ""
-    kiosk_camera_password = settings.get("kiosk_camera_password") or ""
-    kiosk_show_iframe = bool(kiosk_stream_url and not kiosk_stream_is_rtsp)
-    kiosk_show_mjpeg = kiosk_stream_is_rtsp or (
-        kiosk_camera_host and kiosk_camera_user and kiosk_camera_password
-    )
+    kiosk_streams = []
+    for idx in range(1, 5):
+        stream_url = settings.get(f"kiosk_stream_url_{idx}") or ""
+        stream_is_rtsp = stream_url.lower().startswith("rtsp://")
+        cam_host = settings.get(f"kiosk_camera_host_{idx}") or ""
+        cam_user = settings.get(f"kiosk_camera_user_{idx}") or ""
+        cam_password = settings.get(f"kiosk_camera_password_{idx}") or ""
+        show_iframe = bool(stream_url and not stream_is_rtsp)
+        show_mjpeg = stream_is_rtsp or (cam_host and cam_user and cam_password)
+
+        kiosk_streams.append(
+            {
+                "index": idx,
+                "iframe_url": stream_url if show_iframe else "",
+                "show_iframe": show_iframe,
+                "show_mjpeg": show_mjpeg,
+            }
+        )
     return render_template(
         "kiosk.html",
         page="kiosk",
-        kiosk_stream_url=kiosk_stream_url if kiosk_show_iframe else "",
-        kiosk_show_iframe=kiosk_show_iframe,
-        kiosk_show_mjpeg=kiosk_show_mjpeg,
+        kiosk_streams=kiosk_streams,
+        kiosk_layout=settings.get("kiosk_stream_layout") or "standard",
     )
 
 
@@ -63,16 +71,19 @@ def kiosk_status():
 
 
 @bp.route("/kiosk/stream.mjpg")
-def kiosk_stream():
+@bp.route("/kiosk/stream/<int:stream_id>.mjpg")
+def kiosk_stream(stream_id: int = 1):
+    if stream_id < 1 or stream_id > 4:
+        return ("", 404)
     settings = load_settings_from_db()
-    stream_url = settings.get("kiosk_stream_url") or ""
+    stream_url = settings.get(f"kiosk_stream_url_{stream_id}") or ""
     if stream_url.lower().startswith("rtsp://"):
         rtsp_url = stream_url
     else:
         rtsp_url = _build_rtsp_url(
-            settings.get("kiosk_camera_host") or "",
-            settings.get("kiosk_camera_user") or "",
-            settings.get("kiosk_camera_password") or "",
+            settings.get(f"kiosk_camera_host_{stream_id}") or "",
+            settings.get(f"kiosk_camera_user_{stream_id}") or "",
+            settings.get(f"kiosk_camera_password_{stream_id}") or "",
         )
 
     if not rtsp_url:

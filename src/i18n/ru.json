@@ -87,6 +87,11 @@
   "settings_kiosk_camera_password_label": "Kiosk camera password",
   "settings_kiosk_stream_generated_label": "Generated RTSP URL",
   "settings_kiosk_stream_generated_help": "Generated from camera credentials (rtsp://.../stream1). Use an HLS/MJPEG URL for kiosk view.",
+  "settings_kiosk_stream_layout_label": "Kiosk layout",
+  "settings_kiosk_stream_layout_help": "Controls spacing and logo size on the kiosk page.",
+  "settings_kiosk_stream_layout_standard": "Standard",
+  "settings_kiosk_stream_layout_compact": "Compact",
+  "settings_kiosk_stream_section_title": "Stream",
 
   "settings_language_en": "Английский",
   "settings_language_de": "Немецкий",

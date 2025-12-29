@@ -1,5 +1,9 @@
 # Versionen PrintFleet
 
+## Version 0.5.8
+
+4 Streams auf der Kioskseite, Design Kioskseite über Designtemplate in Einstellugnen
+
 ## Version 0.5.7
 
 Setup FFmpeg für Stream, Anpassungen Stream

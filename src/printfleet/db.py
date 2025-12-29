@@ -112,7 +112,24 @@ def init_db_schema_only() -> None:
             kiosk_stream_url TEXT,
             kiosk_camera_host TEXT,
             kiosk_camera_user TEXT,
-            kiosk_camera_password TEXT
+            kiosk_camera_password TEXT,
+            kiosk_stream_layout TEXT,
+            kiosk_stream_url_1 TEXT,
+            kiosk_camera_host_1 TEXT,
+            kiosk_camera_user_1 TEXT,
+            kiosk_camera_password_1 TEXT,
+            kiosk_stream_url_2 TEXT,
+            kiosk_camera_host_2 TEXT,
+            kiosk_camera_user_2 TEXT,
+            kiosk_camera_password_2 TEXT,
+            kiosk_stream_url_3 TEXT,
+            kiosk_camera_host_3 TEXT,
+            kiosk_camera_user_3 TEXT,
+            kiosk_camera_password_3 TEXT,
+            kiosk_stream_url_4 TEXT,
+            kiosk_camera_host_4 TEXT,
+            kiosk_camera_user_4 TEXT,
+            kiosk_camera_password_4 TEXT
         );
         """
     )
@@ -156,6 +173,23 @@ def init_db_schema_only() -> None:
     if "kiosk_camera_password" not in settings_cols:
         cur.execute("ALTER TABLE settings ADD COLUMN kiosk_camera_password TEXT")
 
+    if "kiosk_stream_layout" not in settings_cols:
+        cur.execute("ALTER TABLE settings ADD COLUMN kiosk_stream_layout TEXT")
+
+    for idx in range(1, 5):
+        key = f"kiosk_stream_url_{idx}"
+        if key not in settings_cols:
+            cur.execute(f"ALTER TABLE settings ADD COLUMN {key} TEXT")
+        key = f"kiosk_camera_host_{idx}"
+        if key not in settings_cols:
+            cur.execute(f"ALTER TABLE settings ADD COLUMN {key} TEXT")
+        key = f"kiosk_camera_user_{idx}"
+        if key not in settings_cols:
+            cur.execute(f"ALTER TABLE settings ADD COLUMN {key} TEXT")
+        key = f"kiosk_camera_password_{idx}"
+        if key not in settings_cols:
+            cur.execute(f"ALTER TABLE settings ADD COLUMN {key} TEXT")
+
     # Falls noch kein Settings-Datensatz existiert, einen Default-Eintrag erzeugen
     cur.execute("SELECT COUNT(*) AS cnt FROM settings")
     row = cur.fetchone()
@@ -175,9 +209,54 @@ def init_db_schema_only() -> None:
                 kiosk_stream_url,
                 kiosk_camera_host,
                 kiosk_camera_user,
-                kiosk_camera_password
+                kiosk_camera_password,
+                kiosk_stream_layout,
+                kiosk_stream_url_1,
+                kiosk_camera_host_1,
+                kiosk_camera_user_1,
+                kiosk_camera_password_1,
+                kiosk_stream_url_2,
+                kiosk_camera_host_2,
+                kiosk_camera_user_2,
+                kiosk_camera_password_2,
+                kiosk_stream_url_3,
+                kiosk_camera_host_3,
+                kiosk_camera_user_3,
+                kiosk_camera_password_3,
+                kiosk_stream_url_4,
+                kiosk_camera_host_4,
+                kiosk_camera_user_4,
+                kiosk_camera_password_4
             )
-            VALUES (1, ?, ?, NULL, 'en', NULL, NULL, NULL, NULL, NULL, NULL)
+            VALUES (
+                1,
+                ?,
+                ?,
+                NULL,
+                'en',
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                'standard',
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL,
+                NULL
+            )
             """,
             (default_poll, default_reload),
         )
@@ -204,7 +283,24 @@ def load_settings_from_db() -> Dict[str, Any]:
             kiosk_stream_url,
             kiosk_camera_host,
             kiosk_camera_user,
-            kiosk_camera_password
+            kiosk_camera_password,
+            kiosk_stream_layout,
+            kiosk_stream_url_1,
+            kiosk_camera_host_1,
+            kiosk_camera_user_1,
+            kiosk_camera_password_1,
+            kiosk_stream_url_2,
+            kiosk_camera_host_2,
+            kiosk_camera_user_2,
+            kiosk_camera_password_2,
+            kiosk_stream_url_3,
+            kiosk_camera_host_3,
+            kiosk_camera_user_3,
+            kiosk_camera_password_3,
+            kiosk_stream_url_4,
+            kiosk_camera_host_4,
+            kiosk_camera_user_4,
+            kiosk_camera_password_4
         FROM settings
         WHERE id = 1
         """
@@ -224,6 +320,21 @@ def load_settings_from_db() -> Dict[str, Any]:
         settings["kiosk_camera_host"] = row["kiosk_camera_host"] or ""
         settings["kiosk_camera_user"] = row["kiosk_camera_user"] or ""
         settings["kiosk_camera_password"] = row["kiosk_camera_password"] or ""
+        settings["kiosk_stream_layout"] = row["kiosk_stream_layout"] or "standard"
+        for idx in range(1, 5):
+            settings[f"kiosk_stream_url_{idx}"] = row[f"kiosk_stream_url_{idx}"] or ""
+            settings[f"kiosk_camera_host_{idx}"] = row[f"kiosk_camera_host_{idx}"] or ""
+            settings[f"kiosk_camera_user_{idx}"] = row[f"kiosk_camera_user_{idx}"] or ""
+            settings[f"kiosk_camera_password_{idx}"] = row[f"kiosk_camera_password_{idx}"] or ""
+
+        if not settings["kiosk_stream_url_1"] and settings["kiosk_stream_url"]:
+            settings["kiosk_stream_url_1"] = settings["kiosk_stream_url"]
+        if not settings["kiosk_camera_host_1"] and settings["kiosk_camera_host"]:
+            settings["kiosk_camera_host_1"] = settings["kiosk_camera_host"]
+        if not settings["kiosk_camera_user_1"] and settings["kiosk_camera_user"]:
+            settings["kiosk_camera_user_1"] = settings["kiosk_camera_user"]
+        if not settings["kiosk_camera_password_1"] and settings["kiosk_camera_password"]:
+            settings["kiosk_camera_password_1"] = settings["kiosk_camera_password"]
     else:
         settings["poll_interval"] = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
         settings["db_reload_interval"] = 30.0
@@ -235,6 +346,12 @@ def load_settings_from_db() -> Dict[str, Any]:
         settings["kiosk_camera_host"] = ""
         settings["kiosk_camera_user"] = ""
         settings["kiosk_camera_password"] = ""
+        settings["kiosk_stream_layout"] = "standard"
+        for idx in range(1, 5):
+            settings[f"kiosk_stream_url_{idx}"] = ""
+            settings[f"kiosk_camera_host_{idx}"] = ""
+            settings[f"kiosk_camera_user_{idx}"] = ""
+            settings[f"kiosk_camera_password_{idx}"] = ""
 
     return settings
 

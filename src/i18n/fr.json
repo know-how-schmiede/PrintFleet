@@ -138,6 +138,11 @@
   "settings_kiosk_camera_password_label": "Mot de passe de la camera kiosk",
   "settings_kiosk_stream_generated_label": "URL RTSP generee",
   "settings_kiosk_stream_generated_help": "Generee a partir des identifiants (rtsp://.../stream1). Utiliser une URL HLS/MJPEG pour le kiosk.",
+  "settings_kiosk_stream_layout_label": "Mise en page du kiosk",
+  "settings_kiosk_stream_layout_help": "Controle les espacements et la taille du logo sur la page kiosk.",
+  "settings_kiosk_stream_layout_standard": "Standard",
+  "settings_kiosk_stream_layout_compact": "Compact",
+  "settings_kiosk_stream_section_title": "Stream",
 
   "settings_language_en": "Anglais",
   "settings_language_de": "Allemand",
