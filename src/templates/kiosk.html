@@ -17,9 +17,20 @@
       margin: 1.5rem 0;
     }
 
-    .kiosk-stream,
+    .kiosk-stream {
+      width: 30%;
+    }
+
     .kiosk-logo-wrap {
-      width: 50%;
+      width: 70%;
+    }
+
+    .kiosk-header.no-stream {
+      justify-content: center;
+    }
+
+    .kiosk-header.no-stream .kiosk-logo-wrap {
+      width: 100%;
     }
 
     .kiosk-logo {
@@ -64,7 +75,7 @@
 
 {% block content %}
   <div class="d-flex flex-column align-items-center">
-    <div class="kiosk-header w-100">
+    <div class="kiosk-header w-100{% if not kiosk_show_iframe and not kiosk_show_mjpeg %} no-stream{% endif %}">
       {% if kiosk_show_iframe %}
         <div class="kiosk-stream">
           <div class="card">

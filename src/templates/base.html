@@ -129,11 +129,15 @@
   <footer class="mt-auto border-top bg-body-tertiary">
     <div class="container d-flex justify-content-between align-items-center py-2 small">
       <div class="flex-grow-0">PrintFleet v{{ app_version }}</div>
+      {% if page != 'kiosk' %}
       <div class="d-flex justify-content-center flex-grow-1 gap-3">
         <a href="{{ url_for('info.info_page') }}">About PrintFleet</a>
         <a href="{{ url_for('legal.imprint') }}">Impressum</a>
         <a href="{{ url_for('legal.privacy') }}">Datenschutz</a>
       </div>
+      {% else %}
+      <div class="flex-grow-1"></div>
+      {% endif %}
       <div class="flex-grow-0">
         <a href="https://www.know-how-schmiede.de" target="_blank" rel="noopener">(c) Know-How-Schmiede</a>
       </div>

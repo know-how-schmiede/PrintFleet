@@ -37,7 +37,8 @@ git clone https://github.com/know-how-schmiede/PrintFleet.git /opt/printfleet
 chmod +x /opt/printfleet/scripts/setupPrintFleet \
   /opt/printfleet/scripts/setupPrintFleetService \
   /opt/printfleet/scripts/setupPrintFleetTelegram \
-  /opt/printfleet/scripts/updatePrintFleetService
+  /opt/printfleet/scripts/updatePrintFleetService \
+  /opt/printfleet/scripts/CleanGitLokalRepo
 ```
 
 4. Run the installer:

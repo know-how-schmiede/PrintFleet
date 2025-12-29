@@ -74,6 +74,21 @@
         <li class="nav-item" role="presentation">
           <button
             class="nav-link"
+            id="stream-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#tab-stream"
+            type="button"
+            role="tab"
+            aria-controls="tab-stream"
+            aria-selected="false"
+          >
+            <i class="bi bi-camera-video me-1"></i>
+            {{ _('settings_tab_stream') if _ else 'Stream' }}
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link"
             id="users-tab"
             data-bs-toggle="tab"
             data-bs-target="#tab-users"
@@ -156,6 +171,69 @@
               <div class="form-text">{{ _('settings_db_reload_interval_help') }}</div>
             </div>
 
+          </div>
+        </div>
+
+        <!-- TAB: Benachrichtigungen & Sprache -->
+        <div
+          class="tab-pane fade"
+          id="tab-notify"
+          role="tabpanel"
+          aria-labelledby="notify-tab"
+        >
+          <div class="row g-3">
+
+            <!-- Telegram Chat ID -->
+            <div class="col-md-6">
+              <label for="telegram_chat_id" class="form-label">
+                <i class="bi bi-telegram me-1"></i>
+                {{ _('settings_telegram_chat_id_label') }}
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="telegram_chat_id"
+                name="telegram_chat_id"
+                value="{{ settings.telegram_chat_id }}"
+                title="{{ _('settings_telegram_chat_id_help') }}"
+                placeholder="123456789"
+                form="settingsForm"
+              >
+              <div class="form-text">{{ _('settings_telegram_chat_id_help') }}</div>
+            </div>
+
+            <!-- Sprache -->
+            <div class="col-md-6">
+              <label for="language" class="form-label">
+                <i class="bi bi-translate me-1"></i>
+                {{ _('settings_language_label') }}
+              </label>
+              <select
+                class="form-select"
+                id="language"
+                name="language"
+                title="{{ _('settings_language_help') }}"
+                form="settingsForm"
+              >
+                <option value="en" {% if settings.language == 'en' %}selected{% endif %}>English (en)</option>
+                <option value="de" {% if settings.language == 'de' %}selected{% endif %}>Deutsch (de)</option>
+                <option value="fr" {% if settings.language == 'fr' %}selected{% endif %}>Français (fr)</option>
+                <option value="ru" {% if settings.language == 'ru' %}selected{% endif %}>Русский (ru)</option>
+              </select>
+              <div class="form-text">{{ _('settings_language_help') }}</div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- TAB: Stream -->
+        <div
+          class="tab-pane fade"
+          id="tab-stream"
+          role="tabpanel"
+          aria-labelledby="stream-tab"
+        >
+          <div class="row g-3">
             <!-- Kiosk Stream -->
             <div class="col-12">
               <label for="kiosk_stream_url" class="form-label">
@@ -237,59 +315,6 @@
               >
               <div class="form-text">{{ _('settings_kiosk_stream_generated_help') if _ else 'Generated from camera credentials (rtsp://.../stream1).' }}</div>
             </div>
-
-          </div>
-        </div>
-
-        <!-- TAB: Benachrichtigungen & Sprache -->
-        <div
-          class="tab-pane fade"
-          id="tab-notify"
-          role="tabpanel"
-          aria-labelledby="notify-tab"
-        >
-          <div class="row g-3">
-
-            <!-- Telegram Chat ID -->
-            <div class="col-md-6">
-              <label for="telegram_chat_id" class="form-label">
-                <i class="bi bi-telegram me-1"></i>
-                {{ _('settings_telegram_chat_id_label') }}
-              </label>
-              <input
-                type="text"
-                class="form-control"
-                id="telegram_chat_id"
-                name="telegram_chat_id"
-                value="{{ settings.telegram_chat_id }}"
-                title="{{ _('settings_telegram_chat_id_help') }}"
-                placeholder="123456789"
-                form="settingsForm"
-              >
-              <div class="form-text">{{ _('settings_telegram_chat_id_help') }}</div>
-            </div>
-
-            <!-- Sprache -->
-            <div class="col-md-6">
-              <label for="language" class="form-label">
-                <i class="bi bi-translate me-1"></i>
-                {{ _('settings_language_label') }}
-              </label>
-              <select
-                class="form-select"
-                id="language"
-                name="language"
-                title="{{ _('settings_language_help') }}"
-                form="settingsForm"
-              >
-                <option value="en" {% if settings.language == 'en' %}selected{% endif %}>English (en)</option>
-                <option value="de" {% if settings.language == 'de' %}selected{% endif %}>Deutsch (de)</option>
-                <option value="fr" {% if settings.language == 'fr' %}selected{% endif %}>Français (fr)</option>
-                <option value="ru" {% if settings.language == 'ru' %}selected{% endif %}>Русский (ru)</option>
-              </select>
-              <div class="form-text">{{ _('settings_language_help') }}</div>
-            </div>
-
           </div>
         </div>
 
