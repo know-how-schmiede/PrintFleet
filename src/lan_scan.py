@@ -19,6 +19,11 @@ from typing import Dict, Iterable, List, Mapping, Sequence
 
 # Bekannte Ziele und ihre typischen Ports/Signaturen.
 TARGETS = {
+    "Tasmota": {
+        "ports": {80, 443},
+        "strong_ports": set(),
+        "http_keywords": ("tasmota", "sonoff"),
+    },
     "OctoPrint": {
         "ports": {80, 443, 5000},
         # Starke Indikatoren, auch ohne HTTP-Text
@@ -315,7 +320,7 @@ def print_summary(found: Mapping[str, Dict[str, List[int]]]) -> None:
             print(f"  {ip} (Ports: {port_list})")
 
     if not any_hits:
-        print("Keine OctoPrint- oder Klipper-Hosts gefunden.")
+        print("Keine OctoPrint-, Klipper- oder Tasmota-Hosts gefunden.")
 
 
 def parse_args(argv: Sequence[str] | None = None) -> argparse.Namespace:

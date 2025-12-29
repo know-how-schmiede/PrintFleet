@@ -1,5 +1,9 @@
 # Versionen PrintFleet
 
+## Version 0.5.5
+
+Netzwerkscan Tasmota, Design Verbesserungen Scan-Bereich
+
 ## Version 0.5.4
 
 WebGui bei Netzwerk-Scan

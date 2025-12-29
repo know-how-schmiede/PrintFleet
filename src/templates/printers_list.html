@@ -127,12 +127,25 @@
 <div class="card mt-3" id="printer-scan-card">
   <div class="card-header d-flex flex-wrap justify-content-between align-items-center gap-2">
     <h3 class="h6 mb-0">{{ _('printer_scan_title') }}</h3>
-    <button type="button" class="btn btn-outline-primary btn-sm" id="printerScanButton">
-      {{ _('printer_scan_button') }}
-    </button>
+    <div class="d-flex align-items-center gap-2">
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        id="printerScanToggle"
+        aria-expanded="true"
+        aria-controls="printerScanBodyWrapper"
+        title="{{ _('printer_scan_toggle') }}"
+      >
+        <i class="bi bi-chevron-up" id="printerScanToggleIcon" aria-hidden="true"></i>
+        <span class="visually-hidden">{{ _('printer_scan_toggle') }}</span>
+      </button>
+      <button type="button" class="btn btn-outline-primary btn-sm" id="printerScanButton">
+        {{ _('printer_scan_button') }}
+      </button>
+    </div>
   </div>
 
-  <div class="card-body">
+  <div class="card-body" id="printerScanBodyWrapper">
     <p class="text-muted small mb-2">{{ _('printer_scan_description') }}</p>
     <div id="printerScanStatus" class="text-muted small mb-2" aria-live="polite">
       {{ _('printer_scan_status_idle') }}
@@ -168,6 +181,23 @@
     const scanTable = document.getElementById('printerScanTable');
     const scanBody = document.getElementById('printerScanBody');
     const scanLastValue = document.getElementById('printerScanLastValue');
+    const scanToggle = document.getElementById('printerScanToggle');
+    const scanToggleIcon = document.getElementById('printerScanToggleIcon');
+    const scanBodyWrapper = document.getElementById('printerScanBodyWrapper');
+
+    function setScanCollapsed(collapsed) {
+      if (!scanToggle || !scanToggleIcon || !scanBodyWrapper) return;
+      scanBodyWrapper.classList.toggle('d-none', collapsed);
+      scanToggle.setAttribute('aria-expanded', String(!collapsed));
+      scanToggleIcon.className = collapsed ? 'bi bi-chevron-down' : 'bi bi-chevron-up';
+    }
+
+    if (scanToggle && scanToggleIcon && scanBodyWrapper) {
+      scanToggle.addEventListener('click', () => {
+        const isCollapsed = scanBodyWrapper.classList.contains('d-none');
+        setScanCollapsed(!isCollapsed);
+      });
+    }
 
     if (!scanButton || !scanStatus || !scanTable || !scanBody || !scanLastValue) return;
 

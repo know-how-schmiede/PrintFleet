@@ -151,8 +151,9 @@
 
   "printer_setup_title": "Drucker verwalten",
   "printer_scan_title": "Netzwerk-Scan",
-  "printer_scan_description": "Scannt das lokale Netzwerk nach OctoPrint, Moonraker und Elegoo Centurio Carbon.",
+  "printer_scan_description": "Scannt das lokale Netzwerk nach OctoPrint, Moonraker, Elegoo Centurio Carbon und Tasmota-Steckdosen.",
   "printer_scan_button": "Netzwerk scannen",
+  "printer_scan_toggle": "Ein-/Ausklappen",
   "printer_scan_status_idle": "Noch kein Scan durchgefuehrt.",
   "printer_scan_status_running": "Scan laeuft...",
   "printer_scan_status_done": "Scan abgeschlossen.",

@@ -151,8 +151,9 @@
 
   "printer_setup_title": "Gestion des imprimantes",
   "printer_scan_title": "Scan reseau",
-  "printer_scan_description": "Analyse le reseau local pour OctoPrint, Moonraker et Elegoo Centurio Carbon.",
+  "printer_scan_description": "Analyse le reseau local pour OctoPrint, Moonraker, Elegoo Centurio Carbon et des prises Tasmota.",
   "printer_scan_button": "Scanner le reseau",
+  "printer_scan_toggle": "Replier/Deplier",
   "printer_scan_status_idle": "Aucun scan lance.",
   "printer_scan_status_running": "Scan en cours...",
   "printer_scan_status_done": "Scan termine.",
