@@ -108,7 +108,11 @@ def init_db_schema_only() -> None:
             telegram_chat_id TEXT,
             language TEXT,
             imprint_markdown TEXT,
-            privacy_markdown TEXT
+            privacy_markdown TEXT,
+            kiosk_stream_url TEXT,
+            kiosk_camera_host TEXT,
+            kiosk_camera_user TEXT,
+            kiosk_camera_password TEXT
         );
         """
     )
@@ -140,6 +144,18 @@ def init_db_schema_only() -> None:
     if "privacy_markdown" not in settings_cols:
         cur.execute("ALTER TABLE settings ADD COLUMN privacy_markdown TEXT")
 
+    if "kiosk_stream_url" not in settings_cols:
+        cur.execute("ALTER TABLE settings ADD COLUMN kiosk_stream_url TEXT")
+
+    if "kiosk_camera_host" not in settings_cols:
+        cur.execute("ALTER TABLE settings ADD COLUMN kiosk_camera_host TEXT")
+
+    if "kiosk_camera_user" not in settings_cols:
+        cur.execute("ALTER TABLE settings ADD COLUMN kiosk_camera_user TEXT")
+
+    if "kiosk_camera_password" not in settings_cols:
+        cur.execute("ALTER TABLE settings ADD COLUMN kiosk_camera_password TEXT")
+
     # Falls noch kein Settings-Datensatz existiert, einen Default-Eintrag erzeugen
     cur.execute("SELECT COUNT(*) AS cnt FROM settings")
     row = cur.fetchone()
@@ -155,9 +171,13 @@ def init_db_schema_only() -> None:
                 telegram_chat_id,
                 language,
                 imprint_markdown,
-                privacy_markdown
+                privacy_markdown,
+                kiosk_stream_url,
+                kiosk_camera_host,
+                kiosk_camera_user,
+                kiosk_camera_password
             )
-            VALUES (1, ?, ?, NULL, 'en', NULL, NULL)
+            VALUES (1, ?, ?, NULL, 'en', NULL, NULL, NULL, NULL, NULL, NULL)
             """,
             (default_poll, default_reload),
         )
@@ -180,7 +200,11 @@ def load_settings_from_db() -> Dict[str, Any]:
             telegram_chat_id,
             language,
             imprint_markdown,
-            privacy_markdown
+            privacy_markdown,
+            kiosk_stream_url,
+            kiosk_camera_host,
+            kiosk_camera_user,
+            kiosk_camera_password
         FROM settings
         WHERE id = 1
         """
@@ -196,6 +220,10 @@ def load_settings_from_db() -> Dict[str, Any]:
         settings["language"] = row["language"] or "en"
         settings["imprint_markdown"] = row["imprint_markdown"] or ""
         settings["privacy_markdown"] = row["privacy_markdown"] or ""
+        settings["kiosk_stream_url"] = row["kiosk_stream_url"] or ""
+        settings["kiosk_camera_host"] = row["kiosk_camera_host"] or ""
+        settings["kiosk_camera_user"] = row["kiosk_camera_user"] or ""
+        settings["kiosk_camera_password"] = row["kiosk_camera_password"] or ""
     else:
         settings["poll_interval"] = float(GLOBAL.get("interval", 5.0)) if isinstance(GLOBAL, dict) else 5.0
         settings["db_reload_interval"] = 30.0
@@ -203,6 +231,10 @@ def load_settings_from_db() -> Dict[str, Any]:
         settings["language"] = "en"
         settings["imprint_markdown"] = ""
         settings["privacy_markdown"] = ""
+        settings["kiosk_stream_url"] = ""
+        settings["kiosk_camera_host"] = ""
+        settings["kiosk_camera_user"] = ""
+        settings["kiosk_camera_password"] = ""
 
     return settings
 

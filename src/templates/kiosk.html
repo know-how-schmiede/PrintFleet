@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+{% block container_class %}container-fluid{% endblock %}
+
+{% block title %}PrintFleet | Kiosk{% endblock %}
+
+{% block extra_head %}
+  <style>
+    nav.navbar {
+      display: none;
+    }
+
+    .kiosk-logo {
+      height: 200px;
+      width: auto;
+    }
+
+    .kiosk-table th,
+    .kiosk-table td {
+      white-space: nowrap;
+    }
+
+    .kiosk-progress {
+      min-width: 180px;
+    }
+
+    .kiosk-progress-bar {
+      height: 8px;
+      background: #e9ecef;
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .kiosk-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: #198754;
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+  <div class="d-flex flex-column align-items-center">
+    <div class="text-center my-4">
+      <img
+        src="{{ url_for('static', filename='PrintFleetLogo200.png') }}"
+        alt="PrintFleet Logo"
+        class="kiosk-logo"
+      >
+    </div>
+
+    {% if kiosk_show_iframe %}
+      <div class="card w-100 mb-3">
+        <div class="card-body p-2">
+          <div class="ratio ratio-16x9">
+            <iframe
+              src="{{ kiosk_stream_url }}"
+              title="Kiosk Stream"
+              allow="autoplay; fullscreen"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </div>
+      </div>
+    {% elif kiosk_show_mjpeg %}
+      <div class="card w-100 mb-3">
+        <div class="card-body p-2">
+          <div class="ratio ratio-16x9 bg-black">
+            <img
+              src="{{ url_for('dashboard.kiosk_stream') }}"
+              alt="Kiosk Stream"
+              class="w-100 h-100 object-fit-contain"
+            >
+          </div>
+        </div>
+      </div>
+    {% endif %}
+
+    <div class="card w-100">
+      <div class="card-body p-2">
+        <div class="table-responsive">
+          <table class="table table-striped table-hover table-sm align-middle mb-0 kiosk-table" id="kioskTable">
+            <thead class="table-light">
+              <tr>
+                <th>{{ _('col_printer_name') }}</th>
+                <th>{{ _('col_state') }}</th>
+                <th>{{ _('col_filename') }}</th>
+                <th>{{ _('col_progress') }}</th>
+                <th>{{ _('col_elapsed') }}</th>
+                <th>{{ _('col_eta') }}</th>
+                <th>{{ _('col_hotend') }}</th>
+                <th>{{ _('col_bed') }}</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+    const STATE_LABELS = {
+      "printing": "{{ _('state_printing') }}",
+      "paused": "{{ _('state_paused') }}",
+      "cancelled": "{{ _('state_cancelled') }}",
+      "complete": "{{ _('state_complete') }}",
+      "error": "{{ _('state_error') }}",
+      "offline": "{{ _('state_offline') }}",
+      "standby": "{{ _('state_standby') }}",
+      "unknown": "{{ _('state_unknown') }}",
+      "no_scanning": "{{ _('state_no_scanning') }}"
+    };
+
+    function stateBadgeClass(state) {
+      switch (state) {
+        case 'printing': return 'bg-success';
+        case 'paused': return 'bg-warning text-dark';
+        case 'cancelled': return 'bg-secondary';
+        case 'complete': return 'bg-success';
+        case 'error': return 'bg-danger';
+        case 'offline': return 'bg-secondary';
+        case 'standby': return 'bg-info text-dark';
+        case 'no_scanning': return 'bg-secondary';
+        default: return 'bg-light text-dark';
+      }
+    }
+
+    function toFixed1(x) {
+      return (typeof x === 'number' && isFinite(x)) ? x.toFixed(1) : '';
+    }
+
+    function removeFileExtension(name) {
+      if (!name) return '';
+      const idx = name.lastIndexOf('.');
+      if (idx > 0) return name.substring(0, idx);
+      return name;
+    }
+
+    function shortenFileName(name, max = 28) {
+      if (!name) return '';
+      if (name.length <= max) return name;
+      return name.substring(0, max - 1) + '...';
+    }
+
+    function pctColor(p) {
+      if (p >= 80) return '#16a34a';
+      if (p >= 40) return '#eab308';
+      return '#dc2626';
+    }
+
+    function formatTemp(current, target, noScanning) {
+      if (noScanning) return '';
+      const hasCurrent = typeof current === 'number' && isFinite(current);
+      const hasTarget = typeof target === 'number' && isFinite(target);
+      if (!hasCurrent && !hasTarget) return '-';
+      const currentText = hasCurrent ? current.toFixed(1) : '-';
+      const targetText = hasTarget ? target.toFixed(1) : '-';
+      return currentText + ' / ' + targetText + ' C';
+    }
+
+    function buildProgressCell(pct) {
+      const wrap = document.createElement('div');
+      wrap.className = 'd-flex align-items-center gap-2';
+
+      const bar = document.createElement('div');
+      bar.className = 'kiosk-progress-bar flex-grow-1';
+
+      const fill = document.createElement('div');
+      fill.className = 'kiosk-progress-fill';
+      fill.style.width = pct + '%';
+      fill.style.background = pctColor(pct);
+
+      const label = document.createElement('span');
+      label.className = 'small text-muted';
+      label.textContent = pct.toFixed(1) + '%';
+
+      bar.appendChild(fill);
+      wrap.appendChild(bar);
+      wrap.appendChild(label);
+      return wrap;
+    }
+
+    async function loadKioskData() {
+      try {
+        const response = await fetch('/api/kiosk/status', { cache: 'no-store' });
+        const data = await response.json();
+        const tbody = document.querySelector('#kioskTable tbody');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+
+        (data || []).forEach((p) => {
+          const name = p.name || '';
+          const state = p.state || 'standby';
+          const noScanning = !!p.no_scanning || state === 'no_scanning';
+          const stateKey = noScanning ? 'no_scanning' : state;
+          const stateLabel = STATE_LABELS[stateKey] || stateKey;
+
+          const filename = noScanning ? '' : (p.filename || '');
+          const cleanName = removeFileExtension(filename);
+          const shortName = shortenFileName(cleanName, 28);
+
+          const progressRaw = noScanning ? 0 : p.progress_pct;
+          const progressPct = (typeof progressRaw === 'number' && isFinite(progressRaw)) ? Math.max(0, Math.min(100, progressRaw)) : 0;
+
+          const elapsed = noScanning ? '' : (p.elapsed_hms || '');
+          const eta = noScanning ? '' : (p.eta_hms || '');
+
+          const hotend = formatTemp(p.hotend, p.hotend_t, noScanning);
+          const bed = formatTemp(p.bed, p.bed_t, noScanning);
+
+          const tr = document.createElement('tr');
+          tr.className = stateKey;
+
+          const nameCell = document.createElement('td');
+          nameCell.textContent = name;
+
+          const stateCell = document.createElement('td');
+          stateCell.innerHTML = '<span class="badge ' + stateBadgeClass(stateKey) + '">' + stateLabel + '</span>';
+
+          const fileCell = document.createElement('td');
+          fileCell.textContent = shortName;
+          fileCell.title = filename;
+
+          const progressCell = document.createElement('td');
+          progressCell.className = 'kiosk-progress';
+          if (!noScanning) {
+            progressCell.appendChild(buildProgressCell(progressPct));
+          }
+
+          const elapsedCell = document.createElement('td');
+          elapsedCell.textContent = elapsed;
+
+          const etaCell = document.createElement('td');
+          etaCell.textContent = eta;
+
+          const hotendCell = document.createElement('td');
+          hotendCell.textContent = hotend;
+
+          const bedCell = document.createElement('td');
+          bedCell.textContent = bed;
+
+          tr.appendChild(nameCell);
+          tr.appendChild(stateCell);
+          tr.appendChild(fileCell);
+          tr.appendChild(progressCell);
+          tr.appendChild(elapsedCell);
+          tr.appendChild(etaCell);
+          tr.appendChild(hotendCell);
+          tr.appendChild(bedCell);
+
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error('kiosk fetch error', err);
+      }
+    }
+
+    loadKioskData();
+    setInterval(loadKioskData, 5000);
+  </script>
+{% endblock %}

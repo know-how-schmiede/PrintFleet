@@ -162,7 +162,14 @@ def require_login():
     endpoint = request.endpoint or ""
     if endpoint.startswith("static"):
         return None
-    if endpoint in ("auth.login", "auth.logout"):
+    public_endpoints = {
+        "auth.login",
+        "auth.logout",
+        "dashboard.kiosk",
+        "dashboard.kiosk_status",
+        "dashboard.kiosk_stream",
+    }
+    if endpoint in public_endpoints:
         return None
     if g.user is None:
         return redirect(url_for("auth.login", next=request.full_path))

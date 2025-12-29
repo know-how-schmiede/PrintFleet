@@ -131,6 +131,13 @@
   "settings_language_help": "Wählt die Übersetzungsdatei aus dem i18n-Ordner aus (Englisch ist der Fallback).",
   "settings_imprint_label": "Impressum (Markdown)",
   "settings_privacy_label": "Datenschutz (Markdown)",
+  "settings_kiosk_stream_label": "Kiosk-Stream-URL",
+  "settings_kiosk_stream_help": "Browserfaehige Stream- oder Embed-URL (z.B. HLS/MJPEG). RTSP laeuft nicht direkt im Browser.",
+  "settings_kiosk_camera_host_label": "Kiosk-Kamera IP",
+  "settings_kiosk_camera_user_label": "Kiosk-Kamera Benutzer",
+  "settings_kiosk_camera_password_label": "Kiosk-Kamera Passwort",
+  "settings_kiosk_stream_generated_label": "Generierte RTSP-URL",
+  "settings_kiosk_stream_generated_help": "Aus den Kamera-Daten erzeugt (rtsp://.../stream1). Fuer den Kiosk eine HLS/MJPEG-URL nutzen.",
 
   "settings_language_en": "Englisch",
   "settings_language_de": "Deutsch",

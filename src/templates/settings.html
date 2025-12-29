@@ -156,6 +156,88 @@
               <div class="form-text">{{ _('settings_db_reload_interval_help') }}</div>
             </div>
 
+            <!-- Kiosk Stream -->
+            <div class="col-12">
+              <label for="kiosk_stream_url" class="form-label">
+                <i class="bi bi-camera-video me-1"></i>
+                {{ _('settings_kiosk_stream_label') if _ else 'Kiosk stream URL' }}
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="kiosk_stream_url"
+                name="kiosk_stream_url"
+                value="{{ settings.kiosk_stream_url }}"
+                title="{{ _('settings_kiosk_stream_help') if _ else 'Browser-compatible stream or embed URL' }}"
+                placeholder="https://..."
+                form="settingsForm"
+              >
+              <div class="form-text">{{ _('settings_kiosk_stream_help') if _ else 'Browser-compatible stream or embed URL' }}</div>
+            </div>
+
+            <!-- Kiosk Camera RTSP -->
+            <div class="col-md-4">
+              <label for="kiosk_camera_host" class="form-label">
+                <i class="bi bi-router me-1"></i>
+                {{ _('settings_kiosk_camera_host_label') if _ else 'Camera IP' }}
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="kiosk_camera_host"
+                name="kiosk_camera_host"
+                value="{{ settings.kiosk_camera_host }}"
+                placeholder="192.168.1.10"
+                form="settingsForm"
+              >
+            </div>
+
+            <div class="col-md-4">
+              <label for="kiosk_camera_user" class="form-label">
+                <i class="bi bi-person me-1"></i>
+                {{ _('settings_kiosk_camera_user_label') if _ else 'Camera user' }}
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="kiosk_camera_user"
+                name="kiosk_camera_user"
+                value="{{ settings.kiosk_camera_user }}"
+                placeholder="admin"
+                form="settingsForm"
+              >
+            </div>
+
+            <div class="col-md-4">
+              <label for="kiosk_camera_password" class="form-label">
+                <i class="bi bi-key me-1"></i>
+                {{ _('settings_kiosk_camera_password_label') if _ else 'Camera password' }}
+              </label>
+              <input
+                type="password"
+                class="form-control"
+                id="kiosk_camera_password"
+                name="kiosk_camera_password"
+                value="{{ settings.kiosk_camera_password }}"
+                form="settingsForm"
+              >
+            </div>
+
+            <div class="col-12">
+              <label for="kiosk_stream_generated" class="form-label">
+                <i class="bi bi-link-45deg me-1"></i>
+                {{ _('settings_kiosk_stream_generated_label') if _ else 'Generated RTSP URL' }}
+              </label>
+              <input
+                type="text"
+                class="form-control"
+                id="kiosk_stream_generated"
+                value="{{ settings.kiosk_stream_generated }}"
+                readonly
+              >
+              <div class="form-text">{{ _('settings_kiosk_stream_generated_help') if _ else 'Generated from camera credentials (rtsp://.../stream1).' }}</div>
+            </div>
+
           </div>
         </div>
 

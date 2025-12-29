@@ -131,6 +131,13 @@
   "settings_language_help": "Sélectionne le fichier de traduction à utiliser (anglais par défaut).",
   "settings_imprint_label": "Imprint (Markdown)",
   "settings_privacy_label": "Privacy (Markdown)",
+  "settings_kiosk_stream_label": "URL du flux kiosk",
+  "settings_kiosk_stream_help": "URL de flux ou d'integration compatible navigateur (ex. HLS/MJPEG). RTSP ne fonctionne pas dans le navigateur.",
+  "settings_kiosk_camera_host_label": "IP de la camera kiosk",
+  "settings_kiosk_camera_user_label": "Utilisateur de la camera kiosk",
+  "settings_kiosk_camera_password_label": "Mot de passe de la camera kiosk",
+  "settings_kiosk_stream_generated_label": "URL RTSP generee",
+  "settings_kiosk_stream_generated_help": "Generee a partir des identifiants (rtsp://.../stream1). Utiliser une URL HLS/MJPEG pour le kiosk.",
 
   "settings_language_en": "Anglais",
   "settings_language_de": "Allemand",

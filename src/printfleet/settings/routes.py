@@ -3,6 +3,7 @@
 
 import sqlite3
 from typing import Any, Dict
+from urllib.parse import quote
 
 from flask import flash, g, redirect, render_template, request, url_for
 from werkzeug.security import generate_password_hash
@@ -28,6 +29,13 @@ def settings_page() -> str:
     error = None
     message = None
 
+    def build_rtsp_url(host: str, user: str, password: str) -> str:
+        if not host or not user or not password:
+            return ""
+        safe_user = quote(user, safe="")
+        safe_password = quote(password, safe="")
+        return f"rtsp://{safe_user}:{safe_password}@{host}:554/stream1"
+
     # Immer frische Settings aus der DB holen
     current_settings: Dict[str, Any] = load_settings_from_db()
 
@@ -38,6 +46,15 @@ def settings_page() -> str:
     current_lang = current_settings.get("language", "en")
     current_imprint_md = current_settings.get("imprint_markdown") or ""
     current_privacy_md = current_settings.get("privacy_markdown") or ""
+    current_kiosk_stream = current_settings.get("kiosk_stream_url") or ""
+    current_kiosk_host = current_settings.get("kiosk_camera_host") or ""
+    current_kiosk_user = current_settings.get("kiosk_camera_user") or ""
+    current_kiosk_password = current_settings.get("kiosk_camera_password") or ""
+    current_kiosk_generated = build_rtsp_url(
+        current_kiosk_host,
+        current_kiosk_user,
+        current_kiosk_password,
+    )
 
     # Werte, die wir ans Template geben
     form_values = {
@@ -47,6 +64,11 @@ def settings_page() -> str:
         "language": current_lang,
         "imprint_markdown": current_imprint_md,
         "privacy_markdown": current_privacy_md,
+        "kiosk_stream_url": current_kiosk_stream,
+        "kiosk_camera_host": current_kiosk_host,
+        "kiosk_camera_user": current_kiosk_user,
+        "kiosk_camera_password": current_kiosk_password,
+        "kiosk_stream_generated": current_kiosk_generated,
     }
 
     if request.method == "POST":
@@ -56,6 +78,10 @@ def settings_page() -> str:
         language = (request.form.get("language") or "").strip() or "en"
         imprint_markdown = request.form.get("imprint_markdown") or ""
         privacy_markdown = request.form.get("privacy_markdown") or ""
+        kiosk_stream_url = (request.form.get("kiosk_stream_url") or "").strip()
+        kiosk_camera_host = (request.form.get("kiosk_camera_host") or "").strip()
+        kiosk_camera_user = (request.form.get("kiosk_camera_user") or "").strip()
+        kiosk_camera_password = request.form.get("kiosk_camera_password") or ""
 
         # Standardmäßig: leere Chat-ID als NULL in der DB
         chat_id_db = chat_id if chat_id else None
@@ -86,6 +112,15 @@ def settings_page() -> str:
         form_values["language"] = language
         form_values["imprint_markdown"] = imprint_markdown
         form_values["privacy_markdown"] = privacy_markdown
+        form_values["kiosk_stream_url"] = kiosk_stream_url
+        form_values["kiosk_camera_host"] = kiosk_camera_host
+        form_values["kiosk_camera_user"] = kiosk_camera_user
+        form_values["kiosk_camera_password"] = kiosk_camera_password
+        form_values["kiosk_stream_generated"] = build_rtsp_url(
+            kiosk_camera_host,
+            kiosk_camera_user,
+            kiosk_camera_password,
+        )
 
         if not error:
             # In DB schreiben
@@ -99,10 +134,25 @@ def settings_page() -> str:
                     telegram_chat_id = ?,
                     language = ?,
                     imprint_markdown = ?,
-                    privacy_markdown = ?
+                    privacy_markdown = ?,
+                    kiosk_stream_url = ?,
+                    kiosk_camera_host = ?,
+                    kiosk_camera_user = ?,
+                    kiosk_camera_password = ?
                 WHERE id = 1
                 """,
-                (poll, reload_interval, chat_id_db, language, imprint_markdown, privacy_markdown),
+                (
+                    poll,
+                    reload_interval,
+                    chat_id_db,
+                    language,
+                    imprint_markdown,
+                    privacy_markdown,
+                    kiosk_stream_url,
+                    kiosk_camera_host,
+                    kiosk_camera_user,
+                    kiosk_camera_password,
+                ),
             )
             conn.commit()
             conn.close()
@@ -117,6 +167,15 @@ def settings_page() -> str:
             form_values["language"] = saved.get("language", language)
             form_values["imprint_markdown"] = saved.get("imprint_markdown") or ""
             form_values["privacy_markdown"] = saved.get("privacy_markdown") or ""
+            form_values["kiosk_stream_url"] = saved.get("kiosk_stream_url") or ""
+            form_values["kiosk_camera_host"] = saved.get("kiosk_camera_host") or ""
+            form_values["kiosk_camera_user"] = saved.get("kiosk_camera_user") or ""
+            form_values["kiosk_camera_password"] = saved.get("kiosk_camera_password") or ""
+            form_values["kiosk_stream_generated"] = build_rtsp_url(
+                form_values["kiosk_camera_host"],
+                form_values["kiosk_camera_user"],
+                form_values["kiosk_camera_password"],
+            )
 
     users = list_users()
     current_user_id = g.user["id"] if getattr(g, "user", None) else None
