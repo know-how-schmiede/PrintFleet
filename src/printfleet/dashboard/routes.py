@@ -25,6 +25,16 @@ def _build_rtsp_url(host: str, user: str, password: str) -> str:
     return f"rtsp://{safe_user}:{safe_password}@{host}:554/stream1"
 
 
+def _is_direct_image_stream(url: str) -> bool:
+    lowered = url.lower()
+    if ".m3u8" in lowered:
+        return False
+    if lowered.endswith((".jpg", ".jpeg", ".mjpg", ".mjpeg")):
+        return True
+    markers = ("mjpg", "mjpeg", "action=stream", "/webcam", "/stream")
+    return any(marker in lowered for marker in markers)
+
+
 @bp.route("/")
 def index() -> str:
     # 'page' wird im Template benutzt, um den aktiven Menüpunkt zu markieren
@@ -48,12 +58,15 @@ def kiosk() -> str:
         cam_password = settings.get(f"kiosk_camera_password_{idx}") or ""
         show_iframe = bool(stream_url and not stream_is_rtsp)
         show_mjpeg = stream_is_rtsp or (cam_host and cam_user and cam_password)
+        show_image = bool(stream_url and not stream_is_rtsp and _is_direct_image_stream(stream_url))
 
         kiosk_streams.append(
             {
                 "index": idx,
-                "iframe_url": stream_url if show_iframe else "",
-                "show_iframe": show_iframe,
+                "iframe_url": stream_url if show_iframe and not show_image else "",
+                "image_url": stream_url if show_image else "",
+                "show_iframe": show_iframe and not show_image,
+                "show_image": show_image,
                 "show_mjpeg": show_mjpeg,
             }
         )

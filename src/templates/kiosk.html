@@ -32,6 +32,11 @@
     .kiosk-streams iframe,
     .kiosk-streams img {
       border: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+      object-position: center;
     }
 
     .kiosk-table th,
@@ -90,11 +95,15 @@
                     allow="autoplay; fullscreen"
                     allowfullscreen
                   ></iframe>
+                {% elif stream.show_image %}
+                  <img
+                    src="{{ stream.image_url }}"
+                    alt="Kiosk Stream {{ stream.index }}"
+                  >
                 {% elif stream.show_mjpeg %}
                   <img
                     src="{{ url_for('dashboard.kiosk_stream', stream_id=stream.index) }}"
                     alt="Kiosk Stream {{ stream.index }}"
-                    class="w-100 h-100 object-fit-contain"
                   >
                 {% else %}
                   <span class="kiosk-stream-empty">Kein Stream</span>
