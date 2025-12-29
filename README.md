@@ -32,6 +32,11 @@ Das Projekt befindet sich aktuell in aktiver Entwicklung und dient als Basis fü
 - Hinterlegung der Steckdosen pro Drucker
 - Vorbereitung für API-basierte Schaltbefehle (Ein/Aus)
 
+## Aktuelle Neuerungen
+- Netzwerk-Scan erkennt neben OctoPrint, Moonraker und Elegoo Centurio Carbon jetzt auch Tasmota-Steckdosen.
+- Scan-Ergebnisse zeigen einen "Weboberflaeche oeffnen"-Button pro Treffer.
+- Der Bereich "Netzwerk-Scan" ist einklappbar, um Platz zu sparen.
+
 ## Sicherheit / Passwoerter
 - Passwoerter werden als Hash in der lokalen SQLite-Datenbank gespeichert: `src/PrintFleet.sqlite3`
 - Der Einstellungen-Export kann Benutzer inkl. Passwort-Hash enthalten
