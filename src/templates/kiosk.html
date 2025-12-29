@@ -9,6 +9,19 @@
       display: none;
     }
 
+    .kiosk-header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin: 1.5rem 0;
+    }
+
+    .kiosk-stream,
+    .kiosk-logo-wrap {
+      width: 50%;
+    }
+
     .kiosk-logo {
       height: 200px;
       width: auto;
@@ -35,45 +48,62 @@
       width: 0%;
       background: #198754;
     }
+
+    @media (max-width: 992px) {
+      .kiosk-header {
+        flex-direction: column;
+      }
+
+      .kiosk-stream,
+      .kiosk-logo-wrap {
+        width: 100%;
+      }
+    }
   </style>
 {% endblock %}
 
 {% block content %}
   <div class="d-flex flex-column align-items-center">
-    <div class="text-center my-4">
-      <img
-        src="{{ url_for('static', filename='PrintFleetLogo200.png') }}"
-        alt="PrintFleet Logo"
-        class="kiosk-logo"
-      >
-    </div>
+    <div class="kiosk-header w-100">
+      {% if kiosk_show_iframe %}
+        <div class="kiosk-stream">
+          <div class="card">
+            <div class="card-body p-2">
+              <div class="ratio ratio-16x9">
+                <iframe
+                  src="{{ kiosk_stream_url }}"
+                  title="Kiosk Stream"
+                  allow="autoplay; fullscreen"
+                  allowfullscreen
+                ></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% elif kiosk_show_mjpeg %}
+        <div class="kiosk-stream">
+          <div class="card">
+            <div class="card-body p-2">
+              <div class="ratio ratio-16x9 bg-black">
+                <img
+                  src="{{ url_for('dashboard.kiosk_stream') }}"
+                  alt="Kiosk Stream"
+                  class="w-100 h-100 object-fit-contain"
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endif %}
 
-    {% if kiosk_show_iframe %}
-      <div class="card w-100 mb-3">
-        <div class="card-body p-2">
-          <div class="ratio ratio-16x9">
-            <iframe
-              src="{{ kiosk_stream_url }}"
-              title="Kiosk Stream"
-              allow="autoplay; fullscreen"
-              allowfullscreen
-            ></iframe>
-          </div>
-        </div>
+      <div class="kiosk-logo-wrap text-center">
+        <img
+          src="{{ url_for('static', filename='PrintFleetLogo200.png') }}"
+          alt="PrintFleet Logo"
+          class="kiosk-logo"
+        >
       </div>
-    {% elif kiosk_show_mjpeg %}
-      <div class="card w-100 mb-3">
-        <div class="card-body p-2">
-          <div class="ratio ratio-16x9 bg-black">
-            <img
-              src="{{ url_for('dashboard.kiosk_stream') }}"
-              alt="Kiosk Stream"
-              class="w-100 h-100 object-fit-contain"
-            >
-          </div>
-        </div>
-      </div>
-    {% endif %}
+    </div>
 
     <div class="card w-100">
       <div class="card-body p-2">

@@ -1,5 +1,9 @@
 # Versionen PrintFleet
 
+## Version 0.5.7
+
+Setup FFmpeg für Stream, Anpassungen Stream
+
 ## Version 0.5.6
 
 Kisok-Dashboard für TV-Ansicht, Lifestream Tapo Sicherheitskameras
