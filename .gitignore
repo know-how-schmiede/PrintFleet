@@ -1,11 +1,59 @@
 # Bytecode
 __pycache__/
 *.py[cod]
-/.venv
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Tests / coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+
+# Logs
+*.log
+*.log.*
+*.pid
+*.pid.lock
 
 # Local DB
-src/PrintFleet.sqlite3
 *.sqlite3
 src/PrintFleet.sqlite3
-src/PrintFleet.sqlite3
-*.sqlite3
+
+# OS / editor
+.DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+*.tmp
+*.bak
+*~
+*.orig
+*.rej
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Temp dirs
+tmp/
+temp/
+.cache/
+logs/
+log/

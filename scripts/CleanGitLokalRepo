@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if ! command -v git >/dev/null 2>&1; then
+  echo "ERROR: git is not installed." >&2
+  exit 1
+fi
+
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+repo_dir="$(git -C "${script_dir}/.." rev-parse --show-toplevel 2>/dev/null || true)"
+
+if [[ -z "$repo_dir" ]]; then
+  echo "ERROR: Could not locate git repository root." >&2
+  exit 1
+fi
+
+cd "$repo_dir"
+
+echo "Repository: $repo_dir"
+echo
+echo "Current git status:"
+git status -sb
+echo
+echo "Preview of ignored files to be removed:"
+git clean -X -d -n
+echo
+
+read -r -p "Remove these ignored files now? (y/N): " answer
+answer="$(printf '%s' "$answer" | tr '[:upper:]' '[:lower:]')"
+if [[ "$answer" != "y" ]]; then
+  echo "Aborted. Nothing removed."
+  exit 0
+fi
+
+git clean -X -d -f
+
+echo
+echo "Cleanup done. Current git status:"
+git status -sb

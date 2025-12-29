@@ -6,6 +6,7 @@ This folder contains Bash scripts:
 - `setupPrintFleetService` installs PrintFleet as a systemd service.
 - `setupPrintFleetTelegram` configures the Telegram bot token and chat ID.
 - `updatePrintFleetService` updates the repo and restarts the service.
+- `CleanGitLokalRepo` removes ignored temp files from the repo (safe cleanup).
 
 Both scripts are designed for beginners. You can press Enter to accept defaults.
 
@@ -109,6 +110,16 @@ Manual:
 cd /opt/printfleet && git pull
 systemctl restart printfleet
 ```
+
+## Cleanup before updates (optional)
+
+If you see update errors caused by leftover temp files, run:
+
+```bash
+/opt/printfleet/scripts/CleanGitLokalRepo
+```
+
+The script shows a preview and only removes ignored files after confirmation.
 
 ## Configure Telegram
 
