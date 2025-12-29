@@ -5,21 +5,17 @@
 
 {% block extra_head %}
   <style>
-    nav.navbar {
-      display: none;
-    }
-
     .kiosk-streams {
+      --kiosk-gap: 0.5rem;
       display: flex;
-      gap: 1rem;
+      gap: var(--kiosk-gap);
       width: 100%;
-      overflow-x: auto;
-      padding: 1rem 0;
+      overflow-x: hidden;
+      padding: 0.75rem 0 1rem;
     }
 
     .kiosk-stream-tile {
-      flex: 0 0 30%;
-      min-width: 280px;
+      flex: 0 0 calc((100% - (3 * var(--kiosk-gap))) / 4);
     }
 
     .kiosk-stream-empty {
@@ -28,27 +24,14 @@
       height: 100%;
     }
 
-    .kiosk-logo-bar {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 0.5rem 0 1rem;
-      border-bottom: 1px solid #e5e7eb;
-    }
-
-    .kiosk-logo {
-      height: 110px;
-      width: auto;
-    }
-
     .kiosk-layout-compact .kiosk-streams {
-      gap: 0.5rem;
-      padding: 0.5rem 0;
+      --kiosk-gap: 0.35rem;
+      padding: 0.35rem 0 0.75rem;
     }
 
-    .kiosk-layout-compact .kiosk-logo {
-      height: 80px;
+    .kiosk-streams iframe,
+    .kiosk-streams img {
+      border: 0;
     }
 
     .kiosk-table th,
@@ -74,18 +57,18 @@
     }
 
     @media (max-width: 1200px) {
-      .kiosk-streams {
-        gap: 0.75rem;
-      }
-
       .kiosk-stream-tile {
-        flex: 0 0 45%;
+        flex: 0 0 calc((100% - (1 * var(--kiosk-gap))) / 2);
       }
     }
 
     @media (max-width: 768px) {
+      .kiosk-streams {
+        flex-wrap: wrap;
+      }
+
       .kiosk-stream-tile {
-        flex: 0 0 85%;
+        flex: 0 0 100%;
       }
     }
   </style>
@@ -103,6 +86,7 @@
                   <iframe
                     src="{{ stream.iframe_url }}"
                     title="Kiosk Stream {{ stream.index }}"
+                    scrolling="no"
                     allow="autoplay; fullscreen"
                     allowfullscreen
                   ></iframe>
@@ -120,14 +104,6 @@
           </div>
         </div>
       {% endfor %}
-    </div>
-
-    <div class="kiosk-logo-bar">
-      <img
-        src="{{ url_for('static', filename='PrintFleetLogo200.png') }}"
-        alt="PrintFleet Logo"
-        class="kiosk-logo"
-      >
     </div>
 
     <div class="card w-100">
