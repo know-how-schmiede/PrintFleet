@@ -147,6 +147,7 @@
         <thead>
           <tr>
             <th>{{ _('printer_scan_col_type') }}</th>
+            <th>{{ _('col_link') }}</th>
             <th>{{ _('printer_scan_col_host') }}</th>
             <th>{{ _('printer_scan_col_ports') }}</th>
           </tr>
@@ -250,11 +251,41 @@
         return;
       }
 
+      function buildWebUrl(item) {
+        const ip = item && item.ip ? item.ip : '';
+        const ports = Array.isArray(item && item.ports) ? item.ports : [];
+        if (!ip || ports.length === 0) return '';
+
+        const preferred = [443, 80, 5000, 7125, 8080];
+        let port = ports.find((p) => preferred.includes(p));
+        if (!port) {
+          port = ports[0];
+        }
+
+        const protocol = port === 443 ? 'https' : 'http';
+        const omitPort = (protocol === 'https' && port === 443) || (protocol === 'http' && port === 80);
+        return `${protocol}://${ip}${omitPort ? '' : ':' + port}`;
+      }
+
       results.forEach((item) => {
         const row = document.createElement('tr');
 
         const typeCell = document.createElement('td');
         typeCell.textContent = typeLabels[item.type] || item.type || 'Unknown';
+
+        const webCell = document.createElement('td');
+        const webUrl = buildWebUrl(item);
+        if (webUrl) {
+          const link = document.createElement('a');
+          link.className = 'btn btn-outline-primary btn-sm';
+          link.href = webUrl;
+          link.target = '_blank';
+          link.rel = 'noreferrer';
+          link.textContent = "{{ _('btn_open_web_ui') }}";
+          webCell.appendChild(link);
+        } else {
+          webCell.textContent = '-';
+        }
 
         const hostCell = document.createElement('td');
         hostCell.textContent = item.ip || '';
@@ -263,6 +294,7 @@
         portsCell.textContent = Array.isArray(item.ports) ? item.ports.join(', ') : '';
 
         row.appendChild(typeCell);
+        row.appendChild(webCell);
         row.appendChild(hostCell);
         row.appendChild(portsCell);
         scanBody.appendChild(row);
