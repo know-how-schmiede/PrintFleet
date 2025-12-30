@@ -57,3 +57,5 @@ temp/
 .cache/
 logs/
 log/
+src/lan_scan.log
+src/printfleet/__pycache__/version.cpython-313.pyc

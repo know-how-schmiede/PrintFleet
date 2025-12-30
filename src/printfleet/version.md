@@ -1,5 +1,13 @@
 # Versionen PrintFleet
 
+## Version 0.5.14
+
+Menü-Leiste Hover
+
+## Version 0.5.13
+
+Sticky Nav- und Menüleiste
+
 ## Version 0.5.12
 
 Menu-Leiste in Dashboard-Ansicht

@@ -25,9 +25,10 @@
 
 <body class="d-flex flex-column min-vh-100">
 
-  <!-- NAVBAR -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid position-relative">
+  <div class="sticky-top">
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-1">
+      <div class="container-fluid position-relative">
 
       <!-- Brand / Logo -->
       <a class="navbar-brand d-flex align-items-center" href="{{ url_for('dashboard.index') }}">
@@ -41,65 +42,61 @@
             class="position-absolute top-50 start-50 translate-middle text-light text-nowrap"
             style="font-size: 1.2em; text-transform: none;"></span>
 
-      {% if current_user %}
-      <!-- Toggler für Mobile -->
-      <button class="navbar-toggler" type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#mainNavbar"
-              aria-controls="mainNavbar"
-              aria-expanded="false"
-              aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-
-      <!-- Kollabierbarer Bereich -->
-      <div class="collapse navbar-collapse" id="mainNavbar">
-        <!-- Link-Liste links -->
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <!-- Dashboard -->
-          <li class="nav-item">
-            <a href="{{ url_for('dashboard.index') }}"
-               class="nav-link {% if page == 'overview' %}active{% endif %}">
-              <i class="bi bi-speedometer2 me-1"></i>
-              {{ _('menu_dashboard') }}
-            </a>
-          </li>
-
-          <!-- Settings -->
-          <li class="nav-item">
-            <a href="{{ url_for('settings.settings_page') }}"
-               class="nav-link {% if page == 'settings' %}active{% endif %}">
-              <i class="bi bi-gear me-1"></i>
-              {{ _('menu_settings') }}
-            </a>
-          </li>
-
-          <!-- Printer Setup -->
-          <li class="nav-item">
-            <a href="{{ url_for('printers.printer_list') }}"
-               class="nav-link {% if page == 'printers' %}active{% endif %}">
-              <i class="bi bi-printer me-1"></i>
-              Printer Setup
-            </a>
-          </li>
-
-          <!-- Mein Profil -->
-          <li class="nav-item">
-            <a href="{{ url_for('auth.profile') }}"
-               class="nav-link {% if page == 'profile' %}active{% endif %}">
-              <i class="bi bi-person-badge me-1"></i>
-              {{ _('menu_profile') }}
-            </a>
-          </li>
-        </ul>
-
-      </div>
-      {% endif %}
       <div class="ms-auto d-flex align-items-center">
         <span id="navbarTime" class="fw-bold fs-2 text-light"></span>
       </div>
     </div>
   </nav>
+
+  {% if current_user and page != 'kiosk' %}
+  <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary border-bottom py-0 menu-bar">
+    <div class="container-fluid">
+      <button class="navbar-toggler" type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#secondaryNavbar"
+              aria-controls="secondaryNavbar"
+              aria-expanded="false"
+              aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="secondaryNavbar">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a href="{{ url_for('dashboard.index') }}"
+               class="nav-link py-1 {% if page == 'overview' %}active{% endif %}">
+              <i class="bi bi-speedometer2 me-1"></i>
+              {{ _('menu_dashboard') }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url_for('settings.settings_page') }}"
+               class="nav-link py-1 {% if page == 'settings' %}active{% endif %}">
+              <i class="bi bi-gear me-1"></i>
+              {{ _('menu_settings') }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url_for('printers.printer_list') }}"
+               class="nav-link py-1 {% if page == 'printers' %}active{% endif %}">
+              <i class="bi bi-printer me-1"></i>
+              Printer Setup
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="{{ url_for('auth.profile') }}"
+               class="nav-link py-1 {% if page == 'profile' %}active{% endif %}">
+              <i class="bi bi-person-badge me-1"></i>
+              {{ _('menu_profile') }}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  {% endif %}
+  </div>
+
 
   <!-- Hauptinhalt -->
   <div class="{% block container_class %}container{% endblock %} my-3 flex-grow-1">

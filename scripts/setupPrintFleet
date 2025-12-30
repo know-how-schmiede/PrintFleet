@@ -56,6 +56,7 @@ fi
 echo "Installing packages..."
 DEBIAN_FRONTEND=noninteractive apt-get update
 DEBIAN_FRONTEND=noninteractive apt-get -y install git python3 python3-venv python3-pip build-essential ffmpeg
+echo "Note: Live-Wall stream requires ffmpeg (installed above)."
 
 if ! id -u "$SERVICE_USER" >/dev/null 2>&1; then
   useradd -m -s /bin/bash "$SERVICE_USER"
