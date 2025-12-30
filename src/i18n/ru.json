@@ -60,6 +60,7 @@
   "refresh_interval_info": "Обновление каждые 5 секунд",
 
   "theme_label": "Тема:",
+  "theme_live_wall_label": "Theme Live-Wall",
   "theme_default": "По умолчанию",
   "theme_light_blue": "Светло-синяя",
   "theme_dark_blue": "Тёмно-синяя",

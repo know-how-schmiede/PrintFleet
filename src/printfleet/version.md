@@ -1,5 +1,17 @@
 # Versionen PrintFleet
 
+## Version 0.5.12
+
+Menu-Leiste in Dashboard-Ansicht
+
+## Version 0.5.11
+
+Theme-Auswahl in Einstellugnen, Theme-Auswahl für Live-Wall Ansicht
+
+## Version 0.5.10
+
+Uhrzeit und Datum in Nav-Leiste (Live-Wall)
+
 ## Version 0.5.9
 
 direkter Link auf Live-Wall (Anmelden-Formular),Kiosk wird Live-Wall

@@ -27,7 +27,7 @@
 
   <!-- NAVBAR -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <div class="container-fluid">
+    <div class="container-fluid position-relative">
 
       <!-- Brand / Logo -->
       <a class="navbar-brand d-flex align-items-center" href="{{ url_for('dashboard.index') }}">
@@ -37,6 +37,9 @@
              class="me-2">
         <span>PrintFleet</span>
       </a>
+      <span id="navbarDate"
+            class="position-absolute top-50 start-50 translate-middle text-light text-nowrap"
+            style="font-size: 1.2em; text-transform: none;"></span>
 
       {% if current_user %}
       <!-- Toggler für Mobile -->
@@ -90,32 +93,11 @@
           </li>
         </ul>
 
-        <!-- Theme-Auswahl rechts -->
-        <div class="d-flex align-items-center">
-          <label for="themeSelect" class="me-2 mb-0 small text-light">
-            {{ _('theme_label') }}
-          </label>
-          <select id="themeSelect" class="form-select form-select-sm">
-            <!-- Helle Themes -->
-            <option value="lux">Lux</option>
-            <option value="flatly">Flatly</option>
-            <option value="materia">Materia</option>
-            <option value="minty">Minty</option>
-            <option value="pulse">Pulse</option>
-            <option value="sandstone">Sandstone</option>
-            <option value="solar">Solar</option>
-            <option value="spacelab">Spacelab</option>
-            <option value="yeti">Yeti</option>
-
-            <!-- Dunklere Themes -->
-            <option value="slate">Slate</option>
-            <option value="darkly">Darkly</option>
-            <option value="cyborg">Cyborg</option>
-            <option value="superhero">Superhero</option>
-          </select>
-        </div>
       </div>
       {% endif %}
+      <div class="ms-auto d-flex align-items-center">
+        <span id="navbarTime" class="fw-bold fs-2 text-light"></span>
+      </div>
     </div>
   </nav>
 
@@ -148,12 +130,13 @@
     <!-- Theme-Script (Bootswatch) -->
   <script>
     (function() {
-      const THEME_KEY = 'printfleet-theme';
-      const select = document.getElementById('themeSelect');
       const linkEl = document.getElementById('themeStylesheet');
+      if (!linkEl) return;
 
-      if (!select || !linkEl) return;
-
+      const PAGE = "{{ page|default('') }}";
+      const THEME_KEY_DEFAULT = 'printfleet-theme';
+      const THEME_KEY_LIVE_WALL = 'printfleet-theme-live-wall';
+      const DEFAULT_THEME = 'lux';
       const BASE_URL = 'https://cdn.jsdelivr.net/npm/bootswatch@5.3.3/dist/';
 
       // Verfügbare Themes (Keys müssen zu den option values im <select> passen)
@@ -174,24 +157,70 @@
       };
 
       function applyTheme(themeKey) {
-        const slug = THEMES[themeKey] || THEMES['lux'];  // Fallback: lux
+        const slug = THEMES[themeKey] || THEMES[DEFAULT_THEME];
         linkEl.href = BASE_URL + slug + '/bootstrap.min.css';
       }
 
-      // gespeichertes Theme laden
-      const savedTheme = localStorage.getItem(THEME_KEY);
-      const initialTheme = (savedTheme && THEMES[savedTheme]) ? savedTheme : 'lux';
+      function storedTheme(key) {
+        const saved = localStorage.getItem(key);
+        return (saved && THEMES[saved]) ? saved : "";
+      }
 
-      // initial anwenden
+      const savedDefault = storedTheme(THEME_KEY_DEFAULT) || DEFAULT_THEME;
+      const savedLiveWall = storedTheme(THEME_KEY_LIVE_WALL) || savedDefault;
+      const initialTheme = PAGE === "kiosk" ? savedLiveWall : savedDefault;
+
       applyTheme(initialTheme);
-      select.value = initialTheme;
 
-      // Wechsel bei Änderung
-      select.addEventListener('change', function() {
-        const value = this.value;
-        applyTheme(value);
-        localStorage.setItem(THEME_KEY, value);
+      const select = document.getElementById('themeSelect');
+      if (select) {
+        select.value = savedDefault;
+        select.addEventListener('change', function() {
+          const value = this.value;
+          applyTheme(value);
+          localStorage.setItem(THEME_KEY_DEFAULT, value);
+        });
+      }
+
+      const liveWallSelect = document.getElementById('kioskThemeSelect');
+      if (liveWallSelect) {
+        liveWallSelect.value = savedLiveWall;
+        liveWallSelect.addEventListener('change', function() {
+          const value = this.value;
+          localStorage.setItem(THEME_KEY_LIVE_WALL, value);
+          if (PAGE === "kiosk") {
+            applyTheme(value);
+          }
+        });
+      }
+    })();
+  </script>
+  <script>
+    (function() {
+      const dateEl = document.getElementById('navbarDate');
+      const timeEl = document.getElementById('navbarTime');
+      if (!dateEl && !timeEl) return;
+
+      const dateFormatter = new Intl.DateTimeFormat('de-DE', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
       });
+      const timeFormatter = new Intl.DateTimeFormat('de-DE', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false
+      });
+
+      function updateDateTime() {
+        const now = new Date();
+        if (dateEl) dateEl.textContent = dateFormatter.format(now);
+        if (timeEl) timeEl.textContent = timeFormatter.format(now);
+      }
+
+      updateDateTime();
+      setInterval(updateDateTime, 1000);
     })();
   </script>
 

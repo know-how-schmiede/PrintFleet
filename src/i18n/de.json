@@ -112,6 +112,7 @@
   "refresh_interval_info": "Aktualisierung alle 5 Sekunden",
 
   "theme_label": "Theme:",
+  "theme_live_wall_label": "Theme Live-Wall",
   "theme_default": "Standard",
   "theme_light_blue": "Hellblau",
   "theme_dark_blue": "Dunkelblau",
