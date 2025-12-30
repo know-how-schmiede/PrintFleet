@@ -41,6 +41,9 @@
           <button class="btn btn-primary w-100" type="submit">
             {{ _('login_create_account') if first_user else _('login_button') }}
           </button>
+          <a class="btn btn-outline-secondary w-100 mt-2" href="{{ url_for('dashboard.kiosk') }}">
+            {{ _('login_kiosk_button') }}
+          </a>
         </form>
       </div>
     </div>

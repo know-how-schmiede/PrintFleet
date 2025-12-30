@@ -1,670 +1,627 @@
-2025-12-29 13:33:55,713 INFO Logdatei: C:\Data\GitHub\PrintFleet\src\lan_scan.log
-2025-12-29 13:33:55,717 DEBUG Lokale IPv4-Adressen: 192.168.1.190
-2025-12-29 13:33:55,717 DEBUG Netz-Kandidaten: 192.168.1.190, 192.168.1.190
-2025-12-29 13:33:55,717 INFO Starte Scan fuer 192.168.1.0/24 (254 Hosts).
-2025-12-29 13:33:55,718 DEBUG Scanne Host 192.168.1.1
-2025-12-29 13:33:55,718 DEBUG Scanne Host 192.168.1.2
-2025-12-29 13:33:55,718 DEBUG Scanne Host 192.168.1.3
-2025-12-29 13:33:55,718 DEBUG Scanne Host 192.168.1.4
-2025-12-29 13:33:55,719 DEBUG Scanne Host 192.168.1.5
-2025-12-29 13:33:55,719 DEBUG Scanne Host 192.168.1.6
-2025-12-29 13:33:55,719 DEBUG Scanne Host 192.168.1.7
-2025-12-29 13:33:55,719 DEBUG Scanne Host 192.168.1.8
-2025-12-29 13:33:55,719 DEBUG Scanne Host 192.168.1.9
-2025-12-29 13:33:55,719 DEBUG Offener Port 192.168.1.1:80
-2025-12-29 13:33:55,719 DEBUG Scanne Host 192.168.1.10
-2025-12-29 13:33:55,719 DEBUG Scanne Host 192.168.1.11
-2025-12-29 13:33:55,720 DEBUG Scanne Host 192.168.1.12
-2025-12-29 13:33:55,720 DEBUG Scanne Host 192.168.1.13
-2025-12-29 13:33:55,720 DEBUG Scanne Host 192.168.1.14
-2025-12-29 13:33:55,720 DEBUG Scanne Host 192.168.1.15
-2025-12-29 13:33:55,720 DEBUG Scanne Host 192.168.1.16
-2025-12-29 13:33:55,720 DEBUG Scanne Host 192.168.1.17
-2025-12-29 13:33:55,721 DEBUG Scanne Host 192.168.1.18
-2025-12-29 13:33:55,721 DEBUG Scanne Host 192.168.1.19
-2025-12-29 13:33:55,721 DEBUG Offener Port 192.168.1.14:80
-2025-12-29 13:33:55,721 DEBUG Scanne Host 192.168.1.20
-2025-12-29 13:33:55,721 DEBUG Offener Port 192.168.1.15:80
-2025-12-29 13:33:55,721 DEBUG Scanne Host 192.168.1.21
-2025-12-29 13:33:55,721 DEBUG Scanne Host 192.168.1.22
-2025-12-29 13:33:55,722 DEBUG HTTP-Banner 192.168.1.1:80 /: http/1.0 200 ok
+2025-12-30 16:18:04,527 INFO Logdatei: C:\Data\GitHub\PrintFleet\src\lan_scan.log
+2025-12-30 16:18:04,532 DEBUG Lokale IPv4-Adressen: 192.168.1.190
+2025-12-30 16:18:04,533 DEBUG Netz-Kandidaten: 192.168.1.190, 192.168.1.190
+2025-12-30 16:18:04,533 INFO Starte Scan fuer 192.168.1.0/24 (254 Hosts).
+2025-12-30 16:18:04,533 DEBUG Scanne Host 192.168.1.1
+2025-12-30 16:18:04,533 DEBUG Scanne Host 192.168.1.2
+2025-12-30 16:18:04,533 DEBUG Scanne Host 192.168.1.3
+2025-12-30 16:18:04,534 DEBUG Scanne Host 192.168.1.4
+2025-12-30 16:18:04,534 DEBUG Scanne Host 192.168.1.5
+2025-12-30 16:18:04,534 DEBUG Scanne Host 192.168.1.6
+2025-12-30 16:18:04,534 DEBUG Scanne Host 192.168.1.7
+2025-12-30 16:18:04,534 DEBUG Offener Port 192.168.1.1:80
+2025-12-30 16:18:04,534 DEBUG Scanne Host 192.168.1.8
+2025-12-30 16:18:04,535 DEBUG Scanne Host 192.168.1.9
+2025-12-30 16:18:04,535 DEBUG Scanne Host 192.168.1.10
+2025-12-30 16:18:04,535 DEBUG Scanne Host 192.168.1.11
+2025-12-30 16:18:04,535 DEBUG Scanne Host 192.168.1.12
+2025-12-30 16:18:04,536 DEBUG Scanne Host 192.168.1.13
+2025-12-30 16:18:04,536 DEBUG Scanne Host 192.168.1.14
+2025-12-30 16:18:04,536 DEBUG Scanne Host 192.168.1.15
+2025-12-30 16:18:04,536 DEBUG Scanne Host 192.168.1.16
+2025-12-30 16:18:04,537 DEBUG Scanne Host 192.168.1.17
+2025-12-30 16:18:04,537 DEBUG Scanne Host 192.168.1.18
+2025-12-30 16:18:04,537 DEBUG Scanne Host 192.168.1.19
+2025-12-30 16:18:04,537 DEBUG Scanne Host 192.168.1.20
+2025-12-30 16:18:04,537 DEBUG Scanne Host 192.168.1.21
+2025-12-30 16:18:04,537 DEBUG Offener Port 192.168.1.15:80
+2025-12-30 16:18:04,538 DEBUG Scanne Host 192.168.1.22
+2025-12-30 16:18:04,538 DEBUG Scanne Host 192.168.1.23
+2025-12-30 16:18:04,538 DEBUG Offener Port 192.168.1.14:80
+2025-12-30 16:18:04,538 DEBUG HTTP-Banner 192.168.1.1:80 /: http/1.0 200 ok
 server: httpd/2.0
 x-frame-options: sameorigin
 x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:33:56 gmt
+date: tue, 30 dec 2025 15:18:07 gmt
 content-type: text/html
 
-2025-12-29 13:33:55,722 DEBUG Scanne Host 192.168.1.23
-2025-12-29 13:33:55,722 DEBUG Scanne Host 192.168.1.24
-2025-12-29 13:33:55,722 DEBUG Scanne Host 192.168.1.25
-2025-12-29 13:33:55,722 DEBUG Scanne Host 192.168.1.26
-2025-12-29 13:33:55,723 DEBUG Scanne Host 192.168.1.27
-2025-12-29 13:33:55,723 DEBUG Scanne Host 192.168.1.28
-2025-12-29 13:33:55,723 DEBUG Scanne Host 192.168.1.29
-2025-12-29 13:33:55,723 DEBUG Scanne Host 192.168.1.30
-2025-12-29 13:33:55,723 DEBUG Scanne Host 192.168.1.31
-2025-12-29 13:33:55,723 DEBUG Scanne Host 192.168.1.32
-2025-12-29 13:33:55,724 DEBUG Scanne Host 192.168.1.33
-2025-12-29 13:33:55,724 DEBUG Scanne Host 192.168.1.34
-2025-12-29 13:33:55,724 DEBUG Scanne Host 192.168.1.35
-2025-12-29 13:33:55,724 DEBUG Scanne Host 192.168.1.36
-2025-12-29 13:33:55,724 DEBUG HTTP-Banner 192.168.1.1:80 /api/version: http/1.0 404 not found
+2025-12-30 16:18:04,538 DEBUG Scanne Host 192.168.1.24
+2025-12-30 16:18:04,538 DEBUG Scanne Host 192.168.1.25
+2025-12-30 16:18:04,539 DEBUG Scanne Host 192.168.1.26
+2025-12-30 16:18:04,539 DEBUG Scanne Host 192.168.1.27
+2025-12-30 16:18:04,539 DEBUG Scanne Host 192.168.1.28
+2025-12-30 16:18:04,539 DEBUG Scanne Host 192.168.1.29
+2025-12-30 16:18:04,539 DEBUG Scanne Host 192.168.1.30
+2025-12-30 16:18:04,540 DEBUG Scanne Host 192.168.1.31
+2025-12-30 16:18:04,540 DEBUG HTTP-Banner 192.168.1.15:80 /: http/1.1 403 forbidden
+date: tue, 30 dec 2025 15:18:07 gmt
+server: apache
+x-frame-options: sameorigin
+content-length: 199
+connection: close
+content-type: 
+2025-12-30 16:18:04,540 DEBUG Scanne Host 192.168.1.32
+2025-12-30 16:18:04,540 DEBUG Scanne Host 192.168.1.33
+2025-12-30 16:18:04,540 DEBUG Scanne Host 192.168.1.34
+2025-12-30 16:18:04,541 DEBUG Scanne Host 192.168.1.35
+2025-12-30 16:18:04,541 DEBUG Scanne Host 192.168.1.36
+2025-12-30 16:18:04,541 DEBUG Scanne Host 192.168.1.37
+2025-12-30 16:18:04,541 DEBUG HTTP-Banner 192.168.1.1:80 /api/version: http/1.0 404 not found
 server: httpd/2.0
 x-frame-options: sameorigin
 x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:33:56 gmt
+date: tue, 30 dec 2025 15:18:07 gmt
 content-type: text
-2025-12-29 13:33:55,724 DEBUG Scanne Host 192.168.1.37
-2025-12-29 13:33:55,724 DEBUG Scanne Host 192.168.1.38
-2025-12-29 13:33:55,725 DEBUG Scanne Host 192.168.1.39
-2025-12-29 13:33:55,725 DEBUG Scanne Host 192.168.1.40
-2025-12-29 13:33:55,725 DEBUG Scanne Host 192.168.1.41
-2025-12-29 13:33:55,725 DEBUG Offener Port 192.168.1.20:80
-2025-12-29 13:33:55,725 DEBUG Scanne Host 192.168.1.42
-2025-12-29 13:33:55,725 DEBUG Scanne Host 192.168.1.43
-2025-12-29 13:33:55,726 DEBUG Scanne Host 192.168.1.44
-2025-12-29 13:33:55,726 DEBUG Scanne Host 192.168.1.45
-2025-12-29 13:33:55,726 DEBUG Scanne Host 192.168.1.46
-2025-12-29 13:33:55,726 DEBUG Scanne Host 192.168.1.47
-2025-12-29 13:33:55,726 DEBUG Scanne Host 192.168.1.48
-2025-12-29 13:33:55,727 DEBUG Scanne Host 192.168.1.49
-2025-12-29 13:33:55,727 DEBUG Scanne Host 192.168.1.50
-2025-12-29 13:33:55,727 DEBUG Scanne Host 192.168.1.51
-2025-12-29 13:33:55,727 DEBUG HTTP-Banner 192.168.1.1:80 /server/info: http/1.0 404 not found
+2025-12-30 16:18:04,541 DEBUG Scanne Host 192.168.1.38
+2025-12-30 16:18:04,542 DEBUG Scanne Host 192.168.1.39
+2025-12-30 16:18:04,542 DEBUG Scanne Host 192.168.1.40
+2025-12-30 16:18:04,542 DEBUG Scanne Host 192.168.1.41
+2025-12-30 16:18:04,542 DEBUG Scanne Host 192.168.1.42
+2025-12-30 16:18:04,542 DEBUG HTTP-Banner 192.168.1.15:80 /api/version: http/1.1 404 not found
+date: tue, 30 dec 2025 15:18:07 gmt
+server: apache
+x-frame-options: sameorigin
+content-length: 196
+connection: close
+content-type: 
+2025-12-30 16:18:04,542 DEBUG Scanne Host 192.168.1.43
+2025-12-30 16:18:04,543 DEBUG Scanne Host 192.168.1.44
+2025-12-30 16:18:04,543 DEBUG Scanne Host 192.168.1.45
+2025-12-30 16:18:04,543 DEBUG Scanne Host 192.168.1.46
+2025-12-30 16:18:04,543 DEBUG Scanne Host 192.168.1.47
+2025-12-30 16:18:04,543 DEBUG Scanne Host 192.168.1.48
+2025-12-30 16:18:04,544 DEBUG Scanne Host 192.168.1.49
+2025-12-30 16:18:04,544 DEBUG Scanne Host 192.168.1.50
+2025-12-30 16:18:04,544 DEBUG Scanne Host 192.168.1.51
+2025-12-30 16:18:04,544 DEBUG Scanne Host 192.168.1.52
+2025-12-30 16:18:04,544 DEBUG HTTP-Banner 192.168.1.1:80 /server/info: http/1.0 404 not found
 server: httpd/2.0
 x-frame-options: sameorigin
 x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:33:56 gmt
+date: tue, 30 dec 2025 15:18:07 gmt
 content-type: text
-2025-12-29 13:33:55,727 DEBUG Scanne Host 192.168.1.52
-2025-12-29 13:33:55,727 DEBUG Scanne Host 192.168.1.53
-2025-12-29 13:33:55,727 DEBUG Scanne Host 192.168.1.54
-2025-12-29 13:33:55,728 DEBUG Scanne Host 192.168.1.55
-2025-12-29 13:33:55,728 DEBUG Scanne Host 192.168.1.56
-2025-12-29 13:33:55,728 DEBUG Scanne Host 192.168.1.57
-2025-12-29 13:33:55,728 DEBUG Scanne Host 192.168.1.58
-2025-12-29 13:33:55,728 DEBUG Scanne Host 192.168.1.59
-2025-12-29 13:33:55,728 DEBUG Scanne Host 192.168.1.60
-2025-12-29 13:33:55,728 DEBUG Scanne Host 192.168.1.61
-2025-12-29 13:33:55,729 DEBUG Scanne Host 192.168.1.62
-2025-12-29 13:33:55,729 DEBUG Scanne Host 192.168.1.63
-2025-12-29 13:33:55,729 DEBUG Scanne Host 192.168.1.64
-2025-12-29 13:33:55,733 DEBUG HTTP-Banner 192.168.1.14:80 /: http/1.1 200 ok
-date: mon, 29 dec 2025 12:33:56 gmt
+2025-12-30 16:18:04,544 DEBUG Scanne Host 192.168.1.53
+2025-12-30 16:18:04,545 DEBUG Scanne Host 192.168.1.54
+2025-12-30 16:18:04,545 DEBUG Scanne Host 192.168.1.55
+2025-12-30 16:18:04,545 DEBUG HTTP-Banner 192.168.1.15:80 /server/info: http/1.1 404 not found
+date: tue, 30 dec 2025 15:18:07 gmt
+server: apache
+x-frame-options: sameorigin
+content-length: 196
+connection: close
+content-type: 
+2025-12-30 16:18:04,545 DEBUG Scanne Host 192.168.1.56
+2025-12-30 16:18:04,545 DEBUG Scanne Host 192.168.1.57
+2025-12-30 16:18:04,546 DEBUG Scanne Host 192.168.1.58
+2025-12-30 16:18:04,546 DEBUG Scanne Host 192.168.1.59
+2025-12-30 16:18:04,546 DEBUG Scanne Host 192.168.1.60
+2025-12-30 16:18:04,546 DEBUG Scanne Host 192.168.1.61
+2025-12-30 16:18:04,546 DEBUG Scanne Host 192.168.1.62
+2025-12-30 16:18:04,546 DEBUG Offener Port 192.168.1.15:443
+2025-12-30 16:18:04,547 DEBUG Scanne Host 192.168.1.63
+2025-12-30 16:18:04,547 DEBUG Scanne Host 192.168.1.64
+2025-12-30 16:18:04,748 DEBUG Offener Port 192.168.1.21:80
+2025-12-30 16:18:04,848 DEBUG HTTP-Banner 192.168.1.21:80 /: http/1.0 200 ok
+content-type: text/html
+server: tasmota/15.2.0 (esp8266ex)
+cache-control: no-cache, no-store, must-revalidate
+pragma: no-cache
+expires: -1
+2025-12-30 16:18:04,848 DEBUG Treffer 192.168.1.21 via Port 80: Tasmota
+2025-12-30 16:18:04,901 DEBUG HTTP-Banner 192.168.1.14:80 /: http/1.1 200 ok
+date: tue, 30 dec 2025 15:18:07 gmt
 server: apache
 vary: accept-encoding
 connection: close
 content-type: text/html; charset=utf-8
 
 <!doct
-2025-12-29 13:33:55,738 DEBUG HTTP-Banner 192.168.1.15:80 /: http/1.1 403 forbidden
-date: mon, 29 dec 2025 12:33:56 gmt
-server: apache
-x-frame-options: sameorigin
-content-length: 199
-connection: close
-content-type: 
-2025-12-29 13:33:55,739 DEBUG HTTP-Banner 192.168.1.15:80 /api/version: http/1.1 404 not found
-date: mon, 29 dec 2025 12:33:56 gmt
-server: apache
-x-frame-options: sameorigin
-content-length: 196
-connection: close
-content-type: 
-2025-12-29 13:33:55,741 DEBUG HTTP-Banner 192.168.1.15:80 /server/info: http/1.1 404 not found
-date: mon, 29 dec 2025 12:33:56 gmt
-server: apache
-x-frame-options: sameorigin
-content-length: 196
-connection: close
-content-type: 
-2025-12-29 13:33:55,751 DEBUG Offener Port 192.168.1.15:443
-2025-12-29 13:33:55,753 DEBUG HTTP-Banner 192.168.1.14:80 /api/version: http/1.1 404 not found
-date: mon, 29 dec 2025 12:33:56 gmt
+2025-12-30 16:18:04,904 DEBUG HTTP-Banner 192.168.1.14:80 /api/version: http/1.1 404 not found
+date: tue, 30 dec 2025 15:18:07 gmt
 server: apache
 vary: accept-encoding
 content-length: 271
 connection: close
 content-type: text/h
-2025-12-29 13:33:55,768 DEBUG HTTP-Banner 192.168.1.14:80 /server/info: http/1.1 404 not found
-date: mon, 29 dec 2025 12:33:56 gmt
+2025-12-30 16:18:04,906 DEBUG HTTP-Banner 192.168.1.14:80 /server/info: http/1.1 404 not found
+date: tue, 30 dec 2025 15:18:07 gmt
 server: apache
 vary: accept-encoding
 content-length: 271
 connection: close
 content-type: text/h
-2025-12-29 13:33:55,778 DEBUG Offener Port 192.168.1.14:443
-2025-12-29 13:33:55,778 DEBUG Offener Port 192.168.1.21:80
-2025-12-29 13:33:55,851 DEBUG HTTP-Banner 192.168.1.20:80 /: http/1.0 200 ok
+2025-12-30 16:18:04,916 DEBUG Offener Port 192.168.1.14:443
+2025-12-30 16:18:05,039 DEBUG Offener Port 192.168.1.20:80
+2025-12-30 16:18:05,164 DEBUG HTTP-Banner 192.168.1.20:80 /: http/1.0 200 ok
 content-type: text/html
 server: tasmota/15.2.0 (esp8266ex)
 cache-control: no-cache, no-store, must-revalidate
 pragma: no-cache
 expires: -1
-2025-12-29 13:33:55,851 DEBUG Treffer 192.168.1.20 via Port 80: Tasmota
-2025-12-29 13:33:55,864 DEBUG HTTP-Banner 192.168.1.21:80 /: http/1.0 200 ok
-content-type: text/html
-server: tasmota/15.2.0 (esp8266ex)
-cache-control: no-cache, no-store, must-revalidate
-pragma: no-cache
-expires: -1
-2025-12-29 13:33:55,865 DEBUG Treffer 192.168.1.21 via Port 80: Tasmota
-2025-12-29 13:33:57,095 DEBUG Offener Port 192.168.1.15:8080
-2025-12-29 13:33:57,114 DEBUG HTTP-Banner 192.168.1.15:8080 /: http/1.1 200 ok
-date: mon, 29 dec 2025 12:33:57 gmt
+2025-12-30 16:18:05,164 DEBUG Treffer 192.168.1.20 via Port 80: Tasmota
+2025-12-30 16:18:05,871 DEBUG Offener Port 192.168.1.15:8080
+2025-12-30 16:18:05,875 DEBUG HTTP-Banner 192.168.1.15:8080 /: http/1.1 200 ok
+date: tue, 30 dec 2025 15:18:09 gmt
 server:  
 x-frame-options: sameorigin
 content-security-policy: script-src 'self' 'unsafe-inline' 'unsafe
-2025-12-29 13:33:57,128 DEBUG HTTP-Banner 192.168.1.15:8080 /api/version: http/1.1 404 not found
-date: mon, 29 dec 2025 12:33:57 gmt
+2025-12-30 16:18:05,877 DEBUG HTTP-Banner 192.168.1.15:8080 /api/version: http/1.1 404 not found
+date: tue, 30 dec 2025 15:18:09 gmt
 server:  
 x-frame-options: sameorigin
 content-security-policy: script-src 'self' 'unsafe-inline' 
-2025-12-29 13:33:57,143 DEBUG HTTP-Banner 192.168.1.15:8080 /server/info: http/1.1 404 not found
-date: mon, 29 dec 2025 12:33:57 gmt
+2025-12-30 16:18:05,880 DEBUG HTTP-Banner 192.168.1.15:8080 /server/info: http/1.1 404 not found
+date: tue, 30 dec 2025 15:18:09 gmt
 server:  
 x-frame-options: sameorigin
 content-security-policy: script-src 'self' 'unsafe-inline' 
-2025-12-29 13:33:57,143 DEBUG Scanne Host 192.168.1.65
-2025-12-29 13:33:57,268 DEBUG Offener Port 192.168.1.14:8080
-2025-12-29 13:33:57,286 DEBUG HTTP-Banner 192.168.1.14:8080 /: http/1.1 200 ok
-date: mon, 29 dec 2025 12:33:57 gmt
+2025-12-30 16:18:05,881 DEBUG Scanne Host 192.168.1.65
+2025-12-30 16:18:06,386 DEBUG Offener Port 192.168.1.14:8080
+2025-12-30 16:18:06,404 DEBUG HTTP-Banner 192.168.1.14:8080 /: http/1.1 200 ok
+date: tue, 30 dec 2025 15:18:09 gmt
 server: http server 1.0
 x-frame-options: sameorigin
 content-type: text/html; charset=utf-8
 last-modifie
-2025-12-29 13:33:57,289 DEBUG HTTP-Banner 192.168.1.14:8080 /api/version: http/1.1 404 not found
-date: mon, 29 dec 2025 12:33:57 gmt
+2025-12-30 16:18:06,419 DEBUG HTTP-Banner 192.168.1.14:8080 /api/version: http/1.1 404 not found
+date: tue, 30 dec 2025 15:18:09 gmt
 server: http server 1.0
 x-frame-options: sameorigin
 content-type: text/html
-last-modified: mon, 
-2025-12-29 13:33:57,318 DEBUG HTTP-Banner 192.168.1.14:8080 /server/info: http/1.1 404 not found
-date: mon, 29 dec 2025 12:33:58 gmt
+last-modified: tue, 
+2025-12-30 16:18:06,434 DEBUG HTTP-Banner 192.168.1.14:8080 /server/info: http/1.1 404 not found
+date: tue, 30 dec 2025 15:18:09 gmt
 server: http server 1.0
 x-frame-options: sameorigin
 content-type: text/html
-last-modified: mon, 
-2025-12-29 13:33:57,318 DEBUG Scanne Host 192.168.1.66
-2025-12-29 13:33:58,164 DEBUG Scanne Host 192.168.1.67
-2025-12-29 13:33:58,269 DEBUG Scanne Host 192.168.1.68
-2025-12-29 13:33:58,284 DEBUG Scanne Host 192.168.1.69
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.70
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.71
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.72
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.73
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.74
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.75
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.76
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.77
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.78
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.79
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.80
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.81
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.82
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.83
-2025-12-29 13:33:58,766 DEBUG Scanne Host 192.168.1.84
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.85
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.86
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.87
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.88
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.89
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.90
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.91
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.92
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.93
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.94
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.95
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.96
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.97
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.98
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.99
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.100
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.101
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.102
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.103
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.104
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.105
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.106
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.107
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.108
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.109
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.110
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.111
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.112
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.113
-2025-12-29 13:33:58,767 DEBUG Scanne Host 192.168.1.114
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.115
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.116
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.117
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.118
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.119
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.120
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.121
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.122
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.123
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.124
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.125
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.126
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.127
-2025-12-29 13:33:58,768 DEBUG Scanne Host 192.168.1.128
-2025-12-29 13:34:00,185 DEBUG Scanne Host 192.168.1.129
-2025-12-29 13:34:00,340 DEBUG Scanne Host 192.168.1.130
-2025-12-29 13:34:01,190 DEBUG Scanne Host 192.168.1.131
-2025-12-29 13:34:01,318 DEBUG Scanne Host 192.168.1.132
-2025-12-29 13:34:01,333 DEBUG Scanne Host 192.168.1.133
-2025-12-29 13:34:01,797 DEBUG Scanne Host 192.168.1.134
-2025-12-29 13:34:01,797 DEBUG Scanne Host 192.168.1.135
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.136
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.137
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.138
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.139
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.140
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.141
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.142
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.143
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.144
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.145
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.146
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.147
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.148
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.149
-2025-12-29 13:34:01,798 DEBUG Scanne Host 192.168.1.150
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.151
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.152
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.153
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.154
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.155
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.156
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.157
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.158
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.159
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.160
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.161
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.162
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.163
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.164
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.165
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.166
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.167
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.168
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.169
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.170
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.171
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.172
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.173
-2025-12-29 13:34:01,799 DEBUG Scanne Host 192.168.1.174
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.175
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.176
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.177
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.178
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.179
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.180
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.181
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.182
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.183
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.184
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.185
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.186
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.187
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.188
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.189
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.190
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.191
-2025-12-29 13:34:01,800 DEBUG Scanne Host 192.168.1.192
-2025-12-29 13:34:01,812 DEBUG Offener Port 192.168.1.153:80
-2025-12-29 13:34:01,828 DEBUG Offener Port 192.168.1.167:80
-2025-12-29 13:34:01,830 DEBUG HTTP-Banner 192.168.1.153:80 /: http/1.0 200 ok
+last-modified: tue, 
+2025-12-30 16:18:06,435 DEBUG Scanne Host 192.168.1.66
+2025-12-30 16:18:06,975 DEBUG Scanne Host 192.168.1.67
+2025-12-30 16:18:07,268 DEBUG Scanne Host 192.168.1.68
+2025-12-30 16:18:07,579 DEBUG Scanne Host 192.168.1.69
+2025-12-30 16:18:07,579 DEBUG Scanne Host 192.168.1.70
+2025-12-30 16:18:07,579 DEBUG Scanne Host 192.168.1.71
+2025-12-30 16:18:07,579 DEBUG Scanne Host 192.168.1.72
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.73
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.74
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.75
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.76
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.77
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.78
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.79
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.80
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.81
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.82
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.83
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.84
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.85
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.86
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.87
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.88
+2025-12-30 16:18:07,580 DEBUG Scanne Host 192.168.1.89
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.90
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.91
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.92
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.93
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.94
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.95
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.96
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.97
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.98
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.99
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.100
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.101
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.102
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.103
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.104
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.105
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.106
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.107
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.108
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.109
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.110
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.111
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.112
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.113
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.114
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.115
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.116
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.117
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.118
+2025-12-30 16:18:07,581 DEBUG Scanne Host 192.168.1.119
+2025-12-30 16:18:07,582 DEBUG Scanne Host 192.168.1.120
+2025-12-30 16:18:07,582 DEBUG Scanne Host 192.168.1.121
+2025-12-30 16:18:07,582 DEBUG Scanne Host 192.168.1.122
+2025-12-30 16:18:07,582 DEBUG Scanne Host 192.168.1.123
+2025-12-30 16:18:07,582 DEBUG Scanne Host 192.168.1.124
+2025-12-30 16:18:07,582 DEBUG Scanne Host 192.168.1.125
+2025-12-30 16:18:07,582 DEBUG Scanne Host 192.168.1.126
+2025-12-30 16:18:07,594 DEBUG Scanne Host 192.168.1.127
+2025-12-30 16:18:07,595 DEBUG Scanne Host 192.168.1.128
+2025-12-30 16:18:08,919 DEBUG Scanne Host 192.168.1.129
+2025-12-30 16:18:09,461 DEBUG Scanne Host 192.168.1.130
+2025-12-30 16:18:10,007 DEBUG Scanne Host 192.168.1.131
+2025-12-30 16:18:10,298 DEBUG Scanne Host 192.168.1.132
+2025-12-30 16:18:10,611 DEBUG Scanne Host 192.168.1.133
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.134
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.135
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.136
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.137
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.138
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.139
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.140
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.141
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.142
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.143
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.144
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.145
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.146
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.147
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.148
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.149
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.150
+2025-12-30 16:18:10,612 DEBUG Scanne Host 192.168.1.151
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.152
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.153
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.154
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.155
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.156
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.157
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.158
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.159
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.160
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.161
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.162
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.163
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.164
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.165
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.166
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.167
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.168
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.169
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.170
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.171
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.172
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.173
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.174
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.175
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.176
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.177
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.178
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.179
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.180
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.181
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.182
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.183
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.184
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.185
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.186
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.187
+2025-12-30 16:18:10,613 DEBUG Scanne Host 192.168.1.188
+2025-12-30 16:18:10,614 DEBUG Scanne Host 192.168.1.189
+2025-12-30 16:18:10,614 DEBUG Scanne Host 192.168.1.190
+2025-12-30 16:18:10,619 DEBUG Offener Port 192.168.1.153:80
+2025-12-30 16:18:10,627 DEBUG Scanne Host 192.168.1.191
+2025-12-30 16:18:10,627 DEBUG Scanne Host 192.168.1.192
+2025-12-30 16:18:10,644 DEBUG HTTP-Banner 192.168.1.153:80 /: http/1.0 200 ok
 server: httpd/3.0
 x-frame-options: sameorigin
 x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:02 gmt
+date: tue, 30 dec 2025 15:18:14 gmt
 content-type: text/html
 
-2025-12-29 13:34:01,834 DEBUG HTTP-Banner 192.168.1.153:80 /api/version: http/1.0 404 not found
+2025-12-30 16:18:10,648 DEBUG HTTP-Banner 192.168.1.153:80 /api/version: http/1.0 404 not found
 server: httpd/3.0
 x-frame-options: sameorigin
 x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:02 gmt
+date: tue, 30 dec 2025 15:18:14 gmt
 content-type: text
-2025-12-29 13:34:01,860 DEBUG HTTP-Banner 192.168.1.153:80 /server/info: http/1.0 404 not found
+2025-12-30 16:18:10,652 DEBUG HTTP-Banner 192.168.1.153:80 /server/info: http/1.0 404 not found
 server: httpd/3.0
 x-frame-options: sameorigin
 x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:02 gmt
+date: tue, 30 dec 2025 15:18:14 gmt
 content-type: text
-2025-12-29 13:34:01,887 DEBUG HTTP-Banner 192.168.1.167:80 /: http/1.1 302 found
+2025-12-30 16:18:10,913 DEBUG Offener Port 192.168.1.173:80
+2025-12-30 16:18:10,919 DEBUG Offener Port 192.168.1.150:80
+2025-12-30 16:18:10,934 DEBUG Offener Port 192.168.1.152:80
+2025-12-30 16:18:11,030 DEBUG HTTP-Banner 192.168.1.152:80 /: http/1.0 200 ok
+content-type: text/html
+server: tasmota/15.2.0 (esp8266ex)
+cache-control: no-cache, no-store, must-revalidate
+pragma: no-cache
+expires: -1
+2025-12-30 16:18:11,030 DEBUG Treffer 192.168.1.152 via Port 80: Tasmota
+2025-12-30 16:18:11,035 DEBUG HTTP-Banner 192.168.1.150:80 /: http/1.0 200 ok
+content-type: text/html
+server: tasmota/15.2.0 (esp8266ex)
+cache-control: no-cache, no-store, must-revalidate
+pragma: no-cache
+expires: -1
+2025-12-30 16:18:11,035 DEBUG Treffer 192.168.1.150 via Port 80: Tasmota
+2025-12-30 16:18:11,051 DEBUG HTTP-Banner 192.168.1.173:80 /: http/1.0 200 ok
+content-type: text/html
+server: tasmota/15.2.0 (esp8266ex)
+cache-control: no-cache, no-store, must-revalidate
+pragma: no-cache
+expires: -1
+2025-12-30 16:18:11,051 DEBUG Treffer 192.168.1.173 via Port 80: Tasmota
+2025-12-30 16:18:11,259 DEBUG Offener Port 192.168.1.162:443
+2025-12-30 16:18:11,942 DEBUG Scanne Host 192.168.1.193
+2025-12-30 16:18:12,493 DEBUG Scanne Host 192.168.1.194
+2025-12-30 16:18:13,043 DEBUG Scanne Host 192.168.1.195
+2025-12-30 16:18:13,060 DEBUG Offener Port 192.168.1.190:8080
+2025-12-30 16:18:13,064 DEBUG HTTP-Banner 192.168.1.190:8080 /: http/1.1 302 found
+server: werkzeug/3.1.3 python/3.13.9
+date: tue, 30 dec 2025 15:18:13 gmt
 content-type: text/html; charset=utf-8
-content-length: 299
-location: /login/?redirect=/?&permissions=status,settings_read
-set-cookie: csr
-2025-12-29 13:34:01,887 DEBUG Treffer 192.168.1.167 via Port 80: OctoPrint
-2025-12-29 13:34:01,890 DEBUG Offener Port 192.168.1.167:443
-2025-12-29 13:34:01,932 DEBUG Offener Port 192.168.1.152:80
-2025-12-29 13:34:01,952 DEBUG Offener Port 192.168.1.173:80
-2025-12-29 13:34:01,993 DEBUG Treffer 192.168.1.167 via Port 443: OctoPrint
-2025-12-29 13:34:02,049 DEBUG HTTP-Banner 192.168.1.173:80 /: http/1.0 200 ok
-content-type: text/html
-server: tasmota/15.2.0 (esp8266ex)
-cache-control: no-cache, no-store, must-revalidate
-pragma: no-cache
-expires: -1
-2025-12-29 13:34:02,049 DEBUG Treffer 192.168.1.173 via Port 80: Tasmota
-2025-12-29 13:34:02,055 DEBUG HTTP-Banner 192.168.1.152:80 /: http/1.0 200 ok
-content-type: text/html
-server: tasmota/15.2.0 (esp8266ex)
-cache-control: no-cache, no-store, must-revalidate
-pragma: no-cache
-expires: -1
-2025-12-29 13:34:02,055 DEBUG Treffer 192.168.1.152 via Port 80: Tasmota
-2025-12-29 13:34:02,432 DEBUG Offener Port 192.168.1.162:443
-2025-12-29 13:34:03,225 DEBUG Scanne Host 192.168.1.193
-2025-12-29 13:34:03,378 DEBUG Scanne Host 192.168.1.194
-2025-12-29 13:34:03,817 DEBUG Scanne Host 192.168.1.195
-2025-12-29 13:34:04,225 DEBUG Scanne Host 192.168.1.196
-2025-12-29 13:34:04,240 DEBUG Offener Port 192.168.1.184:8080
-2025-12-29 13:34:04,240 DEBUG Offener Port 192.168.1.168:8080
-2025-12-29 13:34:04,240 DEBUG Offener Port 192.168.1.190:8080
-2025-12-29 13:34:04,243 DEBUG HTTP-Banner 192.168.1.184:8080 /: http/1.0 200 ok
+content-length: 225
+loca
+2025-12-30 16:18:13,066 DEBUG HTTP-Banner 192.168.1.190:8080 /api/version: http/1.1 302 found
+server: werkzeug/3.1.3 python/3.13.9
+date: tue, 30 dec 2025 15:18:13 gmt
+content-type: text/html; charset=utf-8
+content-length: 247
+loca
+2025-12-30 16:18:13,069 DEBUG HTTP-Banner 192.168.1.190:8080 /server/info: http/1.1 302 found
+server: werkzeug/3.1.3 python/3.13.9
+date: tue, 30 dec 2025 15:18:13 gmt
+content-type: text/html; charset=utf-8
+content-length: 247
+loca
+2025-12-30 16:18:13,069 DEBUG Scanne Host 192.168.1.196
+2025-12-30 16:18:13,074 DEBUG Offener Port 192.168.1.168:8080
+2025-12-30 16:18:13,074 DEBUG Offener Port 192.168.1.184:8080
+2025-12-30 16:18:13,078 DEBUG HTTP-Banner 192.168.1.168:8080 /: http/1.1 302 found
+server: werkzeug/3.1.3 python/3.13.5
+date: tue, 30 dec 2025 15:18:16 gmt
+content-type: text/html; charset=utf-8
+content-length: 225
+loca
+2025-12-30 16:18:13,081 DEBUG HTTP-Banner 192.168.1.168:8080 /api/version: http/1.1 302 found
+server: werkzeug/3.1.3 python/3.13.5
+date: tue, 30 dec 2025 15:18:16 gmt
+content-type: text/html; charset=utf-8
+content-length: 247
+loca
+2025-12-30 16:18:13,089 DEBUG Scanne Host 192.168.1.197
+2025-12-30 16:18:13,091 DEBUG HTTP-Banner 192.168.1.184:8080 /: http/1.0 200 ok
 server: gunicorn
-date: mon, 29 dec 2025 12:34:05 gmt
+date: tue, 30 dec 2025 15:18:16 gmt
 connection: close
 content-type: text/html; charset=utf-8
 content-length: 6082
 vary: c
-2025-12-29 13:34:04,244 DEBUG HTTP-Banner 192.168.1.168:8080 /: http/1.1 302 found
-server: werkzeug/3.1.3 python/3.13.5
-date: mon, 29 dec 2025 12:34:05 gmt
-content-type: text/html; charset=utf-8
-content-length: 225
-loca
-2025-12-29 13:34:04,245 DEBUG HTTP-Banner 192.168.1.184:8080 /api/version: http/1.0 404 not found
+2025-12-30 16:18:13,106 DEBUG HTTP-Banner 192.168.1.184:8080 /api/version: http/1.0 404 not found
 server: gunicorn
-date: mon, 29 dec 2025 12:34:05 gmt
+date: tue, 30 dec 2025 15:18:16 gmt
 connection: close
 content-type: text/html; charset=utf-8
 content-length: 207
 v
-2025-12-29 13:34:04,256 DEBUG HTTP-Banner 192.168.1.190:8080 /: http/1.1 302 found
-server: werkzeug/3.1.3 python/3.13.9
-date: mon, 29 dec 2025 12:34:04 gmt
-content-type: text/html; charset=utf-8
-content-length: 225
-loca
-2025-12-29 13:34:04,258 DEBUG HTTP-Banner 192.168.1.168:8080 /api/version: http/1.1 302 found
+2025-12-30 16:18:13,107 DEBUG HTTP-Banner 192.168.1.168:8080 /server/info: http/1.1 302 found
 server: werkzeug/3.1.3 python/3.13.5
-date: mon, 29 dec 2025 12:34:05 gmt
+date: tue, 30 dec 2025 15:18:16 gmt
 content-type: text/html; charset=utf-8
 content-length: 247
 loca
-2025-12-29 13:34:04,258 DEBUG HTTP-Banner 192.168.1.190:8080 /api/version: http/1.1 302 found
-server: werkzeug/3.1.3 python/3.13.9
-date: mon, 29 dec 2025 12:34:04 gmt
-content-type: text/html; charset=utf-8
-content-length: 247
-loca
-2025-12-29 13:34:04,261 DEBUG HTTP-Banner 192.168.1.190:8080 /server/info: http/1.1 302 found
-server: werkzeug/3.1.3 python/3.13.9
-date: mon, 29 dec 2025 12:34:04 gmt
-content-type: text/html; charset=utf-8
-content-length: 247
-loca
-2025-12-29 13:34:04,261 DEBUG Scanne Host 192.168.1.197
-2025-12-29 13:34:04,262 DEBUG HTTP-Banner 192.168.1.168:8080 /server/info: http/1.1 302 found
-server: werkzeug/3.1.3 python/3.13.5
-date: mon, 29 dec 2025 12:34:05 gmt
-content-type: text/html; charset=utf-8
-content-length: 247
-loca
-2025-12-29 13:34:04,262 DEBUG Scanne Host 192.168.1.198
-2025-12-29 13:34:04,272 DEBUG HTTP-Banner 192.168.1.184:8080 /server/info: http/1.0 404 not found
+2025-12-30 16:18:13,108 DEBUG Scanne Host 192.168.1.198
+2025-12-30 16:18:13,108 DEBUG HTTP-Banner 192.168.1.184:8080 /server/info: http/1.0 404 not found
 server: gunicorn
-date: mon, 29 dec 2025 12:34:05 gmt
+date: tue, 30 dec 2025 15:18:16 gmt
 connection: close
 content-type: text/html; charset=utf-8
 content-length: 207
 v
-2025-12-29 13:34:04,272 DEBUG Scanne Host 192.168.1.199
-2025-12-29 13:34:04,285 DEBUG Scanne Host 192.168.1.200
-2025-12-29 13:34:04,346 DEBUG Scanne Host 192.168.1.201
-2025-12-29 13:34:04,361 DEBUG Scanne Host 192.168.1.202
-2025-12-29 13:34:04,440 DEBUG Offener Port 192.168.1.201:80
-2025-12-29 13:34:04,471 DEBUG Scanne Host 192.168.1.203
-2025-12-29 13:34:04,486 DEBUG Scanne Host 192.168.1.204
-2025-12-29 13:34:04,502 DEBUG Offener Port 192.168.1.203:80
-2025-12-29 13:34:04,554 DEBUG HTTP-Banner 192.168.1.201:80 /: http/1.0 200 ok
+2025-12-30 16:18:13,108 DEBUG Scanne Host 192.168.1.199
+2025-12-30 16:18:13,321 DEBUG Scanne Host 192.168.1.200
+2025-12-30 16:18:13,464 DEBUG Scanne Host 192.168.1.201
+2025-12-30 16:18:13,465 DEBUG Scanne Host 192.168.1.202
+2025-12-30 16:18:13,479 DEBUG Scanne Host 192.168.1.203
+2025-12-30 16:18:13,637 DEBUG Offener Port 192.168.1.203:80
+2025-12-30 16:18:13,653 DEBUG Scanne Host 192.168.1.204
+2025-12-30 16:18:13,654 DEBUG Scanne Host 192.168.1.205
+2025-12-30 16:18:13,654 DEBUG Scanne Host 192.168.1.206
+2025-12-30 16:18:13,654 DEBUG Scanne Host 192.168.1.207
+2025-12-30 16:18:13,654 DEBUG Scanne Host 192.168.1.208
+2025-12-30 16:18:13,654 DEBUG Scanne Host 192.168.1.209
+2025-12-30 16:18:13,654 DEBUG Scanne Host 192.168.1.210
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.211
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.212
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.213
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.214
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.215
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.216
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.217
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.218
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.219
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.220
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.221
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.222
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.223
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.224
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.225
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.226
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.227
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.228
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.229
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.230
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.231
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.232
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.233
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.234
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.235
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.236
+2025-12-30 16:18:13,669 DEBUG Scanne Host 192.168.1.237
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.238
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.239
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.240
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.241
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.242
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.243
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.244
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.245
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.246
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.247
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.248
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.249
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.250
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.251
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.252
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.253
+2025-12-30 16:18:13,670 DEBUG Scanne Host 192.168.1.254
+2025-12-30 16:18:13,672 DEBUG Offener Port 192.168.1.224:80
+2025-12-30 16:18:13,672 DEBUG Offener Port 192.168.1.213:80
+2025-12-30 16:18:13,673 DEBUG Offener Port 192.168.1.238:80
+2025-12-30 16:18:13,676 DEBUG HTTP-Banner 192.168.1.213:80 /: http/1.0 200 ok
+server: httpd/3.0
+x-frame-options: sameorigin
+x-xss-protection: 1; mode=block
+date: tue, 30 dec 2025 15:18:17 gmt
+content-type: text/html
+
+2025-12-30 16:18:13,680 DEBUG HTTP-Banner 192.168.1.213:80 /api/version: http/1.0 404 not found
+server: httpd/3.0
+x-frame-options: sameorigin
+x-xss-protection: 1; mode=block
+date: tue, 30 dec 2025 15:18:17 gmt
+content-type: text
+2025-12-30 16:18:13,685 DEBUG HTTP-Banner 192.168.1.224:80 /: http/1.0 200 ok
+server: httpd/3.0
+x-frame-options: sameorigin
+x-xss-protection: 1; mode=block
+date: tue, 30 dec 2025 15:18:17 gmt
+content-type: text/html
+
+2025-12-30 16:18:13,699 DEBUG Offener Port 192.168.1.246:80
+2025-12-30 16:18:13,700 DEBUG HTTP-Banner 192.168.1.224:80 /api/version: http/1.0 404 not found
+server: httpd/3.0
+x-frame-options: sameorigin
+x-xss-protection: 1; mode=block
+date: tue, 30 dec 2025 15:18:17 gmt
+content-type: text
+2025-12-30 16:18:13,701 DEBUG HTTP-Banner 192.168.1.213:80 /server/info: http/1.0 404 not found
+server: httpd/3.0
+x-frame-options: sameorigin
+x-xss-protection: 1; mode=block
+date: tue, 30 dec 2025 15:18:17 gmt
+content-type: text
+2025-12-30 16:18:13,701 DEBUG HTTP-Banner 192.168.1.238:80 /: http/1.0 200 ok
+
+2025-12-30 16:18:13,715 DEBUG HTTP-Banner 192.168.1.224:80 /server/info: http/1.0 404 not found
+server: httpd/3.0
+x-frame-options: sameorigin
+x-xss-protection: 1; mode=block
+date: tue, 30 dec 2025 15:18:17 gmt
+content-type: text
+2025-12-30 16:18:13,717 DEBUG HTTP-Banner 192.168.1.238:80 /api/version: http/1.0 404 not found
+
+2025-12-30 16:18:13,727 DEBUG HTTP-Banner 192.168.1.246:80 /: http/1.0 200 ok
+server: httpd/2.0
+x-frame-options: sameorigin
+x-xss-protection: 1; mode=block
+date: tue, 30 dec 2025 15:18:17 gmt
+content-type: text/html
+
+2025-12-30 16:18:13,732 DEBUG HTTP-Banner 192.168.1.238:80 /server/info: http/1.0 404 not found
+
+2025-12-30 16:18:13,743 DEBUG HTTP-Banner 192.168.1.203:80 /: http/1.0 200 ok
 content-type: text/html
 server: tasmota/15.2.0 (esp8266ex)
 cache-control: no-cache, no-store, must-revalidate
 pragma: no-cache
 expires: -1
-2025-12-29 13:34:04,554 DEBUG Treffer 192.168.1.201 via Port 80: Tasmota
-2025-12-29 13:34:04,603 DEBUG HTTP-Banner 192.168.1.203:80 /: http/1.0 200 ok
+2025-12-30 16:18:13,743 DEBUG Treffer 192.168.1.203 via Port 80: Tasmota
+2025-12-30 16:18:13,744 DEBUG Offener Port 192.168.1.197:443
+2025-12-30 16:18:13,746 DEBUG HTTP-Banner 192.168.1.246:80 /api/version: http/1.0 404 not found
+server: httpd/2.0
+x-frame-options: sameorigin
+x-xss-protection: 1; mode=block
+date: tue, 30 dec 2025 15:18:17 gmt
+content-type: text
+2025-12-30 16:18:13,760 DEBUG Offener Port 192.168.1.205:80
+2025-12-30 16:18:13,770 DEBUG HTTP-Banner 192.168.1.246:80 /server/info: http/1.0 404 not found
+server: httpd/2.0
+x-frame-options: sameorigin
+x-xss-protection: 1; mode=block
+date: tue, 30 dec 2025 15:18:17 gmt
+content-type: text
+2025-12-30 16:18:13,887 DEBUG HTTP-Banner 192.168.1.205:80 /: http/1.0 200 ok
 content-type: text/html
 server: tasmota/15.2.0 (esp8266ex)
 cache-control: no-cache, no-store, must-revalidate
 pragma: no-cache
 expires: -1
-2025-12-29 13:34:04,603 DEBUG Treffer 192.168.1.203 via Port 80: Tasmota
-2025-12-29 13:34:04,833 DEBUG Scanne Host 192.168.1.205
-2025-12-29 13:34:04,833 DEBUG Scanne Host 192.168.1.206
-2025-12-29 13:34:04,833 DEBUG Scanne Host 192.168.1.207
-2025-12-29 13:34:04,833 DEBUG Scanne Host 192.168.1.208
-2025-12-29 13:34:04,833 DEBUG Scanne Host 192.168.1.209
-2025-12-29 13:34:04,833 DEBUG Scanne Host 192.168.1.210
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.211
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.212
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.213
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.214
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.215
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.216
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.217
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.218
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.219
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.220
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.221
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.222
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.223
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.224
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.225
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.226
-2025-12-29 13:34:04,834 DEBUG Scanne Host 192.168.1.227
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.228
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.229
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.230
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.231
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.232
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.233
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.234
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.235
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.236
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.237
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.238
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.239
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.240
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.241
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.242
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.243
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.244
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.245
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.246
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.247
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.248
-2025-12-29 13:34:04,835 DEBUG Scanne Host 192.168.1.249
-2025-12-29 13:34:04,837 DEBUG Offener Port 192.168.1.224:80
-2025-12-29 13:34:04,837 DEBUG Offener Port 192.168.1.213:80
-2025-12-29 13:34:04,839 DEBUG Offener Port 192.168.1.243:80
-2025-12-29 13:34:04,840 DEBUG HTTP-Banner 192.168.1.213:80 /: http/1.0 200 ok
+2025-12-30 16:18:13,887 DEBUG Treffer 192.168.1.205 via Port 80: Tasmota
+2025-12-30 16:18:14,059 DEBUG Offener Port 192.168.1.217:80
+2025-12-30 16:18:14,077 DEBUG HTTP-Banner 192.168.1.217:80 /: http/1.0 200 ok
 server: httpd/3.0
 x-frame-options: sameorigin
 x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:05 gmt
+date: tue, 30 dec 2025 15:18:17 gmt
 content-type: text/html
 
-2025-12-29 13:34:04,841 DEBUG Offener Port 192.168.1.246:80
-2025-12-29 13:34:04,843 DEBUG HTTP-Banner 192.168.1.243:80 /: http/1.1 200 ok
-server: nginx/1.14.2
-date: tue, 30 jul 2024 09:48:41 gmt
-content-type: text/html
-content-length: 1487
-last-modified: sun, 10 jul 2022 09:08
-2025-12-29 13:34:04,843 DEBUG Treffer 192.168.1.243 via Port 80: Elegoo Centurio, Klipper
-2025-12-29 13:34:04,843 DEBUG HTTP-Banner 192.168.1.213:80 /api/version: http/1.0 404 not found
+2025-12-30 16:18:14,109 DEBUG HTTP-Banner 192.168.1.217:80 /api/version: http/1.0 404 not found
 server: httpd/3.0
 x-frame-options: sameorigin
 x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:05 gmt
+date: tue, 30 dec 2025 15:18:17 gmt
 content-type: text
-2025-12-29 13:34:04,846 DEBUG HTTP-Banner 192.168.1.213:80 /server/info: http/1.0 404 not found
+2025-12-30 16:18:14,127 DEBUG HTTP-Banner 192.168.1.217:80 /server/info: http/1.0 404 not found
 server: httpd/3.0
 x-frame-options: sameorigin
 x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:05 gmt
+date: tue, 30 dec 2025 15:18:17 gmt
 content-type: text
-2025-12-29 13:34:04,846 DEBUG HTTP-Banner 192.168.1.246:80 /: http/1.0 200 ok
-server: httpd/2.0
-x-frame-options: sameorigin
-x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:05 gmt
-content-type: text/html
-
-2025-12-29 13:34:04,848 DEBUG Offener Port 192.168.1.238:80
-2025-12-29 13:34:04,848 DEBUG Scanne Host 192.168.1.250
-2025-12-29 13:34:04,848 DEBUG Scanne Host 192.168.1.251
-2025-12-29 13:34:04,848 DEBUG Scanne Host 192.168.1.252
-2025-12-29 13:34:04,848 DEBUG Scanne Host 192.168.1.253
-2025-12-29 13:34:04,848 DEBUG Scanne Host 192.168.1.254
-2025-12-29 13:34:04,849 DEBUG HTTP-Banner 192.168.1.224:80 /: http/1.0 200 ok
-server: httpd/3.0
-x-frame-options: sameorigin
-x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:05 gmt
-content-type: text/html
-
-2025-12-29 13:34:04,853 DEBUG HTTP-Banner 192.168.1.246:80 /api/version: http/1.0 404 not found
-server: httpd/2.0
-x-frame-options: sameorigin
-x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:05 gmt
-content-type: text
-2025-12-29 13:34:04,864 DEBUG HTTP-Banner 192.168.1.224:80 /api/version: http/1.0 404 not found
-server: httpd/3.0
-x-frame-options: sameorigin
-x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:05 gmt
-content-type: text
-2025-12-29 13:34:04,866 DEBUG HTTP-Banner 192.168.1.238:80 /: http/1.0 200 ok
-
-2025-12-29 13:34:04,870 DEBUG HTTP-Banner 192.168.1.238:80 /api/version: http/1.0 404 not found
-
-2025-12-29 13:34:04,871 DEBUG HTTP-Banner 192.168.1.246:80 /server/info: http/1.0 404 not found
-server: httpd/2.0
-x-frame-options: sameorigin
-x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:05 gmt
-content-type: text
-2025-12-29 13:34:04,879 DEBUG HTTP-Banner 192.168.1.224:80 /server/info: http/1.0 404 not found
-server: httpd/3.0
-x-frame-options: sameorigin
-x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:05 gmt
-content-type: text
-2025-12-29 13:34:04,893 DEBUG Offener Port 192.168.1.197:443
-2025-12-29 13:34:04,896 DEBUG HTTP-Banner 192.168.1.238:80 /server/info: http/1.0 404 not found
-
-2025-12-29 13:34:04,908 DEBUG Offener Port 192.168.1.217:80
-2025-12-29 13:34:04,909 DEBUG Offener Port 192.168.1.233:80
-2025-12-29 13:34:05,001 DEBUG Offener Port 192.168.1.205:80
-2025-12-29 13:34:05,023 DEBUG HTTP-Banner 192.168.1.217:80 /: http/1.0 200 ok
-server: httpd/3.0
-x-frame-options: sameorigin
-x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:05 gmt
-content-type: text/html
-
-2025-12-29 13:34:05,080 DEBUG HTTP-Banner 192.168.1.233:80 /: http/1.1 200 ok
-content-type: text/html; charset=utf-8
-etag: "1758876493.2166"
-content-length: 2166
-
-<!doctype html><html lang="en"><head>
-  <meta charset=
-2025-12-29 13:34:05,081 DEBUG Treffer 192.168.1.233 via Port 80: Elegoo Centurio
-2025-12-29 13:34:05,099 DEBUG HTTP-Banner 192.168.1.205:80 /: http/1.0 200 ok
-content-type: text/html
-server: tasmota/15.2.0 (esp8266ex)
-cache-control: no-cache, no-store, must-revalidate
-pragma: no-cache
-expires: -1
-2025-12-29 13:34:05,099 DEBUG Treffer 192.168.1.205 via Port 80: Tasmota
-2025-12-29 13:34:05,721 DEBUG HTTP-Banner 192.168.1.217:80 /server/info: http/1.0 404 not found
-server: httpd/3.0
-x-frame-options: sameorigin
-x-xss-protection: 1; mode=block
-date: mon, 29 dec 2025 12:34:06 gmt
-content-type: text
-2025-12-29 13:34:06,083 DEBUG Offener Port 192.168.1.243:7125
-2025-12-29 13:34:06,111 DEBUG HTTP-Banner 192.168.1.243:7125 /: http/1.1 200 ok
-server: tornadoserver/6.1
-content-type: text/html; charset=utf-8
-date: tue, 30 jul 2024 09:48:42 gmt
-etag: "45e410b23f60fb1882b396a13210f7d4
-2025-12-29 13:34:06,111 DEBUG Treffer 192.168.1.243 via Port 7125: Elegoo Centurio, Klipper
-2025-12-29 13:34:06,113 DEBUG Offener Port 192.168.1.243:8080
-2025-12-29 13:34:06,130 DEBUG HTTP-Banner 192.168.1.243:8080 /: http/1.0 200 ok
-content-type: text/html
-connection: close
-server: mjpg-streamer/0.2
-cache-control: no-store, no-cache, must-revalidate, pre-check=0, post-ch
-2025-12-29 13:34:06,134 DEBUG HTTP-Banner 192.168.1.243:8080 /api/version: http/1.0 400 bad request
-content-type: text/plain
-connection: close
-server: mjpg-streamer/0.2
-cache-control: no-store, no-cache, must-revalidate, pre-check=
-2025-12-29 13:34:06,161 DEBUG HTTP-Banner 192.168.1.243:8080 /server/info: http/1.0 400 bad request
-content-type: text/plain
-connection: close
-server: mjpg-streamer/0.2
-cache-control: no-store, no-cache, must-revalidate, pre-check=
-2025-12-29 13:34:07,278 DEBUG Offener Port 192.168.1.237:8080
-2025-12-29 13:34:07,278 DEBUG Offener Port 192.168.1.234:8080
-2025-12-29 13:34:07,297 DEBUG HTTP-Banner 192.168.1.234:8080 /: http/1.0 403 forbidden
-content-type: text/html
-access-control-allow-origin: *
-access-control-allow-headers: content-type
-content-length: 341
-connection: cl
-2025-12-29 13:34:07,304 DEBUG HTTP-Banner 192.168.1.234:8080 /api/version: http/1.0 404 not found
-content-type: text/html
-access-control-allow-origin: *
-access-control-allow-headers: content-type
-content-length: 341
-connection: cl
-2025-12-29 13:34:07,315 DEBUG HTTP-Banner 192.168.1.237:8080 /: http/1.0 200 ok
+2025-12-30 16:18:16,110 DEBUG Offener Port 192.168.1.237:8080
+2025-12-30 16:18:16,127 DEBUG HTTP-Banner 192.168.1.237:8080 /: http/1.0 200 ok
 server: gunicorn
-date: mon, 29 dec 2025 12:34:08 gmt
+date: tue, 30 dec 2025 15:18:19 gmt
 connection: close
 content-type: text/html; charset=utf-8
 content-length: 20026
 
 
-2025-12-29 13:34:07,328 DEBUG HTTP-Banner 192.168.1.234:8080 /server/info: http/1.0 404 not found
+2025-12-30 16:18:16,139 DEBUG Offener Port 192.168.1.235:8080
+2025-12-30 16:18:16,141 DEBUG HTTP-Banner 192.168.1.237:8080 /api/version: http/1.0 404 not found
+server: gunicorn
+date: tue, 30 dec 2025 15:18:19 gmt
+connection: close
+content-type: text/html; charset=utf-8
+content-length: 207
+
+2025-12-30 16:18:16,156 DEBUG HTTP-Banner 192.168.1.237:8080 /server/info: http/1.0 404 not found
+server: gunicorn
+date: tue, 30 dec 2025 15:18:19 gmt
+connection: close
+content-type: text/html; charset=utf-8
+content-length: 207
+
+2025-12-30 16:18:16,159 DEBUG HTTP-Banner 192.168.1.235:8080 /: http/1.0 403 forbidden
 content-type: text/html
 access-control-allow-origin: *
 access-control-allow-headers: content-type
 content-length: 341
 connection: cl
-2025-12-29 13:34:07,340 DEBUG HTTP-Banner 192.168.1.237:8080 /api/version: http/1.0 404 not found
-server: gunicorn
-date: mon, 29 dec 2025 12:34:08 gmt
-connection: close
-content-type: text/html; charset=utf-8
-content-length: 207
-
-2025-12-29 13:34:07,342 DEBUG HTTP-Banner 192.168.1.237:8080 /server/info: http/1.0 404 not found
-server: gunicorn
-date: mon, 29 dec 2025 12:34:08 gmt
-connection: close
-content-type: text/html; charset=utf-8
-content-length: 207
-
+2025-12-30 16:18:16,189 DEBUG HTTP-Banner 192.168.1.235:8080 /api/version: http/1.0 404 not found
+content-type: text/html
+access-control-allow-origin: *
+access-control-allow-headers: content-type
+content-length: 341
+connection: cl
+2025-12-30 16:18:16,222 DEBUG HTTP-Banner 192.168.1.235:8080 /server/info: http/1.0 404 not found
+content-type: text/html
+access-control-allow-origin: *
+access-control-allow-headers: content-type
+content-length: 341
+connection: cl

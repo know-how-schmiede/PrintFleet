@@ -28,6 +28,7 @@
   "login_password": "Mot de passe",
   "login_password_confirm": "Confirmer le mot de passe",
   "login_button": "Se connecter",
+  "login_kiosk_button": "PrintFleet Live-Wall",
   "login_create_account": "Creer un compte",
   "login_error_required": "Nom d'utilisateur et mot de passe requis.",
   "login_error_password_mismatch": "Les mots de passe ne correspondent pas.",

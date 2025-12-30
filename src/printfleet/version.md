@@ -1,5 +1,9 @@
 # Versionen PrintFleet
 
+## Version 0.5.9
+
+direkter Link auf Live-Wall (Anmelden-Formular),Kiosk wird Live-Wall
+
 ## Version 0.5.8
 
 4 Streams auf der Kioskseite, Design Kioskseite über Designtemplate in Einstellugnen
