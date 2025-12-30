@@ -255,6 +255,7 @@ def init_db_schema_only() -> None:
                 NULL,
                 NULL,
                 NULL,
+                NULL,
                 NULL
             )
             """,
