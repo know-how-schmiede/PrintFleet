@@ -65,7 +65,7 @@ from printfleet.monitor import (
 try:
     from PrintFleetPrinterList import GLOBAL
 except Exception as e:
-    print("Konfigurationsdatei 'PrintFleetPrinterList.py' fehlt/fehlerhaft.", file=sys.stderr)
+    print("Konfigurationsdatei 'PrintFleetPrinterList.py' fehlt/fehlerhaft. Vorlage: PrintFleetPrinterList.example.py", file=sys.stderr)
     raise
 
 

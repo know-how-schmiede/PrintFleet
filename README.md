@@ -43,6 +43,11 @@ Das Projekt befindet sich aktuell in aktiver Entwicklung und dient als Basis fü
 - Die DB-Datei ist in `.gitignore` enthalten und wird nicht nach GitHub uebertragen
 - Bitte die Datenbank niemals manuell committen oder hochladen
 
+## Lokale Konfiguration (PrintFleetPrinterList)
+- Die Datei `src/PrintFleetPrinterList.py` ist eine lokale Konfiguration und darf nicht ins Repo committed werden.
+- Vorlage: `src/PrintFleetPrinterList.example.py` kopieren und als `src/PrintFleetPrinterList.py` ablegen.
+- Eigene IPs/Keys dort eintragen. Die Datei ist in `.gitignore` enthalten.
+
 ## 🛠 Ziel des Projekts
 PrintFleet soll eine modulare, erweiterbare Plattform sein, mit der 3D-Drucker-Farmen zuverlässig verwaltet werden können.
 Im Fokus stehen:

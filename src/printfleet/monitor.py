@@ -21,7 +21,7 @@ from printfleet.backends import (
 try:
     from PrintFleetPrinterList import GLOBAL
 except Exception as e:
-    print("Konfigurationsdatei 'PrintFleetPrinterList.py' fehlt/fehlerhaft (monitor).", file=sys.stderr)
+    print("Konfigurationsdatei 'PrintFleetPrinterList.py' fehlt/fehlerhaft (monitor). Vorlage: PrintFleetPrinterList.example.py", file=sys.stderr)
     GLOBAL = {}
 
 

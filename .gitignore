@@ -29,10 +29,36 @@ htmlcov/
 *.log.*
 *.pid
 *.pid.lock
+*.out
+*.err
 
 # Local DB
 *.sqlite3
+*.sqlite3-*
+*.sqlite3-journal
+*.sqlite3-wal
+*.sqlite3-shm
+*.sqlite3-lock
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
 src/PrintFleet.sqlite3
+
+# Runtime / service data
+instance/
+data/
+runtime/
+var/
+
+# Local config (service/runtime)
+.env
+.env.*
+*.ini
+*.cfg
+*.conf
+*.toml
+src/PrintFleetPrinterList.py
 
 # OS / editor
 .DS_Store
